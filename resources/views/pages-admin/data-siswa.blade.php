@@ -33,67 +33,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Contoh baris data siswa -->
-                        <tr class="student-row" data-id="1">
-                            <td class="py-2 px-4 border-b text-center">1</td>
-                            <td class="py-2 px-4 border-b text-left">Budi Santoso</td>
-                            <td class="py-2 px-4 border-b text-left">PPLG</td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <a href="/path/to/grades/budi_santoso.pdf" target="_blank" class="text-blue-500 hover:underline">
-                                    Unduh PDF
-                                </a>
-                            </td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <a href="/path/to/attendance/budi_santoso.pdf" target="_blank" class="text-blue-500 hover:underline">
-                                    Unduh PDF
-                                </a>
-                            </td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <a href="/path/to/certificates/budi_santoso.pdf" target="_blank" class="text-blue-500 hover:underline">
-                                    Unduh PDF
-                                </a>
-                            </td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <button onclick="openReportPopup(1)" class="text-blue-500 hover:underline">
-                                    Lihat Laporan
-                                </button>
-                            </td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <button onclick="deleteStudent(1)" class="bg-red-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-500 transition duration-300 ease-in-out">
-                                    <i class="fas fa-trash mr-1"></i> Hapus
-                                </button>
-                            </td>
-                        </tr>
-                        <tr class="student-row" data-id="2">
-                            <td class="py-2 px-4 border-b text-center">2</td>
-                            <td class="py-2 px-4 border-b text-left">Siti Aisyah</td>
-                            <td class="py-2 px-4 border-b text-left">PPLG</td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <a href="/path/to/grades/siti_aisyah.pdf" target="_blank" class="text-blue-500 hover:underline">
-                                    Unduh PDF
-                                </a>
-                            </td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <a href="/path/to/attendance/siti_aisyah.pdf" target="_blank" class="text-blue-500 hover:underline">
-                                    Unduh PDF
-                                </a>
-                            </td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <a href="/path/to/certificates/siti_aisyah.pdf" target="_blank" class="text-blue-500 hover:underline">
-                                    Unduh PDF
-                                </a>
-                            </td>
-                            <td class="py-2 px-4 border-b text-center">
-                                <button onclick="openReportPopup(1)" class="text-blue-500 hover:underline">
-                                    Lihat Laporan
-                                </button>
-                            </td>                            
-                            <td class="py-2 px-4 border-b text-center">
-                                <button onclick="deleteStudent(2)" class="bg-red-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-500 transition duration-300 ease-in-out">
-                                    <i class="fas fa-trash mr-1"></i> Hapus
-                                </button>
-                            </td>
-                        </tr>
+                        @foreach ($siswa as $item)
+                            <tr class="student-row" data-id="1">
+                                <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
+                                <td class="py-2 px-4 border-b text-left">{{ $item->name }}</td>
+                                <td class="py-2 px-4 border-b text-left">PPLG</td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    <a href="/path/to/grades/budi_santoso.pdf" target="_blank" class="text-blue-500 hover:underline">
+                                        Unduh PDF
+                                    </a>
+                                </td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    <a href="/path/to/attendance/budi_santoso.pdf" target="_blank" class="text-blue-500 hover:underline">
+                                        Unduh PDF
+                                    </a>
+                                </td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    <a href="{{ route('cetak-sertifikat-siswa', $item->id) }}" target="_blank" class="text-blue-500 hover:underline">
+                                        Unduh PDF
+                                    </a>
+                                </td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    <button onclick="openReportPopup(1)" class="text-blue-500 hover:underline">
+                                        Lihat Laporan
+                                    </button>
+                                </td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    <button onclick="deleteStudent(1)" class="bg-red-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-500 transition duration-300 ease-in-out">
+                                        <i class="fas fa-trash mr-1"></i> Hapus
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

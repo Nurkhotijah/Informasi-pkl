@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Kehadiran;
 // use App\Models\Pengajuan;
 
 
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -13,10 +16,11 @@ class AdminController extends Controller
     public function dashboard()
     {
         return view('pages-admin.dashboard-admin');
-    } public function kehadiranSiswapkl()  
+    }
+    public function kehadiranSiswapkl()
     {
         // Logika untuk mengelola kehadiran
-        return view('pages-admin.kehadiran-siswapkl'); 
+        return view('pages-admin.kehadiran-siswapkl');
     }
     public function index()
     {
@@ -27,78 +31,90 @@ class AdminController extends Controller
         // Mengirim data ke tampilan
         return view('pages-admin.kehadiran-siswapkl', compact('kehadiran'));
     }
-    public function pengajuan() 
+    public function pengajuan()
     {
         // Logika untuk mengelola pengajuan
-        return view('pages-admin.pengajuan'); 
-    }
-    
-    public function pengajuanSiswa() 
-    {
-        // Logika untuk mengelola pengajuan
-        return view('pages-admin.pengajuan-siswa'); 
+        return view('pages-admin.pengajuan');
     }
 
-    public function tambahSiswa() 
+    public function pengajuanSiswa()
     {
         // Logika untuk mengelola pengajuan
-        return view('pages-admin.tambah-siswa'); 
-        
+        return view('pages-admin.pengajuan-siswa');
     }
-    public function dataSiswa() 
+
+    public function tambahSiswa()
     {
         // Logika untuk mengelola pengajuan
-        return view('pages-admin.data-siswa'); 
-        
+        return view('pages-admin.tambah-siswa');
     }
+    public function dataSiswa()
+    {
+        $siswa = User::whereHas('profile', function ($query) {
+            $query->where('id_sekolah', Auth::user()->sekolah->id);
+        })->get();
+
+        // Logika untuk mengelola pengajuan
+        return view('pages-admin.data-siswa', compact('siswa'));
+    }
+
+    public function cetakSertifikatSiswa($id)
+    {
+        $siswa = User::where('id', $id)->first();
+
+        $pdf = Pdf::loadView('pages-admin.pdf.sertifikat', compact('siswa'));
+        $pdf->setPaper('A4', 'Landscape');
+        return $pdf->stream($siswa->name . '-sertifikat.pdf');
+    }
+
     public function jurnalSiswa()
     {
         // Logika untuk menampilkan jurnal siswa
-        return view('pages-admin.jurnal-siswa'); 
+        return view('pages-admin.jurnal-siswa');
     }
 
     public function jurnalDetail()
     {
         // Logika untuk menampilkan jurnal siswa
-        return view('pages-admin.jurnal-detail'); 
+        return view('pages-admin.jurnal-detail');
     }
 
     public function nilaiSiswa()
     {
-       
-        return view('pages-admin.nilai-siswa'); 
+
+        return view('pages-admin.nilai-siswa');
     }
 
     public function rekapKehadiransiswa()
     {
-        
-        return view('pages-admin.rekap-kehadiransiswa'); 
+
+        return view('pages-admin.rekap-kehadiransiswa');
     }
 
     public function profileAdmin()
     {
         // Logika untuk menampilkan jurnal siswa
-        return view('pages-admin.profile-admin'); 
+        return view('pages-admin.profile-admin');
     }
 
     public function profileUpdate()
     {
         // Logika untuk menampilkan jurnal siswa
-        return view('pages-admin.profile-update'); 
+        return view('pages-admin.profile-update');
     }
 
     // public function showRiwayat()
     // {
     //     // // Debug ID pengguna yang sedang login
     //     // dd(auth()->id()); // Pastikan ini mengembalikan ID pengguna yang sedang login
-        
+
     //     // Mengambil riwayat pengajuan berdasarkan ID user yang sedang login
     //     $riwayatPengajuan = Pengajuan::where('user_id', auth()->id())->get();
-    
+
     //     // Mengirimkan data riwayat pengajuan ke view
     //     return view('pages-admin.pengajuan', compact('riwayatPengajuan'));
     // }
-    
+
     // public function editPengajuan()
     // {
     //     // Logika untuk menampilkan jurnal siswa

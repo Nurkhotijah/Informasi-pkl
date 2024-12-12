@@ -174,6 +174,7 @@ Route::prefix('jurnal-siswa')->name('jurnal-siswa.')->group(function () {
 /* -------------------------------------------------------------------------- */
 
 Route::get('/data-siswa', [AdminController::class, 'dataSiswa'])->name('data-siswa');
+Route::get('/cetak-sertifikat-siswa/{id}', [AdminController::class, 'cetakSertifikatSiswa'])->name('cetak-sertifikat-siswa');
 
 // Route::get('/tambah-siswa', [AdminController::class, 'tambahSiswa'])->name('tambah-siswa');
 
