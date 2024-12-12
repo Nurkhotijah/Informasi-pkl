@@ -19,6 +19,9 @@ class Pengajuan extends Model
         'tanggal_selesai',
         'cv_file',
         'status_persetujuan',
+        'tahun',
+        'pembimbing',
+        'lampiran',
     ];
 
     // Relasi dengan model Sekolah

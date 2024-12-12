@@ -20,8 +20,7 @@
 
             <!-- Tombol Unduh Rekap Kehadiran -->
             <a class="bg-green-500 text-white text-xs px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out flex absensis-center space-x-2 w-auto" 
-               href="{{ asset('path/to/certificate.pdf') }}" 
-               download="Sertifikat_PKL_{{ Auth::user()->name }}">
+               href="{{ route('rekap.kehadiran') }}">
                 <i class="fas fa-download"></i>
                 <span>Rekap Kehadiran</span>
             </a>

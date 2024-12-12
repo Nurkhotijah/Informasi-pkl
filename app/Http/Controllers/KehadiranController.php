@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Kehadiran;
 use App\Models\Profile;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\User;
 use Carbon\Carbon;
 
 class KehadiranController extends Controller
@@ -162,5 +164,33 @@ class KehadiranController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function rekapkehadiran()
+    {
+        $user = auth()->user(); // Mendapatkan pengguna yang sedang login
+        $kehadiran = Kehadiran::where('user_id', $user->id)->get(); // Ambil data kehadiran berdasarkan user_id
+
+        // Hitung jumlah kehadiran, izin, dan tidak hadir
+        $hadirCount = $kehadiran->where('status', 'hadir')->count();
+        $izinCount = $kehadiran->where('status', 'izin')->count();
+        $tidakHadirCount = $kehadiran->where('status', 'tidak hadir')->count();
+        $total = $hadirCount + $izinCount + $tidakHadirCount;
+
+        // Menyusun data untuk dikirim ke view
+        $data = [
+            'user' => $user,
+            'kehadiran' => $kehadiran,
+            'hadirCount' => $hadirCount,
+            'izinCount' => $izinCount,
+            'tidakHadirCount' => $tidakHadirCount,
+            'total' => $total,
+        ];
+
+        // Membuat PDF menggunakan template
+        $pdf = PDF::loadView('template-kehadiran', $data);
+
+        // Mengunduh PDF
+        return $pdf->download('rekap-kehadiran-' . $user->name . '.pdf');
     }
 }    

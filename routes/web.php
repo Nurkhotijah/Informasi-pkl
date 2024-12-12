@@ -46,6 +46,7 @@ Route::get('/kelola-kehadiran', [IndustriController::class, 'kehadiran'])->name(
 Route::get('/kehadiran/detail/{id}', [IndustriController::class, 'detail'])->name('kehadiran.detail');
 Route::post('/kehadiran/update/{id}', [IndustriController::class, 'update'])->name('kehadiran.update');
 Route::get('/kehadiran/edit/{id}', [IndustriController::class, 'edit'])->name('kehadiran.edit');
+Route::get('/kehadiran/{userId}', [IndustriController::class, 'cetakkehadiranuser'])->name('kehadiran.pdf');
 
 Route::get('/profile-industri', [IndustriController::class, 'showProfile'])->name('profile-industri');
 Route::get('/update-industri', [IndustriController::class, 'editProfile'])->name('update-industri');
@@ -94,6 +95,9 @@ Route::get('kehadiran-siswapkl', [AdminController::class, 'index'])->name('kehad
 
 Route::get('pengajuan-siswa', [SiswaController::class, 'index'])->name('pengajuan-siswa');
 Route::get('tambah-siswa', [SiswaController::class, 'create'])->name('tambah-siswa');
+Route::get('tambah-data', [SiswaController::class, 'tambah'])->name('pengajuan.tambah');
+Route::get('pengajuan-lihat', [SiswaController::class, 'lihat'])->name('pengajuan.lihat');
+
 Route::post('pengajuan-siswa', [SiswaController::class, 'store'])->name('pengajuan-siswa.store');
 Route::delete('hapus-siswa/{id}', [SiswaController::class, 'destroy'])->name('hapus-siswa');
 /* -------------------------------------------------------------------------- */
@@ -183,6 +187,7 @@ Route::get('/nilai-siswa', [AdminController::class, 'nilaiSiswa'])->name('nilai-
 Route::get('/kehadiran', [KehadiranController::class, 'index'])->name('kehadiran');
 Route::get('edit/{id}', [KehadiranController::class, 'edit'])->name('edit'); // Halaman edit kehadiran
 Route::post('update/{id}', [KehadiranController::class, 'update'])->name('updatekehadiran'); // Update data kehadiran
+Route::get('/rekap-kehadiran', [KehadiranController::class, 'rekapkehadiran'])->name('rekap.kehadiran');
 
 Route::get('/profile-admin', [ProfileController::class, 'showProfileSekolah'])->name('profile-admin');
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');

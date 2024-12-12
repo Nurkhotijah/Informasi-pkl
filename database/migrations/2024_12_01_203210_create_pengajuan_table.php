@@ -17,6 +17,9 @@ return new class extends Migration
             $table->date('tanggal_selesai');
             $table->string('cv_file');
             $table->enum('status_persetujuan', ['pending', 'diterima', 'ditolak'])->default('pending');
+            $table->integer('tahun');
+            $table->string('pembimbing');
+            $table->string('lampiran');
             $table->timestamps();
 
             $table->foreign('id_sekolah')->references('id')->on('sekolah')->onDelete('cascade');

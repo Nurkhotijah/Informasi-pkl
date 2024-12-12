@@ -14,12 +14,25 @@ class SiswaController extends Controller
         return view('pages-admin.pengajuan-siswa', compact('siswas'));
     }
 
+    public function tambah()
+    {
+        return view('pages-admin.pengajuan.tambah');
+    }
     // Menampilkan form untuk menambah siswa
     public function create()
     {
         return view('pages-admin.tambah-siswa');
     }
 
+    public function lihat()
+    {
+        // Ambil data siswa dari model Siswa
+        $siswas = Siswa::all(); // Pastikan model Siswa sudah ada
+    
+        // Kirim data ke view menggunakan compact
+        return view('pages-admin.pengajuan.lihat', compact('siswas'));
+    }
+    
     // Menyimpan data siswa baru
     public function store(Request $request)
     {
