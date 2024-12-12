@@ -21,6 +21,7 @@ class Pengajuan extends Model
         'status_persetujuan',
         'tahun',
         'pembimbing',
+        'judul_pkl',
         'lampiran',
     ];
 

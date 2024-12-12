@@ -21,6 +21,10 @@
                     <form action="{{ route('pengajuan.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-4">
+                            <label for="judul" class="block text-sm font-medium text-gray-700">Judul PKL</label>
+                            <input type="text" name="judul" id="judul" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div class="mb-4">
                             <label for="tahun" class="block text-sm font-medium text-gray-700">Tahun</label>
                             <input type="text" name="tahun" id="tahun" class="w-full p-2 border rounded" required>
                         </div>

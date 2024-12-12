@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('status_persetujuan', ['pending', 'diterima', 'ditolak'])->default('pending');
             $table->integer('tahun');
             $table->string('pembimbing');
+            $table->string('judul_pkl');
             $table->string('lampiran');
             $table->timestamps();
 

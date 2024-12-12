@@ -32,6 +32,7 @@
                             <th class="py-2 px-4 border-b text-center">No</th>
                             <th class="py-2 px-4 border-b text-center">Tahun</th>
                             <th class="py-2 px-4 border-b text-left">Nama Pembimbing</th>
+                            <th class="py-2 px-4 border-b text-left">Judul PKL</th>
                             <th class="py-2 px-4 border-b text-center">Lampiran</th>
                             <th class="py-2 px-4 border-b text-center">Aksi</th>
                         </tr>
@@ -42,6 +43,7 @@
                             <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                             <td class="py-2 px-4 border-b text-center">{{ $item->tahun }}</td>
                             <td class="py-2 px-4 border-b">{{ $item->pembimbing }}</td>
+                            <td class="py-2 px-4 border-b">{{ $item->judul_pkl }}</td>
                             <td class="py-2 px-4 border-b text-center">
                                 <a href="{{ asset('storage/' . $item->lampiran) }}" target="_blank" class="text-blue-500 hover:underline">Download</a>
                             </td>
