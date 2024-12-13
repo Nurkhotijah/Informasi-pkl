@@ -13,22 +13,26 @@ class Pengajuan extends Model
 
     protected $fillable = [
         'id_sekolah',
+        'id_pkl',
         'nama',
         'jurusan',
         'tanggal_mulai',
         'tanggal_selesai',
         'cv_file',
         'status_persetujuan',
-        'tahun',
-        'pembimbing',
-        'judul_pkl',
-        'lampiran',
     ];
+
 
     // Relasi dengan model Sekolah
     public function sekolah()
     {
         return $this->belongsTo(Sekolah::class, 'id_sekolah');
+    }
+
+    // Relasi dengan model PKL
+    public function pkl()
+    {
+        return $this->belongsTo(Pkl::class, 'id_pkl');
     }
 
     

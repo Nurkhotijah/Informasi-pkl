@@ -11,20 +11,19 @@ return new class extends Migration
         Schema::create('pengajuan', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_sekolah')->nullable();
+            $table->unsignedBigInteger('id_pkl')->nullable();; // Add the id_pkl column
             $table->string('nama');
             $table->string('jurusan');
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->string('cv_file');
             $table->enum('status_persetujuan', ['pending', 'diterima', 'ditolak'])->default('pending');
-            $table->integer('tahun');
-            $table->string('pembimbing');
-            $table->string('judul_pkl');
-            $table->string('lampiran');
             $table->timestamps();
-
+    
             $table->foreign('id_sekolah')->references('id')->on('sekolah')->onDelete('cascade');
+            $table->foreign('id_pkl')->references('id')->on('pkl')->onDelete('cascade'); // Add foreign key for id_pkl
         });
+    
     }
 
     public function down()
