@@ -15,6 +15,7 @@ use App\Http\Controllers\JurnalIndustriController;
 use App\Http\Controllers\JurnalSiswaController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PklController;
 use App\Http\Controllers\SekolahController;
 
 
@@ -137,10 +138,17 @@ Route::prefix('jurnal-industri')->name('jurnal-industri.')->group(function () {
 /*                                   SEKOLAH                                  */
 /* -------------------------------------------------------------------------- */
 
+Route::prefix('pkl')->name('pkl.')->group(function () {
+    Route::get('', [PklController::class, 'index'])->name('index');
+    Route::get('/create', [PklController::class, 'create'])->name('create');
+    Route::post('/store', [PklController::class, 'store'])->name('store');
+    Route::get('/detail/{id}', [PklController::class, 'detail'])->name('detail');
+});
+
 Route::prefix('pengajuan')->name('pengajuan.')->group(function () {
-    Route::get('', [PengajuanController::class, 'index'])->name('index');
-    Route::get('/create', [PengajuanController::class, 'create'])->name('create');
-    Route::post('/store', [PengajuanController::class, 'store'])->name('store');
+    Route::get('list-siswa/{id_pkl}', [PengajuanController::class, 'index'])->name('index');
+    Route::get('/create/{id_pkl}', [PengajuanController::class, 'create'])->name('create');
+    Route::post('/store/{id_pkl}', [PengajuanController::class, 'store'])->name('store');
     Route::delete('/delete/{id}', [PengajuanController::class, 'destroy'])->name('delete');
 });
 Route::get('pengajuan-index', [AdminController::class, 'pengajuanindex'])->name('pengajuan-index');

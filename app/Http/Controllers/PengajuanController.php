@@ -10,20 +10,19 @@ use Illuminate\Support\Facades\Auth;
 
 class PengajuanController extends Controller
 {
-    public function index()
+    public function index($id_pkl)
     {
-        $users = Auth::user();
-        $pengajuan = Pengajuan::where('id_sekolah', $users->sekolah->id)->get();
+        $pengajuan = Pengajuan::where('id_pkl', $id_pkl)->get();
 
-        return view('pages-admin.pengajuan.index', compact('pengajuan'));
+        return view('pages-admin.pkl.pengajuan.index', compact('pengajuan', 'id_pkl'));
     }
 
-    public function create() // Untuk menampilkan form pengajuan siswa
+    public function create($id_pkl) // Untuk menampilkan form pengajuan siswa
     {
-        return view('pages-admin.pengajuan.create'); // Pastikan view yang dimaksud sesuai
+        return view('pages-admin.pkl.pengajuan.create', compact('id_pkl')); // Pastikan view yang dimaksud sesuai
     }
 
-    public function store(Request $request) // Untuk menyimpan pengajuan siswa baru
+    public function store(Request $request, $id_pkl) // Untuk menyimpan pengajuan siswa baru
     {
         $request->validate([
             'nama' => 'required|string|max:255',
@@ -46,10 +45,11 @@ class PengajuanController extends Controller
             'tanggal_selesai' => $request->tanggal_selesai,
             'cv_file' => $filePath,
             'status_persetujuan' => 'pending',
+            'id_pkl' => $id_pkl, // ID Sekolah yang login
             'id_sekolah' => $users->sekolah->id, // ID Sekolah yang login
         ]);
 
-        return redirect('/pengajuan')->with('success', 'Pengajuan siswa berhasil diajukan.');
+        return redirect('/pengajuan/list-siswa/' . $id_pkl)->with('success', 'Pengajuan siswa berhasil diajukan.');
     }
 
     public function destroy($id)

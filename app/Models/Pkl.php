@@ -18,7 +18,7 @@ class Pkl extends Model
         'pembimbing',
         'judul_pkl',
         'lampiran',
-        'status',
+        'id_sekolah'
     ];
 
     // Define the relationships

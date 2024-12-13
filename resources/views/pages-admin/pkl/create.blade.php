@@ -18,7 +18,7 @@
         @endif
         <div class="">
             <main class="p-6 overflow-y-auto h-full">
-                    <form action="{{ route('pengajuan.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('pkl.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-4">
                             <label for="judul" class="block text-sm font-medium text-gray-700">Judul PKL</label>

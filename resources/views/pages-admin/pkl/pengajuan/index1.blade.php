@@ -53,6 +53,7 @@
                                     <span class="bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
                                 @elseif ($item->status_sekolah == 'diterima')
                                     <span class="bg-green-200 text-green-800 text-xs px-2 py-1 rounded-full">Diterima</span>
+                                @endif
                             </td>
                             <td class="py-2 px-4 border-b text-center">
                                
