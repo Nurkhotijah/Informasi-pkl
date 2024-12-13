@@ -34,6 +34,7 @@
                             <th class="py-2 px-4 border-b text-left">Nama Pembimbing</th>
                             <th class="py-2 px-4 border-b text-left">Judul PKL</th>
                             <th class="py-2 px-4 border-b text-center">Lampiran</th>
+                            <th class="py-2 px-4 border-b text-center">Status</th>
                             <th class="py-2 px-4 border-b text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -46,6 +47,12 @@
                             <td class="py-2 px-4 border-b">{{ $item->judul_pkl }}</td>
                             <td class="py-2 px-4 border-b text-center">
                                 <a href="{{ asset('storage/' . $item->lampiran) }}" target="_blank" class="text-blue-500 hover:underline">Download</a>
+                            </td>
+                            <td class="py-2 px-4 border-b text-center">
+                                @if ($item->status_sekolah == 'pending')
+                                    <span class="bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
+                                @elseif ($item->status_sekolah == 'diterima')
+                                    <span class="bg-green-200 text-green-800 text-xs px-2 py-1 rounded-full">Diterima</span>
                             </td>
                             <td class="py-2 px-4 border-b text-center">
                                

@@ -42,7 +42,8 @@ class SekolahController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $listSekolah = Pengajuan::where('id_sekolah', $id)->get();
+        return view('pages-industri.sekolah.show', compact('listSekolah'));
     }
 
     /**

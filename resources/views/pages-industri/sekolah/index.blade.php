@@ -26,6 +26,7 @@
                             <th class="py-2 px-4 border-b text-left">Nama Sekolah</th>
                             <th class="py-2 px-4 border-b text-left">Email Sekolah</th>
                             <th class="py-2 px-4 border-b text-left">Alamat Sekolah</th>
+                            <th class="py-2 px-4 border-b text-center">Status</th>
                             <th class="py-2 px-4 border-b text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -38,8 +39,13 @@
                                 <td class="py-2 px-4 border-b text-left">{{ $item->email }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->sekolah->alamat }}</td>
                                 <td class="py-2 px-4 border-b text-center">
+                                    <button onclick="updateStatus({{ $item->sekolah->id }})" id="status-{{ $item->sekolah->id }}" class="bg-yellow-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-green-500 transition duration-300 ease-in-out">
+                                        Pending
+                                    </button>
+                                </td>
+                                <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
-                                        <button onclick="window.open('{{ route('sekolah.detail-siswa', $item->sekolah->id) }}', '_blank')" class="bg-yellow-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-yellow-500 transition duration-300 ease-in-out">
+                                        <button onclick="window.open('{{ route('sekolah.show', $item->sekolah->id) }}', '_blank')" class="bg-yellow-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-yellow-500 transition duration-300 ease-in-out">
                                             <i class="fas fa-eye mr-1"></i> Lihat
                                         </button>                                    
                                         <button onclick="deleteSchool(1)" class="bg-red-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-500 transition duration-300 ease-in-out">
@@ -56,13 +62,56 @@
             <!-- Pagination Section -->
             <div class="flex justify-end items-center mt-4">
                 <span class="mr-4" id="pageNumber">Halaman 1</span>
-                <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()">
+                <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()" id="prevButton" disabled>
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()">
+                <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()" id="nextButton">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
+
+            <script>
+                let currentPage = 1;
+                const rowsPerPage = 5;
+                const rows = document.querySelectorAll('.school-row');
+                const totalPages = Math.ceil(rows.length / rowsPerPage);
+                
+                function showPage(page) {
+                    const start = (page - 1) * rowsPerPage;
+                    const end = start + rowsPerPage;
+                    
+                    rows.forEach((row, index) => {
+                        if (index >= start && index < end) {
+                            row.style.display = '';
+                            // Update nomor urut
+                            row.querySelector('td:first-child').textContent = index + 1;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                    
+                    document.getElementById('pageNumber').textContent = `Halaman ${page}`;
+                    document.getElementById('prevButton').disabled = page === 1;
+                    document.getElementById('nextButton').disabled = page === totalPages;
+                }
+                
+                function nextPage() {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        showPage(currentPage);
+                    }
+                }
+                
+                function prevPage() {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        showPage(currentPage);
+                    }
+                }
+                
+                // Initialize first page
+                showPage(1);
+            </script>
         </div>
     </main>
 </div>
@@ -82,6 +131,25 @@
         });
     }
 
+    // Function to update status
+    function updateStatus(schoolId) {
+        const statusButton = document.getElementById(`status-${schoolId}`);
+        if (statusButton.textContent.trim() === 'Pending') {
+            statusButton.textContent = 'Diterima';
+            statusButton.classList.remove('bg-yellow-500');
+            statusButton.classList.add('bg-green-500');
+            // Here you would make an API call to update the status in the backend
+            // fetch('/api/school/status/' + schoolId, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         status: 'accepted'
+            //     })
+            // });
+        }
+    }
    
     // Function to view students for a selected school
     function viewStudents(school) {
@@ -97,38 +165,7 @@
         }
     }
 
-    // Pagination logic (basic example)
-    let currentPage = 1;
-    const rowsPerPage = 5;
-
-    function prevPage() {
-        if (currentPage > 1) {
-            currentPage--;
-            updatePagination();
-        }
-    }
-
-    function nextPage() {
-        currentPage++;
-        updatePagination();
-    }
-
-    function updatePagination() {
-        const rows = document.querySelectorAll('.school-row');
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        rows.forEach((row, index) => {
-            if (index >= start && index < end) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-        document.getElementById('pageNumber').textContent = `Halaman ${currentPage}`;
-    }
-
-    // Initialize pagination
-    updatePagination();
+   
 </script>
 
 @endsection
