@@ -15,12 +15,14 @@ class CreatePklTable extends Migration
     {
         Schema::create('pkl', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_sekolah')->nullable();
             $table->integer('tahun');
             $table->string('pembimbing');
             $table->string('judul_pkl');
             $table->string('lampiran');
-            $table->enum('status', ['diterima', 'pending']);
             $table->timestamps();
+            
+            $table->foreign('id_sekolah')->references('id')->on('sekolah')->onDelete('cascade');
         });
     }
 
