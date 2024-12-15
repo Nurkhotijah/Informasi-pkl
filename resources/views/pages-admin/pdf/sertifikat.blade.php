@@ -113,10 +113,9 @@
 </head>
 <body>
     <div class="certificate">
-       <div class="logo left">
-         <img src="{{ $logoSekolah ? asset('storage/' . $logoSekolah) : asset('default-logo.jpg') }}" alt="Logo Sekolah">
+        <div class="logo left">
+            <img src="{{ $siswa->user && $siswa->user->foto_profile ? asset('storage/' . $siswa->user->foto_profile) : asset('path/to/default-image.jpg') }}" alt="Logo sekolah">
         </div>
-
         <div class="logo right">
             <img src="{{ public_path('assets/certificate/qelopak.png') }}" class="bg" alt="Logo qelopak">
         </div>

@@ -125,17 +125,15 @@ class AdminController extends Controller
 
     public function cetakSertifikatSiswa($id)
     {
-        $siswa = User::with('profile')->find($id);
-    
-    // Ambil logo sekolah jika role adalah sekolah
-    $logoSekolah = null;
-    if ($siswa->role == 'sekolah') {
-        $logoSekolah = $siswa->profile->foto_sekolah; // Misalkan 'foto_sekolah' adalah kolom foto logo sekolah di Profile
-    }
+        $siswa = User::with('profile.sekolah.user.profile')->find($id);
 
-    $pdf = Pdf::loadView('pages-admin.pdf.sertifikat', compact('siswa', 'logoSekolah'));
-    $pdf->setPaper('A4', 'Landscape');
-    return $pdf->stream($siswa->name . '-sertifikat.pdf');
+        if (!$siswa || !$siswa->profile || !$siswa->profile->sekolah || !$siswa->profile->sekolah->user || !$siswa->profile->sekolah->user->profile) {
+            return redirect()->back()->with('error', 'Data sertifikat tidak ditemukan.');
+        }
+
+        $pdf = Pdf::loadView('pages-admin.pdf.sertifikat', compact('siswa'));
+        $pdf->setPaper('A4', 'Landscape');
+        return $pdf->stream($siswa->name . '-sertifikat.pdf');
     }
 
     public function jurnalSiswa()

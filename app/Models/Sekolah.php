@@ -42,10 +42,7 @@ class Sekolah extends Model
     return $this->belongsTo(Sekolah::class, 'id_sekolah');
 }
 
-public function profile()
-    {
-        return $this->hasMany(Profile::class); // Jika banyak profile di sekolah
-    }
+
 
     
 }
