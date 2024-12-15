@@ -15,15 +15,7 @@
                         <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" placeholder="Cari Nama atau sekolah" type="text" oninput="searchTable()">
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
-                    <div class="flex items-center w-full sm:w-auto sm:ml-auto">
-                        <label class="mr-2" for="date">Pilih Tanggal:</label>
-                        <input 
-                            type="date" 
-                            class="border rounded p-2 w-full sm:w-auto" 
-                            id="date" 
-                            onchange="filterByDate()"
-                        />
-                    </div>                    
+                                   
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -119,23 +111,6 @@ function searchTable() {
     updateTableDisplay();
 }
 
-function filterByDate() {
-    const selectedDate = document.getElementById('date').value;
-    const tableBody = document.querySelector('#attendanceTable tbody');
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
-    
-    if (!selectedDate) {
-        filteredData = rows;
-    } else {
-        filteredData = rows.filter(row => {
-            const dateCell = row.querySelector('td:nth-child(4)');
-            return dateCell.textContent.includes(selectedDate);
-        });
-    }
-    
-    currentPage = 1;
-    updateTableDisplay();
-}
 
 function updateTableDisplay() {
     const tableBody = document.querySelector('#attendanceTable tbody');

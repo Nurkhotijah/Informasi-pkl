@@ -11,7 +11,15 @@
             <div class="mb-4">
                 <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Detail Kehadiran</h1>
                 <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
-            
+                    <div class="flex items-center w-full sm:w-auto sm:ml-auto">
+                        <label class="mr-2" for="date">Pilih Tanggal:</label>
+                        <input 
+                            type="date" 
+                            class="border rounded p-2 w-full sm:w-auto" 
+                            id="date" 
+                            onchange="filterByDate()"
+                        />
+                    </div>    
                                      
                 </div>
             </div>
@@ -94,6 +102,26 @@
 </div>
 
 <script>
+
+function filterByDate() {
+    const selectedDate = document.getElementById('date').value;
+    const tableBody = document.querySelector('#attendanceTable tbody');
+    const rows = Array.from(tableBody.querySelectorAll('tr'));
+    
+    if (!selectedDate) {
+        filteredData = rows;
+    } else {
+        filteredData = rows.filter(row => {
+            const dateCell = row.querySelector('td:nth-child(4)');
+            return dateCell.textContent.includes(selectedDate);
+        });
+    }
+    
+    currentPage = 1;
+    updateTableDisplay();
+}
+
+
 const ITEMS_PER_PAGE = 10;
 let currentPage = 1;
 let filteredData = [];

@@ -102,8 +102,9 @@
             </div>
             <div class="info-row">
                 <span class="info-label">Sekolah</span>
-                <span class="info-value">: {{ $penilaian->sekolah->nama ?? 'Sekolah tidak ditemukan' }}</span>
+                <span class="info-value">: {{ $penilaian->user->profile->sekolah->nama ?? 'Data Sekolah Tidak Tersedia' }}</span>
             </div>
+           
         </div>
 
         <table>

@@ -177,7 +177,7 @@
         const searchInput = document.getElementById('search').value.toLowerCase();
         const rows = document.querySelectorAll('.student-row');
         rows.forEach(row => {
-            const studentName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const studentName = row.querySelector('td:nth-child(3)').textContent.toLowerCase(); // Changed to check the name column
             if (studentName.includes(searchInput)) {
                 row.style.display = '';
             } else {

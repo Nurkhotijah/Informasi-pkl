@@ -180,6 +180,9 @@ Route::prefix('jurnal-siswa')->name('jurnal-siswa.')->group(function () {
     Route::post('/upload/{id}', [JurnalSiswaController::class, 'uploadLaporan'])->name('upload');
 });
 
+Route::get('/unduh-penilaian/{id}', [AdminController::class, 'downloadpenilaian'])->name('penilaiansiswa.unduh');
+Route::get('/unduh-kehadiran/{userId}', [AdminController::class, 'kehadiransekolah'])->name('kehadiransiswa.unduh');
+
 // Route::get('/penilaian/{id}', [PenilaianController::class, 'showPenilaian'])->name('penilaian.show');
 
 /* -------------------------------------------------------------------------- */
@@ -188,6 +191,7 @@ Route::prefix('jurnal-siswa')->name('jurnal-siswa.')->group(function () {
 
 Route::get('/data-siswa', [AdminController::class, 'dataSiswa'])->name('data-siswa');
 Route::get('/cetak-sertifikat-siswa/{id}', [AdminController::class, 'cetakSertifikatSiswa'])->name('cetak-sertifikat-siswa');
+Route::get('/laporan', [AdminController::class, 'indexlaporan'])->name('pages-admin.data-siswa');
 
 // Route::get('/tambah-siswa', [AdminController::class, 'tambahSiswa'])->name('tambah-siswa');
 
@@ -209,7 +213,7 @@ Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riw
 Route::post('/kehadiran', [KehadiranController::class, 'store'])->name('kehadiran.store');
 Route::get('/dashboard-user', [UserController::class, 'dashboard'])->name('user.dashboard');
 
-Route::get('/penilaian-user', [PenilaianController::class, 'show'])->name('penilaian.show');
+Route::get('/penilaian-user', [PenilaianController::class, 'showuser'])->name('penilaian.show.user');
 
 
 Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riwayat-absensi');

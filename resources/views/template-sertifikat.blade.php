@@ -31,7 +31,7 @@
    </div>
    <div class="text-center mt-4">
     <h1 class="text-2xl font-bold">
-     SERTIFIKAT
+        S E R T I F I K A T
     </h1>
     <p class="mt-4">
      DINAS PERHUBUNGAN KABUPATEN BOGOR
@@ -40,7 +40,7 @@
      Memberikan Sertifikat Kepada:
     </p>
     <h2 class="text-3xl font-bold mt-4">
-     Wisnu Risna Aripin
+        {{ $siswa->name }}
     </h2>
     <hr class="my-4 border-gray-400"/>
     <p class="mt-4">

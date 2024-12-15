@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kehadiran;
-// use App\Models\Pengajuan;
-
-
+use App\Models\Penilaian;
+use App\Models\Profile;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -24,18 +23,42 @@ class AdminController extends Controller
     }
     public function index()
     {
-        $kehadiran = Kehadiran::with('user')->get();
-        // Mengambil semua data dari tabel kehadiran
-        $kehadiran = Kehadiran::all();
+        $kehadiran = Kehadiran::with('user')->whereHas('user.profile', function($query) {
+            $query->where('id_sekolah', Auth::user()->sekolah->id);
+        })->get();
 
         // Mengirim data ke tampilan
         return view('pages-admin.kehadiran-siswapkl', compact('kehadiran'));
     }
-    public function pengajuan()
+    public function downloadpenilaian($id)
     {
-        // Logika untuk mengelola pengajuan
-        return view('pages-admin.pengajuan');
+        // Mengambil data penilaian berdasarkan ID
+        $penilaian = Penilaian::findOrFail($id);
+    
+        // Menyiapkan data untuk template
+        $data = [
+            'penilaian' => $penilaian,
+        ];
+    
+        // Membuat PDF dari template Blade
+        $pdf = Pdf::loadView('template-penilaian', $data);
+    
+        // Mengunduh file PDF
+        return $pdf->download('penilaian_' . $penilaian->id . '.pdf');
     }
+
+    public function indexlaporan()
+    {
+        // Mendapatkan sekolah yang login
+        $sekolahId = Auth::user()->id;
+    
+        $siswa = User::whereHas('pengajuan', function ($query) use ($sekolahId) {
+            $query->where('id_sekolah', $sekolahId);
+        })->with('pengajuan')->get();        
+    
+        return view('pages-admin.data-siswa', compact('siswa'));
+    }
+    
 
     public function pengajuanSiswa()
     {
@@ -57,6 +80,48 @@ class AdminController extends Controller
         // Logika untuk mengelola pengajuan
         return view('pages-admin.data-siswa', compact('siswa'));
     }
+
+    public function kehadiransekolah($userId)
+    {
+        // Ambil data user berdasarkan userId
+        $user = User::with('profile.sekolah')->find($userId); // Pastikan relasi sudah didefinisikan di model
+    
+        if (!$user) {
+            return redirect()->back()->with('error', 'Data user tidak ditemukan.');
+        }
+    
+        // Ambil data kehadiran berdasarkan user_id
+        $kehadiran = Kehadiran::where('user_id', $userId)->get();
+    
+        // Ambil data tanggal mulai dan tanggal selesai PKL dari tabel profile
+        $tanggalMulai = $user->profile ? $user->profile->tanggal_mulai : null;
+        $tanggalSelesai = $user->profile ? $user->profile->tanggal_selesai : null;
+    
+        // Hitung jumlah kehadiran, izin, dan tidak hadir
+        $hadirCount = $kehadiran->where('status', 'hadir')->count();
+        $izinCount = $kehadiran->where('status', 'izin')->count();
+        $tidakHadirCount = $kehadiran->where('status', 'tidak hadir')->count();
+        $total = $hadirCount + $izinCount + $tidakHadirCount;
+    
+        // Menyusun data untuk dikirim ke view
+        $data = [
+            'user' => $user,
+            'kehadiran' => $kehadiran,
+            'hadirCount' => $hadirCount,
+            'izinCount' => $izinCount,
+            'tidakHadirCount' => $tidakHadirCount,
+            'total' => $total,
+            'tanggalMulai' => $tanggalMulai,
+            'tanggalSelesai' => $tanggalSelesai,
+        ];
+    
+        // Membuat PDF menggunakan template
+        $pdf = PDF::loadView('template-kehadiran', $data);
+    
+        // Mengunduh PDF
+        return $pdf->download('rekap-kehadiran-' . $userId . '.pdf');
+    }
+    
 
     public function cetakSertifikatSiswa($id)
     {

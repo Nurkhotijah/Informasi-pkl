@@ -74,7 +74,7 @@
                     <!-- Profile Dropdown -->
                     <div class="relative">
                         <button id="profileButton" class="focus:outline-none flex items-center space-x-2">
-                            <img src="{{ Auth::user()->foto_profile ? asset('storage/' . Auth::user()->foto_profile) : asset('assets/default-profile.png') }}" alt="profile" class="w-auto h-8" />
+                            <img src="{{ Auth::check() && Auth::user()->foto_profile ? asset('storage/' . Auth::user()->foto_profile) : asset('assets/default-profile.png') }}" alt="profile" class="w-auto h-8" />
                         </button>
 
                         <!-- Profile Dropdown -->

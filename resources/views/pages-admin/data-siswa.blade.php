@@ -29,7 +29,6 @@
                             <th class="py-2 px-4 border-b text-center">Kehadiran</th>
                             <th class="py-2 px-4 border-b text-center">Sertifikat</th>
                             <th class="py-2 px-4 border-b text-center">Laporan</th> <!-- Kolom Laporan Baru -->
-                            <th class="py-2 px-4 border-b text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,52 +36,38 @@
                             <tr class="student-row" data-id="1">
                                 <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->name }}</td>
-                                <td class="py-2 px-4 border-b text-left">PPLG</td>
+                                <td class="py-2 px-4 border-b text-left">{{ $item->jurusan }}</td>
                                 <td class="py-2 px-4 border-b text-center">
-                                    <a href="/path/to/grades/budi_santoso.pdf" target="_blank" class="text-blue-500 hover:underline">
-                                        Unduh PDF
+                                    <a href="{{ route('penilaiansiswa.unduh', ['id' => $item->id]) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                        <img src="{{ asset('images/print-icon.png') }}" alt="Cetak" class="w-4 h-4 mr-1"> 
+                                    </a>                                    
+                                </td>
+                                <td class="py-2 px-4 border-b text-center">
+                                    <a href="{{ route('kehadiransiswa.unduh', ['userId' => $item->id]) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                        <img src="{{ asset('images/print-icon.png') }}" alt="Cetak" class="w-4 h-4 mr-1"> 
+                                    </a>
+                                </td>
+                                
+                                <td class="py-2 px-4 border-b text-center">
+                                    <a href="{{ route('cetak-sertifikat-siswa', $item->id) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                        <img src="{{ asset('images/print-icon.png') }}" alt="Cetak" class="w-4 h-4 mr-1"> 
                                     </a>
                                 </td>
                                 <td class="py-2 px-4 border-b text-center">
-                                    <a href="/path/to/attendance/budi_santoso.pdf" target="_blank" class="text-blue-500 hover:underline">
-                                        Unduh PDF
+                                    @if ($item->laporan)
+                                    <a href="{{ asset('storage/' . $item->laporan->file_path) }}" target="_blank" class="text-blue-500 hover:underline">
+                                        {{ $item->laporan->file_name }}
                                     </a>
+                                @else
+                                    <p class="text-gray-500">Belum ada laporan</p>
+                                @endif
                                 </td>
-                                <td class="py-2 px-4 border-b text-center">
-                                    <a href="{{ route('cetak-sertifikat-siswa', $item->id) }}" target="_blank" class="text-blue-500 hover:underline">
-                                        Unduh PDF
-                                    </a>
-                                </td>
-                                <td class="py-2 px-4 border-b text-center">
-                                    <button onclick="openReportPopup(1)" class="text-blue-500 hover:underline">
-                                        Lihat Laporan
-                                    </button>
-                                </td>
-                                <td class="py-2 px-4 border-b text-center">
-                                    <button onclick="deleteStudent(1)" class="bg-red-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-500 transition duration-300 ease-in-out">
-                                        <i class="fas fa-trash mr-1"></i> Hapus
-                                    </button>
-                                </td>
-                            </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            <!-- Pop-up Laporan PKL Siswa -->
-<div id="reportPopup" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
-    <div class="bg-white p-6 rounded shadow-lg w-1/3">
-        <h2 class="text-xl font-semibold mb-4">Laporan PKL Siswa</h2>
-        <div id="reportContent">
-            <!-- Konten laporan akan dimuat di sini -->
-        </div>
-        <button onclick="closeReportPopup()" class="bg-red-400 text-white px-4 py-2 rounded mt-4 hover:bg-red-500">
-            Tutup
-        </button>
-    </div>
-</div>
-
-            
-            
+           
+ 
             <!-- Pagination Section -->
             <div class="flex justify-end items-center mt-4">
                 <span class="mr-4" id="pageNumber">Halaman 1</span>
@@ -98,26 +83,6 @@
 </div>
 
 <script>
-    // Fungsi untuk membuka pop-up dan menampilkan laporan
-function openReportPopup(studentId) {
-    // Menentukan URL atau konten yang ingin ditampilkan di dalam pop-up
-    var reportUrl = `/path/to/reports/siswa_${studentId}.pdf`;
-
-    // Memasukkan laporan ke dalam div #reportContent
-    var reportContent = `
-        <iframe src="${reportUrl}" width="100%" height="400px"></iframe>
-    `;
-    document.getElementById('reportContent').innerHTML = reportContent;
-
-    // Menampilkan pop-up
-    document.getElementById('reportPopup').classList.remove('hidden');
-}
-
-// Fungsi untuk menutup pop-up
-function closeReportPopup() {
-    // Menyembunyikan pop-up
-    document.getElementById('reportPopup').classList.add('hidden');
-}
 
     function deleteStudent(studentId) {
         // Tampilkan dialog konfirmasi

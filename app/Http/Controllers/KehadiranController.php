@@ -81,6 +81,25 @@ class KehadiranController extends Controller
     public function store(Request $request)
     {
         try {
+            $user = Auth::user();
+            $now = Carbon::now();
+            $tanggal = $now->toDateString();
+
+            // Cek apakah sudah absen hari ini
+            $kehadiran = Kehadiran::where('user_id', $user->id)
+                ->whereDate('tanggal', $tanggal)
+                ->first();
+
+            // Cek jika user sudah absen masuk atau pulang
+            if ($kehadiran && ($kehadiran->foto_masuk || $kehadiran->foto_keluar)) {
+                return response()->json(['message' => 'Anda sudah absen masuk atau pulang, tidak bisa upload foto izin.'], 400);
+            }
+
+            // Cek jika user sudah upload foto izin
+            if ($kehadiran && ($kehadiran->foto_izin)) {
+                return response()->json(['message' => 'Anda sudah upload foto izin, tidak bisa absen masuk atau pulang.'], 400);
+            }
+
             // Validasi request
             if ($request->hasFile('foto_izin')) {
                 $request->validate([
@@ -92,15 +111,6 @@ class KehadiranController extends Controller
                     'jenis_absen' => 'required|in:masuk,pulang'
                 ]);
             }
-        
-            $user = Auth::user();
-            $now = Carbon::now();
-            $tanggal = $now->toDateString();
-        
-            // Cek apakah sudah absen hari ini
-            $kehadiran = Kehadiran::where('user_id', $user->id)
-                ->whereDate('tanggal', $tanggal)
-                ->first();
 
             // Jika upload foto izin
             if ($request->hasFile('foto_izin')) {
@@ -108,6 +118,8 @@ class KehadiranController extends Controller
                     $kehadiran = new Kehadiran();
                     $kehadiran->user_id = $user->id;
                     $kehadiran->tanggal = $tanggal;
+                } else {
+                    return response()->json(['message' => 'Anda tidak bisa upload, karena sudah melakukan absen.'], 400);
                 }
                 
                 $fotoPath = $request->file('foto_izin')->store('kehadiran/izin', 'public');
@@ -171,6 +183,11 @@ class KehadiranController extends Controller
         $user = auth()->user(); // Mendapatkan pengguna yang sedang login
         $kehadiran = Kehadiran::where('user_id', $user->id)->get(); // Ambil data kehadiran berdasarkan user_id
 
+        // Ambil data tanggal mulai dan tanggal selesai PKL dari tabel profile sesuai user_id
+        $profile = Profile::where('user_id', $user->id)->first(); // Ambil data profile sesuai user_id
+        $tanggalMulai = $profile ? $profile->tanggal_mulai : null; // Mengambil tanggal mulai jika ada
+        $tanggalSelesai = $profile ? $profile->tanggal_selesai : null; // Mengambil tanggal selesai jika ada
+
         // Hitung jumlah kehadiran, izin, dan tidak hadir
         $hadirCount = $kehadiran->where('status', 'hadir')->count();
         $izinCount = $kehadiran->where('status', 'izin')->count();
@@ -185,6 +202,8 @@ class KehadiranController extends Controller
             'izinCount' => $izinCount,
             'tidakHadirCount' => $tidakHadirCount,
             'total' => $total,
+            'tanggalMulai' => $tanggalMulai,
+            'tanggalSelesai' => $tanggalSelesai,
         ];
 
         // Membuat PDF menggunakan template
@@ -193,4 +212,5 @@ class KehadiranController extends Controller
         // Mengunduh PDF
         return $pdf->download('rekap-kehadiran-' . $user->name . '.pdf');
     }
+
 }    

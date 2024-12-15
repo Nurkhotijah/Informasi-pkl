@@ -85,16 +85,16 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Sekolah</span>
-                    {{-- <span class="info-value">: {{ $kehadiran->profile->sekolah->nama ?? 'Data Sekolah Tidak Tersedia' }}</span> --}}
+                    <span class="info-value">: {{ $user->profile->sekolah->nama ?? 'Data Sekolah Tidak Tersedia' }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Tanggal Mulai PKL</span>
-                    <span class="info-value">: {{ $kehadiran->first()->tanggal }}</span>
+                    <span class="info-value">: {{ $tanggalMulai }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Tanggal Selesai PKL</span>
-                    <span class="info-value">: {{ $kehadiran->last()->tanggal }}</span>
-                </div>
+                    <span class="info-value">: {{ $tanggalSelesai }}</span>
+                </div>                
             </div>
 
             <table>

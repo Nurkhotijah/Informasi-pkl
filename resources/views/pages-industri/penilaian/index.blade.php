@@ -18,7 +18,7 @@
                     <thead class="bg-gray-200">
                         <tr>
                             <th class="py-2 px-4 border-b text-center">No</th>
-                            <th class="py-2 px-4 border-b text-left">Nama User</th>
+                            <th class="py-2 px-4 border-b text-left">Nama Siswa</th>
                             <th class="py-2 px-4 border-b text-left">Sekolah</th>
                             <th class="py-2 px-4 border-b text-center">Aksi</th>
                         </tr>

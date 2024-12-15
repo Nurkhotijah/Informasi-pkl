@@ -61,47 +61,47 @@ class IndustriController extends Controller
     }
 
     public function cetakkehadiranuser($userId)
-    {
-        // Ambil semua data kehadiran untuk user berdasarkan user_id
-        $kehadiran = Kehadiran::where('user_id', $userId)->get();
-    
-        // Jika tidak ada data kehadiran untuk user ini
-        if ($kehadiran->isEmpty()) {
-            return abort(404, 'Data kehadiran tidak ditemukan');
-        }
-    
-        // Ambil data user dan sekolah berdasarkan kehadiran
-        // Kita ambil dari kehadiran pertama karena semua kehadiran memiliki user_id yang sama
-        $user = $kehadiran->first()->user;
-        $sekolah = $kehadiran->first()->sekolah;
-    
-        // Hitung jumlah kehadiran untuk status tertentu
-        $hadirCount = $kehadiran->where('status', 'hadir')->count();
-        $izinCount = $kehadiran->where('status', 'izin')->count();
-        $tidakHadirCount = $kehadiran->where('status', 'tidak hadir')->count();
-        $total = $kehadiran->count();
-    
-        // Siapkan data untuk PDF
-        $data = [
-            'user' => $user,
-            'sekolah' => $sekolah,
-            'kehadiran' => $kehadiran,
-            'hadirCount' => $hadirCount,
-            'izinCount' => $izinCount,
-            'tidakHadirCount' => $tidakHadirCount,
-            'total' => $total,
-        ];
-    
-        // Muat view dan siapkan PDF
-        $pdf = PDF::loadView('template-kehadiran', $data);
-    
-        // Kembalikan PDF sebagai download
-        return $pdf->download('laporan_kehadiran_' . $user->name . '.pdf');
+{
+    // Ambil semua data kehadiran untuk user berdasarkan user_id
+    $kehadiran = Kehadiran::where('user_id', $userId)->get();
+
+    // Jika tidak ada data kehadiran untuk user ini
+    if ($kehadiran->isEmpty()) {
+        return abort(404, 'Data kehadiran tidak ditemukan');
     }
-    
 
+    // Ambil data user dan sekolah berdasarkan kehadiran
+    $user = $kehadiran->first()->user;
 
+    // Ambil data profile untuk tanggal mulai dan selesai PKL
+    $profile = Profile::where('user_id', $userId)->first();
+    $tanggalMulai = $profile ? $profile->tanggal_mulai : 'Tanggal Mulai Tidak Tersedia';
+    $tanggalSelesai = $profile ? $profile->tanggal_selesai : 'Tanggal Selesai Tidak Tersedia';
 
+    // Hitung jumlah kehadiran untuk status tertentu
+    $hadirCount = $kehadiran->where('status', 'hadir')->count();
+    $izinCount = $kehadiran->where('status', 'izin')->count();
+    $tidakHadirCount = $kehadiran->where('status', 'tidak hadir')->count();
+    $total = $kehadiran->count();
+
+    // Siapkan data untuk PDF
+    $data = [
+        'user' => $user,
+        'kehadiran' => $kehadiran,
+        'hadirCount' => $hadirCount,
+        'izinCount' => $izinCount,
+        'tidakHadirCount' => $tidakHadirCount,
+        'total' => $total,
+        'tanggalMulai' => $tanggalMulai,
+        'tanggalSelesai' => $tanggalSelesai,
+    ];
+
+    // Muat view dan siapkan PDF
+    $pdf = PDF::loadView('template-kehadiran', $data);
+
+    // Kembalikan PDF sebagai download
+    return $pdf->download('laporan_kehadiran_' . $user->name . '.pdf');
+}
 
 
 
