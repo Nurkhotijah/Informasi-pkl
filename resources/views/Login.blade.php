@@ -33,7 +33,7 @@
 
             <!-- Email -->
             <div class="mb-6">
-                <label for="email" class="block text-sm font-medium text-gray-600 mb-2">Alamat Email</label>
+                <label for="email" class="block text-sm font-medium text-gray-600 mb-2">Email</label>
                 <input type="email" id="email" name="email" required
                     class="w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
                     placeholder="you@gmail.com">
@@ -44,7 +44,7 @@
                 <label for="password" class="block text-sm font-medium text-gray-600 mb-2">Kata Sandi</label>
                 <input type="password" id="password" name="password" required
                     class="w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-                    placeholder="Masukkan kata sandi">
+                    placeholder="Masukkan Kata Sandi">
             </div>
 
             <!-- Remember Me -->

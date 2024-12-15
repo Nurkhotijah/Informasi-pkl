@@ -36,7 +36,7 @@
         <label for="username" class="block text-sm font-medium text-gray-600 mb-1">Nama Sekolah</label>
         <input type="text" id="name" name="name" required
             class="w-full px-3 py-2 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-            placeholder="Nama Sekolah atau Username">
+            placeholder="Masukkan Nama Sekolah">
     </div>
     <div>
         <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Email</label>
@@ -52,13 +52,13 @@
         <label for="alamat" class="block text-sm font-medium text-gray-600 mb-1">Alamat</label>
         <input type="text" id="alamat" name="alamat" required
             class="w-full px-3 py-2 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-            placeholder="Alamat Lengkap">
+            placeholder="Masukkan Alamat Lengkap">
     </div>
     <div>
-        <label for="password" class="block text-sm font-medium text-gray-600 mb-1">Password</label>
+        <label for="password" class="block text-sm font-medium text-gray-600 mb-1">Kata Sandi</label>
         <input type="password" id="password" name="password" required
             class="w-full px-3 py-2 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-            placeholder="Password">
+            placeholder="Masukkan Kata Sandi">
     </div>
 </div>
 

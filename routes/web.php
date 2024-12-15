@@ -213,7 +213,7 @@ Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riw
 Route::post('/kehadiran', [KehadiranController::class, 'store'])->name('kehadiran.store');
 Route::get('/dashboard-user', [UserController::class, 'dashboard'])->name('user.dashboard');
 
-// Route::get('/penilaian-user', [PenilaianController::class, 'showuser'])->name('penilaian.show.user');
+Route::get('/penilaian-user', [PenilaianController::class, 'showuser'])->name('penilaian.show.user');
 
 
 Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riwayat-absensi');
