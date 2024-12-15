@@ -3,10 +3,10 @@
 @section('title', 'Tambah Pengajuan Siswa')
 
 @section('content')
-<div class="bg-gray-100 h-screen flex items-center justify-center">
+<div class="bg-gray-100  flex items-center justify-center">
     <!-- Tambahkan margin atas untuk menaikkan kotak -->
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
-        <h2 class="text-2xl font-bold mb-6 text-center">Tambah Data Pengajuan</h2>
+        <h2 class="text-2xl font-bold mb-6 text-center">Tambah Data PKL</h2>
         @if ($errors->any())
             <div class="bg-red-500 text-white p-4 mb-4">
                 <ul>
@@ -33,7 +33,7 @@
                             <input type="text" name="pembimbing" id="pembimbing" class="w-full p-2 border rounded" required>
                         </div>
                         <div class="mb-4">
-                            <label for="lampiran" class="block text-sm font-medium text-gray-700">Lampiran (PDF)</label>
+                            <label for="lampiran" class="block text-sm font-medium text-gray-700">Lampiran</label>
                             <input type="file" name="lampiran" id="lampiran" accept=".pdf" class="w-full p-2 border rounded" required>
                         </div>
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Simpan</button>
