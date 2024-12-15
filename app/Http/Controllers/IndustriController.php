@@ -18,7 +18,8 @@ class IndustriController extends Controller
 {
     public function dashboard()
     {
-        return view('pages-industri.dashboard-industri');
+        $jumlahjurnal = Jurnal::count(); // Menghitung total semua jurnal yang siswa kirim
+        return view('pages-industri.dashboard-industri', compact('jumlahjurnal'));
     }
 
 /* -------------------------------------------------------------------------- */
@@ -220,9 +221,10 @@ class IndustriController extends Controller
 
     public function show($id)
     {
-        $penilaian = Penilaian::with(relations: 'user')->findOrFail($id);
+        $penilaian = Penilaian::with(['user.sekolah'])->findOrFail($id);
         return view('pages-industri.penilaian.show', compact('penilaian'));
     }
+    
 
     public function destroy($id)
 {

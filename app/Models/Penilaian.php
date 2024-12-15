@@ -25,9 +25,14 @@ class Penilaian extends Model
     }
 
     // Relasi ke sekolah (sekolah_id)
+    // public function sekolah()
+    // {
+    //     return $this->belongsTo(User::class, 'sekolah_id');
+    // }
+
     public function sekolah()
     {
-        return $this->belongsTo(User::class, 'sekolah_id');
+        return $this->hasOneThrough(Sekolah::class, User::class, 'id', 'user_id');
     }
 
     public function profile()

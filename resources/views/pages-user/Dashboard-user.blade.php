@@ -40,11 +40,10 @@
                 {{ $buttonText }}
             </button>
             <a class="bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center gap-2" 
-                href="{{ asset('path/to/certificate.pdf') }}" 
-                download="Sertifikat_PKL_{{ Auth::user()->name }}">
-                <i class="fas fa-download"></i>
-                Sertifikat PKL
-            </a>
+            href="{{ route('cetak-sertifikat', Auth::user()->id) }}">
+             <i class="fas fa-download"></i>
+             Sertifikat PKL
+         </a>         
 
         </div>
     </div>

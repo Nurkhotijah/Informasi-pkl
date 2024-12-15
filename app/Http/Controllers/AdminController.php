@@ -30,22 +30,7 @@ class AdminController extends Controller
         // Mengirim data ke tampilan
         return view('pages-admin.kehadiran-siswapkl', compact('kehadiran'));
     }
-    public function downloadpenilaian($id)
-    {
-        // Mengambil data penilaian berdasarkan ID
-        $penilaian = Penilaian::findOrFail($id);
     
-        // Menyiapkan data untuk template
-        $data = [
-            'penilaian' => $penilaian,
-        ];
-    
-        // Membuat PDF dari template Blade
-        $pdf = Pdf::loadView('template-penilaian', $data);
-    
-        // Mengunduh file PDF
-        return $pdf->download('penilaian_' . $penilaian->id . '.pdf');
-    }
 
     public function indexlaporan()
     {
@@ -122,15 +107,28 @@ class AdminController extends Controller
         return $pdf->download('rekap-kehadiran-' . $userId . '.pdf');
     }
     
+    public function downloadpenilaian($id)
+    {
+        $penilaian = Penilaian::find($id); // Gunakan find dulu untuk debug
+    
+        if (!$penilaian) {
+            return response()->json([
+                'message' => 'Data Penilaian tidak ditemukan.',
+                'id' => $id,
+            ], 404); // Tampilkan pesan error jika tidak ditemukan
+        }
+    
+        // Lanjutkan jika data ditemukan
+        $data = ['penilaian' => $penilaian];
+        $pdf = Pdf::loadView('template-penilaian', $data);
+        return $pdf->download('penilaian_' . $penilaian->id . '.pdf');
+    }
+    
 
     public function cetakSertifikatSiswa($id)
     {
         $siswa = User::with('profile.sekolah.user.profile')->find($id);
-
-        if (!$siswa || !$siswa->profile || !$siswa->profile->sekolah || !$siswa->profile->sekolah->user || !$siswa->profile->sekolah->user->profile) {
-            return redirect()->back()->with('error', 'Data sertifikat tidak ditemukan.');
-        }
-
+        
         $pdf = Pdf::loadView('pages-admin.pdf.sertifikat', compact('siswa'));
         $pdf->setPaper('A4', 'Landscape');
         return $pdf->stream($siswa->name . '-sertifikat.pdf');

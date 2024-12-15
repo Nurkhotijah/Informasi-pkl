@@ -19,7 +19,7 @@
         @csrf
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             <div class="flex flex-col">
-                <label for="user_id" class="block text-gray-700 font-semibold mb-2">Nama User</label>
+                <label for="user_id" class="block text-gray-700 font-semibold mb-2">Nama Siswa</label>
                 <select name="user_id" id="user_id" class="w-full p-3 border border-gray-300 rounded-md">
                     @foreach ($siswa as $item)
                     <option value="{{ $item->id }}">{{ $item->name }}</option>

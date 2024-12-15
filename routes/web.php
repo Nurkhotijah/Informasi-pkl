@@ -17,7 +17,7 @@ use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PklController;
 use App\Http\Controllers\SekolahController;
-
+use App\Http\Controllers\CertificateController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -213,7 +213,7 @@ Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riw
 Route::post('/kehadiran', [KehadiranController::class, 'store'])->name('kehadiran.store');
 Route::get('/dashboard-user', [UserController::class, 'dashboard'])->name('user.dashboard');
 
-Route::get('/penilaian-user', [PenilaianController::class, 'showuser'])->name('penilaian.show.user');
+// Route::get('/penilaian-user', [PenilaianController::class, 'showuser'])->name('penilaian.show.user');
 
 
 Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riwayat-absensi');
@@ -222,6 +222,7 @@ Route::get('/unduh-rekap', [KehadiranController::class, 'downloadRekap'])->name(
 
 Route::get('/laporan-pkl', [UserController::class, 'laporanpkl'])->name('laporan-pkl');
 
+Route::get('/cetak-sertifikat/{id}', [CertificateController::class, 'cetakSertifikat'])->name('cetak-sertifikat');
 
 Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile');
 

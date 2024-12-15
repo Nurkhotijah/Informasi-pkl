@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 
 class CertificateController extends Controller
 {
-    public function download()
+    public function cetakSertifikat($id)
     {
-        $user = Auth::user();
-        $certificatePath = public_path('certificates/' . $user->certificate_filename); // Gantilah sesuai penyimpanan file sertifikat
-        return response()->download($certificatePath, 'Sertifikat_PKL_' . $user->name . '.pdf');
+        $siswa = User::with('profile.sekolah.user')->findOrFail($id);
+
+        // Load view dan generate PDF
+        $pdf = Pdf::loadView('pages-user.pdf.sertifikatuser', compact('siswa'));
+        $pdf->setPaper('A4', 'landscape');
+
+        // Return PDF untuk di-download
+        return $pdf->download($siswa->name . '-sertifikat.pdf');
     }
 }

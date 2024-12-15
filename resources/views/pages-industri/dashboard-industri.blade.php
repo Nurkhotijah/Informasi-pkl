@@ -39,17 +39,15 @@
     <div class="bg-white p-6 rounded-lg shadow">
       <div class="flex items-center justify-between">
         <h2 class="text-lg font-semibold">
-          Jumlah Laporan PKL
+          Jumlah Jurnal
         </h2>
         <i class="fas fa-file-alt text-blue-500 text-3xl"></i>
       </div>
-      <p class="text-3xl font-bold mt-4" id="jumlah-laporan">
-        {{ \App\Models\Jurnal::whereHas('user', function($query) {
-            $query->where('id', Auth::id());
-        })->count() }}
+      <p class="text-3xl font-bold mt-4" id="jumlah-jurnal">
+        {{ $jumlahjurnal }}
       </p>
       <p class="text-gray-600">
-        Jumlah total laporan PKL yang sudah dikirim oleh siswa.
+        Jumlah total Jurnal yang sudah dikirim oleh siswa.
       </p>
     </div>
 

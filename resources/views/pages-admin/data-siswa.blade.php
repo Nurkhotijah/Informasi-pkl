@@ -36,11 +36,11 @@
                             <tr class="student-row" data-id="1">
                                 <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->name }}</td>
-                                <td class="py-2 px-4 border-b text-left">{{ $item->jurusan }}</td>
+                                <td class="py-2 px-4 border-b text-left">{{ $item->user->pengajuan->jurusan ?? 'Jurusan Tidak Tersedia' }}</td>
                                 <td class="py-2 px-4 border-b text-center">
-                                    <a href="{{ route('penilaiansiswa.unduh', ['id' => $item->id]) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                                        <i class="fas fa-eye mr-1"></i>                                    
-                                    </a>                                    
+                                    <a href="{{ route('penilaiansiswa.unduh', $item->id) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600"> 
+                                        <i class="fas fa-eye mr-1"></i> 
+                                    </a>                                                                      
                                 </td>
                                 <td class="py-2 px-4 border-b text-center">
                                     <a href="{{ route('kehadiransiswa.unduh', ['userId' => $item->id]) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
@@ -56,7 +56,7 @@
                                 <td class="py-2 px-4 border-b text-center">
                                     @if ($item->laporan)
                                     <a href="{{ asset('storage/' . $item->laporan->file_path) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                                        <i class="fas fa-eye mr-1"></i> {{ $item->laporan->file_name }}
+                                        <i class="fas fa-eye mr-1"></i> 
                                     </a>
                                     @else
                                     <p class="text-gray-500">Belum ada laporan</p>
