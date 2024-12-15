@@ -42,7 +42,7 @@
                                 </td>
                                 <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
-                                        <a href="{{ route('sekolah.detail-siswa', $item->sekolah->id) }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                                        <a href="{{ route('sekolah.detail-siswa', $item->id) }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                     </div>

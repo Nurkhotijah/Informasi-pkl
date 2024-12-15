@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengajuan;
+use App\Models\Pkl;
 use App\Models\Profile;
 use App\Models\Sekolah;
 use App\Models\User;
@@ -42,7 +43,7 @@ class SekolahController extends Controller
      */
     public function show(string $id)
     {
-        $listSekolah = Pengajuan::where('id_sekolah', $id)->get();
+        $listSekolah = Pkl::where('id_sekolah', $id)->get();
         return view('pages-industri.sekolah.show', compact('listSekolah'));
     }
 
@@ -51,7 +52,7 @@ class SekolahController extends Controller
      */
     public function detailSiswa(string $id)
     {
-        $listSiswa = Pengajuan::where('id_sekolah', $id)->get();
+        $listSiswa = Pengajuan::where('id_pkl', $id)->get();
 
         return view('pages-industri.sekolah.detail-siswa', compact('listSiswa'));
     }
