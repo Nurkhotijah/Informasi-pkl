@@ -113,11 +113,12 @@
 </head>
 <body>
     <div class="certificate">
-        <div class="logo left">
-            <img src="logo-left.png" alt="Logo sekolah">
+       <div class="logo left">
+         <img src="{{ $logoSekolah ? asset('storage/' . $logoSekolah) : asset('default-logo.jpg') }}" alt="Logo Sekolah">
         </div>
+
         <div class="logo right">
-            <img src="{{ asset('assets/qelopak.png') }}" alt="Logo qelopak">
+            <img src="{{ public_path('assets/certificate/qelopak.png') }}" class="bg" alt="Logo qelopak">
         </div>
         <h1>Sertifikat Praktik Kerja Lapangan</h1>
         <h2>Diberikan Kepada</h2>
@@ -129,10 +130,9 @@
             pada tanggal <strong>{{ $siswa->profile->tanggal_mulai }}</strong> hingga <strong>{{ $siswa->profile->tanggal_selesai }}</strong>.
         </p>
         <div class="signature">
-            <img src="{{ asset('assets/ttd.png') }}" alt="Tanda Tangan" style="width: 150px;"/>
         </div>
         <div class="signature-space">
-            <p>__________________________</p>
+            <img src="{{ public_path('assets/certificate/ttd.png') }}" alt="Tanda Tangan" style="width: 150px;"/>
             <p>Nama Pembimbing</p>
         </div>
         <div class="footer">
