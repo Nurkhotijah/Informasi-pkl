@@ -55,11 +55,11 @@
             <p class="text-3xl font-bold mt-4" id="current-time">--:--:-- WIB</p>
         </div>
 
-        <!-- Jumlah Laporan -->
         <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-lg font-semibold">Jumlah Laporan PKL</h2>
-            <p class="text-3xl font-bold mt-4" id="jumlah-laporan">0</p>
+            <h2 class="text-lg font-semibold">Jumlah Jurnal</h2>
+            <p class="text-3xl font-bold mt-4" id="jumlah-jurnal">{{ $jumlahJurnal }}</p>
         </div>
+        
 
         <!-- Jumlah Absen -->
         <div class="bg-white p-6 rounded-lg shadow">
@@ -86,6 +86,16 @@
 </div>
 
 <script>
+     / function updateJumlahJurnal() {
+        fetch("/api/jumlah-jurnal")  // Pastikan route ini sudah ada
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('jumlah-jurnal').textContent = data.jumlah_jurnal;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
     // Timer untuk Waktu Saat Ini
     function updateTime() {
         const timeElement = document.getElementById("current-time");

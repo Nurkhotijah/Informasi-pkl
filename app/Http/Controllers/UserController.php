@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Jurnal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,10 +9,18 @@ class UserController extends Controller
 {
 
     public function dashboard()
-    {
-        // Perbaiki path view sesuai dengan lokasi file yang benar
-        return view('pages-user.dashboard-user');
-    }
+{
+    $users = Auth::user();
+
+    // Ambil semua jurnal yang dimiliki pengguna
+    $jurnal = Jurnal::where('user_id', $users->id)->get();
+
+    // Hitung jumlah jurnal yang sudah dikirim oleh pengguna
+    $jumlahJurnal = $jurnal->count();
+
+    return view('pages-user.Dashboard-user', compact('jurnal', 'jumlahJurnal'));
+}
+
     
     public function riwayatabsensi() {
     return view('pages-user.riwayat-absensi');

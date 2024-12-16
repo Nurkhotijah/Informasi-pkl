@@ -24,14 +24,15 @@ class JurnalSiswaController extends Controller
         return view('pages-user.jurnal.edit', compact('jurnal'));
     }
     
+    
     public function create()
     {
         return view('pages-user.jurnal.create');
     }
 
+   // store method
     public function store(Request $request)
     {
-        // dd($request->all()); 
         // Validasi input dari form
         $request->validate([
             'kegiatan' => 'required|string|max:100',
@@ -48,7 +49,6 @@ class JurnalSiswaController extends Controller
 
         // Menyimpan data jurnal kegiatan ke dalam database
         Jurnal::create([
-            
             'kegiatan' => $request->kegiatan,
             'tanggal' => $request->tanggal,
             'waktu_mulai' => $request->waktu_mulai,
@@ -57,9 +57,15 @@ class JurnalSiswaController extends Controller
             'user_id' => $users->id,  // ID pengguna yang login (siswa)
         ]);
 
-        // Redirect ke halaman jurnal kegiatan dengan pesan sukses
-        return redirect()->route('jurnal-siswa.index')->with('success', 'Jurnal kegiatan berhasil ditambahkan!');
+        // Menghitung jumlah jurnal yang sudah dikirim oleh pengguna
+        $jumlahJurnal = Jurnal::where('user_id', $users->id)->count();
+
+        // Redirect ke halaman jurnal kegiatan dengan pesan sukses dan jumlah jurnal yang baru
+        return redirect()->route('jurnal-siswa.index')->with('success', 'Jurnal kegiatan berhasil ditambahkan!')
+                                                    ->with('jumlah_jurnal', $jumlahJurnal);
     }
+
+
     public function show($id)
     {
         $jurnal = Jurnal::findOrFail($id);

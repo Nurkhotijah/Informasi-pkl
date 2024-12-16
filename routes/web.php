@@ -179,6 +179,7 @@ Route::prefix('jurnal-siswa')->name('jurnal-siswa.')->group(function () {
     Route::put('/{id}', [JurnalSiswaController::class, 'update'])->name('update');
     Route::delete('/{id}', [JurnalSiswaController::class, 'destroy'])->name('destroy');
     Route::post('/upload/{id}', [JurnalSiswaController::class, 'uploadLaporan'])->name('upload');
+    Route::get('/api/jumlah-laporan', [JurnalSiswaController::class, 'getJumlahLaporan']);
 });
 
 Route::get('/unduh-penilaian/{id}', [AdminController::class, 'downloadpenilaian'])->name('penilaiansiswa.unduh');

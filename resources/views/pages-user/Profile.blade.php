@@ -19,26 +19,29 @@
                 </div>                              
                 
                 <!-- Informasi -->
-<div class="max-w-2xl mx-auto border border-gray-300 rounded-lg mb-6">
-    <h3 class="bg-blue-500 text-white p-3 font-semibold text-center rounded-t-lg">Informasi</h3>
-    <div class="p-3 text-left space-y-2">
-        <p class="font-sans text-base">
-            <span class="font-medium">Nama Sekolah:</span> {{ $profilesiswa->sekolah->nama ?? 'Sekolah tidak ditemukan' }}
-        </p>
-        <p class="font-sans text-base">
-            <span class="font-medium">Jurusan:</span> {{ $jurusan ?? '-' }}
-        </p>
-        <p class="font-sans text-base">
-            <span class="font-medium">Nama Pembimbing:</span> {{ $profilesiswa->pembimbing->nama ?? 'Pembimbing tidak ditemukan' }}
-        </p>
-        <p class="font-sans text-base">
-            <span class="font-medium">Tanggal Mulai PKL:</span> {{ \Carbon\Carbon::parse($profilesiswa->profile->tanggal_mulai)->format('d M Y') ?? 'Tanggal tidak ditemukan' }}
-        </p>
-        <p class="font-sans text-base">
-            <span class="font-medium">Tanggal Selesai PKL:</span> {{ \Carbon\Carbon::parse($profilesiswa->profile->tanggal_selesai)->format('d M Y') ?? 'Tanggal tidak ditemukan' }}
-        </p>
-    </div>
-</div>
+                <div class="max-w-2xl mx-auto border border-gray-300 rounded-lg mb-6">
+                    <h3 class="bg-blue-500 text-white p-3 font-semibold text-center rounded-t-lg">Informasi</h3>
+                    <div class="p-3 text-left space-y-2">
+                        <p class="font-sans text-base">
+                            <span class="font-medium">Nama Sekolah:</span> {{ $profilesiswa->sekolah->nama ?? 'Sekolah tidak ditemukan' }}
+                        </p>
+                        <p class="font-sans text-base">
+                            <span class="font-medium">Jurusan:</span> {{ $jurusan ?? '-' }}
+                        </p>
+                        <p class="font-sans text-base">
+                            <span class="font-medium">Nama Pembimbing:</span> {{ $profilesiswa->pembimbing->nama ?? 'Pembimbing tidak ditemukan' }}
+                        </p>
+                        <p class="font-sans text-base">
+                            <span class="font-medium">Tanggal Mulai PKL:</span> {{ \Carbon\Carbon::parse($profilesiswa->profile->tanggal_mulai)->format('d M Y') ?? 'Tanggal tidak ditemukan' }}
+                        </p>
+                        <p class="font-sans text-base">
+                            <span class="font-medium">Tanggal Selesai PKL:</span> {{ \Carbon\Carbon::parse($profilesiswa->profile->tanggal_selesai)->format('d M Y') ?? 'Tanggal tidak ditemukan' }}
+                        </p>
+                
+                       
+                    </div>
+                </div>
+                
 
             </div>
         </div>
