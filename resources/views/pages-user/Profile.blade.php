@@ -28,6 +28,15 @@
         <p class="font-sans text-base">
             <span class="font-medium">Jurusan:</span> {{ $jurusan ?? '-' }}
         </p>
+        <p class="font-sans text-base">
+            <span class="font-medium">Nama Pembimbing:</span> {{ $profilesiswa->pembimbing->nama ?? 'Pembimbing tidak ditemukan' }}
+        </p>
+        <p class="font-sans text-base">
+            <span class="font-medium">Tanggal Mulai PKL:</span> {{ \Carbon\Carbon::parse($profilesiswa->profile->tanggal_mulai)->format('d M Y') ?? 'Tanggal tidak ditemukan' }}
+        </p>
+        <p class="font-sans text-base">
+            <span class="font-medium">Tanggal Selesai PKL:</span> {{ \Carbon\Carbon::parse($profilesiswa->profile->tanggal_selesai)->format('d M Y') ?? 'Tanggal tidak ditemukan' }}
+        </p>
     </div>
 </div>
 

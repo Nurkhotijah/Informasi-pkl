@@ -11,7 +11,10 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Sekolah; // Import model Sekolah
+use App\Mail\SekolahAcceptedMail; // Import mail class
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 
 class IndustriController extends Controller
@@ -28,10 +31,11 @@ class IndustriController extends Controller
 
     public function Kehadiran()
     {
-        // Ambil data kehadiran dari database
-        $kehadiran = Kehadiran::all(); // Sesuaikan dengan query yang sesuai dengan kebutuhan
+        // Ambil data kehadiran dengan pagination (2 item per halaman)
+        $kehadiran = Kehadiran::paginate(2);
         return view('pages-industri.kelola-kehadiran', compact('kehadiran'));
     }
+
     public function edit($id)
     {
         $item = Kehadiran::with('user')->find($id);
@@ -126,6 +130,25 @@ class IndustriController extends Controller
         $listSekolah = User::where('role', 'sekolah')->get();
         return view('pages-industri.data-sekolah', compact('listSekolah'));
     }
+
+    public function updateStatusSekolah(Request $request, $id)
+{
+    // Temukan data sekolah berdasarkan ID
+    $sekolah = Sekolah::findOrFail($id);
+
+    // Update status sekolah menjadi "Diterima"
+    $sekolah->status = 'Diterima';
+    $sekolah->save();
+
+    // Kirimkan email pemberitahuan ke sekolah
+    $user = $sekolah->user; // Ambil user terkait
+    Mail::to($user->email)->send(new SekolahAcceptedMail($sekolah));
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Status berhasil diperbarui dan email terkirim.',
+    ]);
+}
 
     public function lihatSiswa($id)
     {

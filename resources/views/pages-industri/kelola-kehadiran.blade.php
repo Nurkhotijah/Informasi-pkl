@@ -52,16 +52,11 @@
                 </table>
             </div>
 
-            <!-- Pagination Section -->
-            <div class="flex justify-end items-center mt-4 space-x-2">
-                <button id="prevPage" class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <span id="pageInfo" class="text-sm text-gray-600"></span>
-                <button id="nextPage" class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
+           <!-- Pagination -->
+        <div class="mt-4">
+            {{ $kehadiran->links('pagination::tailwind') }}
+        </div>
+
         </div>
     </main>
 
@@ -82,75 +77,7 @@
 </div>
 
 <script>
-const ITEMS_PER_PAGE = 10;
-let currentPage = 1;
-let filteredData = [];
 
-function initializeTable() {
-    const tableBody = document.querySelector('#attendanceTable tbody');
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
-    filteredData = rows;
-    updateTableDisplay();
-}
-
-function searchTable() {
-    const searchTerm = document.getElementById('search').value.toLowerCase();
-    const tableBody = document.querySelector('#attendanceTable tbody');
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
-    
-    filteredData = rows.filter(row => {
-        const nameCell = row.querySelector('td:nth-child(2)');
-        const schoolCell = row.querySelector('td:nth-child(3)');
-        return nameCell.textContent.toLowerCase().includes(searchTerm) || 
-               schoolCell.textContent.toLowerCase().includes(searchTerm);
-    });
-    
-    currentPage = 1;
-    updateTableDisplay();
-}
-
-
-function updateTableDisplay() {
-    const tableBody = document.querySelector('#attendanceTable tbody');
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    
-    tableBody.querySelectorAll('tr').forEach(row => {
-        row.style.display = 'none';
-    });
-    
-    filteredData.slice(startIndex, endIndex).forEach(row => {
-        row.style.display = '';
-    });
-    
-    updatePaginationControls();
-}
-
-function updatePaginationControls() {
-    const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-    const prevButton = document.getElementById('prevPage');
-    const nextButton = document.getElementById('nextPage');
-    const pageInfo = document.getElementById('pageInfo');
-    
-    prevButton.disabled = currentPage === 1;
-    nextButton.disabled = currentPage === totalPages;
-    pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
-}
-
-function prevPage() {
-    if (currentPage > 1) {
-        currentPage--;
-        updateTableDisplay();
-    }
-}
-
-function nextPage() {
-    const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-    if (currentPage < totalPages) {
-        currentPage++;
-        updateTableDisplay();
-    }
-}
 
 function openModal(imageUrl) {
     const modal = document.getElementById("modal");

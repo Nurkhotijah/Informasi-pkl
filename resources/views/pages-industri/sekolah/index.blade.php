@@ -39,10 +39,12 @@
                                 <td class="py-2 px-4 border-b text-left">{{ $item->email }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->sekolah->alamat }}</td>
                                 <td class="py-2 px-4 border-b text-center">
-                                    <button onclick="updateStatus({{ $item->sekolah->id }})" id="status-{{ $item->sekolah->id }}" class="bg-yellow-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-green-500 transition duration-300 ease-in-out">
+                                    <button onclick="updateStatus({{ $item->sekolah->id }}, this)" 
+                                            id="status-{{ $item->sekolah->id }}" 
+                                            class="bg-yellow-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-green-500 transition duration-300 ease-in-out">
                                         Pending
                                     </button>
-                                </td>
+                                </td>                                
                                 <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
                                         <button onclick="window.open('{{ route('sekolah.show', $item->sekolah->id) }}', '_blank')" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
@@ -70,8 +72,37 @@
                 </button>
             </div>
 
-            <script>
-                let currentPage = 1;
+ <script>
+ function updateStatus(sekolahId) {
+        const url = `/sekolah/${sekolahId}/update-status`;
+        const button = document.getElementById(`status-${sekolahId}`);
+        
+        // Kirim permintaan AJAX ke server
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Ubah teks tombol menjadi "Diterima"
+                button.textContent = 'Diterima';
+                button.classList.remove('bg-yellow-500');
+                button.classList.add('bg-green-500');
+            } else {
+                alert('Gagal memperbarui status.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan.');
+        });
+    }
+         let currentPage = 1;
                 const rowsPerPage = 5;
                 const rows = document.querySelectorAll('.school-row');
                 const totalPages = Math.ceil(rows.length / rowsPerPage);

@@ -107,6 +107,7 @@ Route::delete('hapus-siswa/{id}', [SiswaController::class, 'destroy'])->name('ha
 
 Route::prefix('sekolah')->name('sekolah.')->group(function () {
     Route::get('', [SekolahController::class, 'index'])->name('index');
+    Route::post('/sekolah/{id}/update-status', [IndustriController::class, 'updateStatusSekolah'])->name('sekolah.updateStatus');
     Route::get('/show/{id}', [SekolahController::class, 'show'])->name('show');
     Route::get('/detail-siswa/{id}', [SekolahController::class, 'detailSiswa'])->name('detail-siswa');
     Route::post('/update-status-siswa', [SekolahController::class, 'updateStatusSiswa'])->name('update-status-siswa');
