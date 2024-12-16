@@ -202,9 +202,9 @@ Route::get('edit/{id}', [KehadiranController::class, 'edit'])->name('edit'); // 
 Route::post('update/{id}', [KehadiranController::class, 'update'])->name('updatekehadiran'); // Update data kehadiran
 Route::get('/rekap-kehadiran', [KehadiranController::class, 'rekapkehadiran'])->name('rekap.kehadiran');
 
-Route::get('/profile-admin', [ProfileController::class, 'showProfileSekolah'])->name('profile-admin');
-Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::get('/profile-admin', [AdminController::class, 'showProfileSekolah'])->name('profile-admin');
+Route::get('/profile/edit', [AdminController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/update', [AdminController::class, 'update'])->name('profile.update');
 
 // USER
 Route::post('/laporan-pkl', [LaporanController::class, 'store'])->name('laporan.store');
@@ -215,6 +215,7 @@ Route::get('/dashboard-user', [UserController::class, 'dashboard'])->name('user.
 
 Route::get('/penilaian-user', [PenilaianController::class, 'showuser'])->name('penilaian.show.user');
 
+Route::get('/profile', [ProfileController::class, 'showprofilsiswa'])->name('profilesiswa');
 
 Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riwayat-absensi');
 Route::post('/upload-foto-izin', [KehadiranController::class, 'uploadFotoIzin'])->name('uploadFotoIzin');
@@ -224,7 +225,6 @@ Route::get('/laporan-pkl', [UserController::class, 'laporanpkl'])->name('laporan
 
 Route::get('/cetak-sertifikat/{id}', [CertificateController::class, 'cetakSertifikat'])->name('cetak-sertifikat');
 
-Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile');
 
 
 

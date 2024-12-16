@@ -37,9 +37,7 @@
                               
                                 <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
-                                        <a href="{{ route('kehadiran.edit', $item->id) }}" class="bg-yellow-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-yellow-500 transition duration-300 ease-in-out">
-                                            <i class="fas fa-edit mr-1"></i> Edit
-                                        </a>
+                                       
                                         <a href="{{ route('kehadiran.detail', $item->user_id) }}" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
                                             <i class="fas fa-eye mr-1"></i> Lihat
                                         </a>

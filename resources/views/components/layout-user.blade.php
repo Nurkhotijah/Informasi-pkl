@@ -93,8 +93,8 @@
        <div class="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg hidden transition-all ease-in-out duration-150" id="profileDropdown">
         <ul class="py-1 text-gray-700">
          <li class="block px-4 py-2 hover:bg-gray-100 cursor-pointer transition">
-          <a class="flex items-center space-x-2" href="{{ route('profile') }}">
-           <img alt="test-account" height="30" src="https://img.icons8.com/fluency-systems-filled/50/000000/test-account.png" width="30"/>
+            <a class="flex items-center space-x-2" href="{{ route('profilesiswa') }}">
+                <img alt="test-account" height="30" src="https://img.icons8.com/fluency-systems-filled/50/000000/test-account.png" width="30"/>
            <span>
             Profile
            </span>

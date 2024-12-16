@@ -25,7 +25,7 @@
                             <th class="py-2 px-4 border-b text-center">No</th>
                             <th class="py-2 px-4 border-b text-left">Judul PKL</th>
                             <th class="py-2 px-4 border-b text-center">Tahun Ajaran</th>
-                            <th class="py-2 px-4 border-b text-left">Pembimbing</th>
+                            <th class="py-2 px-4 border-b text-left">Nama Pembimbing</th>
                             <th class="py-2 px-4 border-b text-center">Lampiran</th>
                             <th class="py-2 px-4 border-b text-center">Aksi</th>
                         </tr>
@@ -38,11 +38,13 @@
                                 <td class="py-2 px-4 border-b text-center">{{ $item->tahun }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->pembimbing }}</td>
                                 <td class="py-2 px-4 border-b text-center">
-                                    <a href="{{ asset('storage/' . $item->lampiran) }}" target="_blank" class="text-blue-500 hover:underline">Lihat</a>
+                                    <a href="{{ asset('storage/' . $item->lampiran) }}" target="_blank" class="bg-blue-500 text-white text-xs px-3 py-1 rounded hover:bg-blue-600">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </a>
                                 </td>
                                 <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
-                                        <a href="{{ route('sekolah.detail-siswa', $item->id) }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                                        <a href="{{ route('sekolah.detail-siswa', $item->id) }}" class="bg-blue-500 text-white text-xs px-3 py-1 rounded hover:bg-blue-600">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                     </div>

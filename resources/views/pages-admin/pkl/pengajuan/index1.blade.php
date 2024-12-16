@@ -15,7 +15,7 @@
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
                     <div class="mt-4 sm:mt-0">
-                        <a href="{{ route('pengajuan.tambah') }}" class="bg-blue-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
+                        <a href="{{ route('pengajuan.tambah') }}" class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out">
                             <i class="fas fa-plus mr-2"></i>Tambah Data
                         </a>
                     </div>

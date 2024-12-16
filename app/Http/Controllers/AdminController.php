@@ -6,8 +6,11 @@ use App\Models\Kehadiran;
 use App\Models\Penilaian;
 use App\Models\Profile;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 
 class AdminController extends Controller
 {
@@ -158,38 +161,57 @@ class AdminController extends Controller
         return view('pages-admin.rekap-kehadiransiswa');
     }
 
-    public function profileAdmin()
+/* -------------------------------------------------------------------------- */
+/*                                  START PROFILE                             */
+/* -------------------------------------------------------------------------- */
+
+    public function showprofilesekolah()
     {
-        // Logika untuk menampilkan jurnal siswa
-        return view('pages-admin.profile-admin');
+        // Ambil data pengguna yang sedang login
+        $profilesekolah = User::findOrFail(auth()->id());
+
+        return view('pages-admin.profile-admin', compact('profilesekolah'));
     }
 
-    public function profileUpdate()
+    public function edit()
     {
-        // Logika untuk menampilkan jurnal siswa
-        return view('pages-admin.profile-update');
+        $profile = User::findOrFail(auth()->id());
+        return view('pages-admin.profile-update', compact('profile'));
     }
 
-    // public function showRiwayat()
-    // {
-    //     // // Debug ID pengguna yang sedang login
-    //     // dd(auth()->id()); // Pastikan ini mengembalikan ID pengguna yang sedang login
+    public function update(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'alamat' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . auth()->id(),
+            'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
 
-    //     // Mengambil riwayat pengajuan berdasarkan ID user yang sedang login
-    //     $riwayatPengajuan = Pengajuan::where('user_id', auth()->id())->get();
+        $profile = User::findOrFail(auth()->id());
 
-    //     // Mengirimkan data riwayat pengajuan ke view
-    //     return view('pages-admin.pengajuan', compact('riwayatPengajuan'));
-    // }
+        $profile->name = $request->name;
+        $profile->alamat = $request->alamat;
+        $profile->email = $request->email;
 
-    // public function editPengajuan()
-    // {
-    //     // Logika untuk menampilkan jurnal siswa
-    //     return view('pages-admin.edit-pengajuan'); 
-    // }
-    // public function editKehadiran()
-    // {
-    //     // Logika untuk menampilkan jurnal siswa
-    //     return view('pages-admin.edit-kehadiran'); 
-    // }
+        if ($request->hasFile('foto_profile')) {
+            $path = $request->file('foto_profile')->store('profile_pictures', 'public');
+            $profile->foto_profile = $path;
+        }
+
+        if ($request->filled('password')) {
+            $profile->password = Hash::make($request->password);
+        }
+
+        $profile->save();
+
+        return redirect()->route('profile-admin')->with('success', 'Profil berhasil diperbarui.');
+    }
+
+/* -------------------------------------------------------------------------- */
+/*                                  END PROFILE                               */
+/* -------------------------------------------------------------------------- */
+
+
 }

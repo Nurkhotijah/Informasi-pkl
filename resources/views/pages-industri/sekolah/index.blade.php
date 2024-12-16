@@ -24,8 +24,8 @@
                         <tr>
                             <th class="py-2 px-4 border-b text-center">No</th>
                             <th class="py-2 px-4 border-b text-left">Nama Sekolah</th>
-                            <th class="py-2 px-4 border-b text-left">Email Sekolah</th>
-                            <th class="py-2 px-4 border-b text-left">Alamat Sekolah</th>
+                            <th class="py-2 px-4 border-b text-left">Email</th>
+                            <th class="py-2 px-4 border-b text-left">Alamat</th>
                             <th class="py-2 px-4 border-b text-center">Status</th>
                             <th class="py-2 px-4 border-b text-center">Aksi</th>
                         </tr>
@@ -45,11 +45,11 @@
                                 </td>
                                 <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
-                                        <button onclick="window.open('{{ route('sekolah.show', $item->sekolah->id) }}', '_blank')" class="bg-yellow-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-yellow-500 transition duration-300 ease-in-out">
-                                            <i class="fas fa-eye mr-1"></i> Lihat
+                                        <button onclick="window.open('{{ route('sekolah.show', $item->sekolah->id) }}', '_blank')" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
+                                            <i class="fas fa-eye"></i> 
                                         </button>                                    
-                                        <button onclick="deleteSchool(1)" class="bg-red-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-500 transition duration-300 ease-in-out">
-                                            <i class="fas fa-trash mr-1"></i> Hapus
+                                        <button onclick="deleteSchool(1)" class="bg-red-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-600 transition duration-300 ease-in-out">
+                                            <i class="fas fa-trash"></i> 
                                         </button>
                                     </div>
                                 </td>

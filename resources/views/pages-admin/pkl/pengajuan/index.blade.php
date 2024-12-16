@@ -16,7 +16,7 @@
                     </div>
                     <!-- Add Student Button -->
                     <div class="mt-4 sm:mt-0">
-                        <a href="{{ route('pengajuan.create', $id_pkl) }}" class="bg-blue-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
+                        <a href="{{ route('pengajuan.create', $id_pkl) }}" class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out">
                             <i class="fas fa-user-plus mr-2"></i>Tambah Siswa
                         </a>
                     </div>
@@ -61,7 +61,9 @@
                                 <form action="{{ route('pengajuan.delete', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus siswa ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:text-red-700">Hapus</button>
+                                    <button type="submit" class="bg-red-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-600 transition duration-300 ease-in-out">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>

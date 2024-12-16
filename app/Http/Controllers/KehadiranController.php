@@ -10,6 +10,7 @@ use App\Models\Profile;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class KehadiranController extends Controller
 {
@@ -37,15 +38,6 @@ class KehadiranController extends Controller
 
         // Menerapkan pagination dengan 10 data per halaman
         $kehadiran = $kehadiran->orderBy('tanggal', 'desc')->paginate(10);
-
-        // Update status tidak hadir jika dalam 24 jam tidak ada aktivitas
-        $yesterday = Carbon::now()->subHours(24);
-        Kehadiran::where('user_id', Auth::id())
-            ->where('tanggal', '<=', $yesterday)
-            ->whereNull('foto_masuk')
-            ->whereNull('foto_keluar')
-            ->whereNull('foto_izin')
-            ->update(['status' => 'Tidak Hadir']);
 
         // Hitung jumlah kehadiran user
         $jumlahKehadiran = Kehadiran::where('user_id', Auth::id())
@@ -189,9 +181,9 @@ class KehadiranController extends Controller
         $tanggalSelesai = $profile ? $profile->tanggal_selesai : null; // Mengambil tanggal selesai jika ada
 
         // Hitung jumlah kehadiran, izin, dan tidak hadir
-        $hadirCount = $kehadiran->where('status', 'hadir')->count();
-        $izinCount = $kehadiran->where('status', 'izin')->count();
-        $tidakHadirCount = $kehadiran->where('status', 'tidak hadir')->count();
+        $hadirCount = $kehadiran->where('status', 'Hadir')->count();
+        $izinCount = $kehadiran->where('status', 'Izin')->count();
+        $tidakHadirCount = $kehadiran->where('status', 'Tidak Hadir')->count();
         $total = $hadirCount + $izinCount + $tidakHadirCount;
 
         // Menyusun data untuk dikirim ke view
@@ -213,4 +205,24 @@ class KehadiranController extends Controller
         return $pdf->download('rekap-kehadiran-' . $user->name . '.pdf');
     }
 
+    // Command to update attendance status daily
+    public function updateDailyAttendance()
+    {
+        $users = User::all();
+        $today = Carbon::now()->toDateString();
+
+        foreach ($users as $user) {
+            $kehadiran = Kehadiran::where('user_id', $user->id)
+                ->whereDate('tanggal', $today)
+                ->first();
+
+            if (!$kehadiran) {
+                $kehadiran = new Kehadiran();
+                $kehadiran->user_id = $user->id;
+                $kehadiran->tanggal = $today;
+                $kehadiran->status = 'Tidak Hadir'; // Default status
+                $kehadiran->save();
+            }
+        }
+    }
 }    

@@ -73,7 +73,7 @@
 
         <!-- Pagination Section -->
         <div class="flex justify-end items-center mt-4">
-            <span class="mr-4" id="pageNumber">Halaman 1</span>
+            <span class="mr-4" id="pageNumber">Halaman <span id="currentPage">1</span> dari <span id="totalPages">1</span></span>
             <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()">
                 <i class="fas fa-chevron-left"></i>
             </button>
@@ -131,7 +131,8 @@
             row.style.display = (index >= startIndex && index < endIndex) ? '' : 'none';
         });
 
-        document.getElementById('pageNumber').textContent = `Halaman ${currentPage}`;
+        document.getElementById('currentPage').textContent = currentPage;
+        document.getElementById('totalPages').textContent = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
     }
 
     function prevPage() {

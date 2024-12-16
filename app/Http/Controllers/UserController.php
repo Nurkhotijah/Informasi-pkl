@@ -32,9 +32,9 @@ public function editjurnal() {
     return view('pages-user.Edit-jurnal');
 }
 
-// public function profile() {
-//     return view('pages-user.Profile');
-// }
+public function profile() {
+    return view('pages-user.Profile');
+}
 
  // Metode untuk menampilkan halaman edit pengajuan
  public function editizin()

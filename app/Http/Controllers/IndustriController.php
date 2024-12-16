@@ -41,16 +41,24 @@ class IndustriController extends Controller
 
 
     public function update(Request $request, $id)
-{
-    // Update status kehadiran berdasarkan ID
-    $kehadiran = Kehadiran::findOrFail($id);
-    
-    // Validasi status, jika diperlukan
-    $kehadiran->status = $request->status;
-    $kehadiran->save();
+    {
+        // Update status kehadiran berdasarkan ID
+        $kehadiran = Kehadiran::findOrFail($id);
+        
+        // Validasi dan perbarui status
+        $kehadiran->status = $request->status;
+        $kehadiran->save();
 
-    return redirect()->route('pages-industri.kelola-kehadiran')->with('success', 'Status kehadiran berhasil diperbarui');
-}
+        // Ambil semua data kehadiran untuk ditampilkan di halaman kelola-kehadiran
+        $dataKehadiran = Kehadiran::with('user')->get();
+
+        // Kembali ke halaman kelola kehadiran dengan data terbaru
+        return view('pages-industri.detail-kehadiran', [
+            'kehadiran' => $dataKehadiran,
+            'success' => 'Status kehadiran berhasil diperbarui',
+        ]);
+    }
+
     public function detail($userId)
     {
         // Cari data kehadiran berdasarkan user_id
@@ -171,17 +179,17 @@ class IndustriController extends Controller
 /* -------------------------------------------------------------------------- */
 /*                                  START JURNAL                              */
 /* -------------------------------------------------------------------------- */
-    public function index()
-    {
-        $jurnal = User::whereHas('profile', function ($query) {
-                $query->where('id_sekolah', '!=', null);
-            })
-            ->where('role', 'siswa')
-            ->with('laporan')
-            ->get();
+    // public function index()
+    // {
+    //     $jurnal = User::whereHas('profile', function ($query) {
+    //             $query->where('id_sekolah', '!=', null);
+    //         })
+    //         ->where('role', 'siswa')
+    //         ->with('laporan')
+    //         ->get();
 
-        return view('pages-industri.jurnal.index', compact('jurnal'));
-    }
+    //     return view('pages-industri.jurnal.index', compact('jurnal'));
+    // }
 
 /* -------------------------------------------------------------------------- */
 /*                                  END JURNAL                                */

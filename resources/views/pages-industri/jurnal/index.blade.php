@@ -37,13 +37,14 @@
                         <td class="py-2 px-4 border-b text-left">{{ $item->profile->sekolah->nama }}</td> <!-- Menampilkan Nama Sekolah -->
                         <td class="py-2 px-4 border-b text-center">
                             @if ($item->laporan)
-                            <a href="#" class="text-blue-500 hover:underline" onclick="showReportPreview('{{ asset('storage/'.$item->laporan->file_name) }}')">
-                                {{ $item->laporan->file_name }}
-                            </a> <!-- Klik untuk melihat laporan -->
+                            <a href="{{ asset('storage/' . $item->laporan->file_path) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                <i class="fas fa-file-pdf"></i> 
+                            </a><!-- Klik untuk melihat laporan -->
                             @else
-                            <p>Tidak ada laporan</p>
+                                <p>Tidak ada laporan</p>
                             @endif
                         </td>
+                        
                         <td class="py-2 px-4 border-b text-center">
                             <div class="flex justify-center space-x-2">
                                 <a href="{{ route('jurnal-industri.detail', $item->id) }}" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
@@ -58,7 +59,7 @@
         </div>
 
         <!-- Modal untuk Preview Laporan -->
-        <div id="reportModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center hidden">
+        {{-- <div id="reportModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center hidden">
             <div class="bg-white p-4 rounded-lg shadow-lg max-w-4xl w-full">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xl font-bold">Preview Laporan</h3>
@@ -68,7 +69,7 @@
                     <!-- Isi laporan akan ditampilkan di sini -->
                 </div>
             </div>
-        </div>
+        </div> --}}
 
     </div>
 </main>

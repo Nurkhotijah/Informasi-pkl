@@ -12,10 +12,10 @@
         </div>
         <!-- Tombol aksi multiple -->
         <div class="flex space-x-2">
-            <button onclick="updateMultipleStatus('diterima')" class="bg-green-400 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-500 transition duration-300 ease-in-out">
+            <button onclick="updateMultipleStatus('diterima')" class="bg-green-200 text-green-800 text-sm px-2 py-1 rounded-shadow">
                 <i class="fas fa-check mr-1"></i> Terima
             </button>
-            <button onclick="updateMultipleStatus('ditolak')" class="bg-red-400 text-white text-xs px-4 py-2 rounded shadow hover:bg-red-500 transition duration-300 ease-in-out">
+            <button onclick="updateMultipleStatus('ditolak')" class="bg-red-300 text-green-800 text-sm px-2 py-1 rounded-shadow">
                 <i class="fas fa-times mr-1"></i> Tolak
             </button>
         </div>
@@ -55,7 +55,9 @@
                     <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($item->tanggal_mulai)->locale('id')->format('d F Y') }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($item->tanggal_selesai)->locale('id')->format('d F Y') }}</td>
                     <td class="py-2 px-4 border-b text-center">
-                        <a href="{{ asset('storage/' . $item->cv_file) }}" target="_blank" class="text-blue-500 hover:underline">Download</a>
+                        <a href="{{ asset('storage/' . $item->cv_file) }}" target="_blank" class="bg-blue-500 text-white text-xs px-3 py-1 rounded hover:bg-blue-600 transition duration-300">
+                            <i class="fas fa-file-pdf"></i>
+                        </a>
                     </td>
                     <td class="py-2 px-4 border-b text-center">
                         @if ($item->status_persetujuan == 'pending')

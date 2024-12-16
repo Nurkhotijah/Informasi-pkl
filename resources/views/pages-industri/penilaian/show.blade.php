@@ -16,7 +16,7 @@
             </div>
             <div class="flex flex-wrap justify-between mb-2">
                 <span class="w-1/2 sm:w-auto">Sekolah</span>
-                <span class="w-1/2 sm:w-auto text-right">: {{ $item->profile->sekolah->nama ?? 'Data Sekolah Tidak Tersedia' }}</span>
+                <span class="w-1/2 sm:w-auto text-right">: {{ $penilaian->user->profile->sekolah->nama ?? 'Data Sekolah Tidak Tersedia' }}</span>
             </div>
         </div>
 

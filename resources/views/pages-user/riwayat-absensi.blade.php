@@ -64,7 +64,7 @@
                     <tr class="bg-white hover:bg-gray-50 transition duration-200 ease-in-out kehadiran-row">
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-700">{{ $loop->iteration + ($kehadiran->currentPage() - 1) * $kehadiran->perPage() }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-800">{{ Auth::user()->name }}</td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600 tanggal-cell">{{ $tanggalAbsen->format('d M Y') }}</td>
+                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600 tanggal-cell">{{ $tanggalAbsen->format('Y-m-d') }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->foto_izin ? 'Izin' : $absensi->status }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->waktu_masuk ? \Carbon\Carbon::parse($absensi->waktu_masuk)->format('H:i:s') : '-' }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->waktu_keluar ? \Carbon\Carbon::parse($absensi->waktu_keluar)->format('H:i:s') : '-' }}</td>

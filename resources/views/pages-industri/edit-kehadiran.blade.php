@@ -45,7 +45,9 @@
             </div>
         
             <div class="col-span-1 sm:col-span-2 flex justify-end">
-                <button type="reset" class="bg-gray-400 text-white text-xs px-3 py-2 rounded shadow hover:bg-gray-500 transition duration-300 ease-in-out mr-2">Batal</button>
+                <a href="#">
+                    <button type="cancel" class="bg-gray-400 text-white text-xs px-3 py-2 rounded shadow hover:bg-gray-500 transition duration-300 ease-in-out mr-2">Batal</button>
+                </a>
                 <button type="submit" class="bg-blue-400 text-white text-xs px-3 py-2 rounded shadow hover:bg-blue-500 transition duration-300 ease-in-out">Simpan</button>
             </div>
         </form>
