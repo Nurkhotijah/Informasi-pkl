@@ -17,7 +17,7 @@
         }
 
         .certificate {
-            width: 800px;
+            width: 95%;
             height: 600px;
             border: 10px solid #4a90e2;
             background: white;

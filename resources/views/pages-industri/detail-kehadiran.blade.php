@@ -35,7 +35,7 @@
                             <th class="py-2 px-4 border-b text-center">Foto Keluar</th> 
                             <th class="py-2 px-4 border-b text-center">Foto Izin</th>
                             <th class="py-2 px-4 border-b text-center">Status</th> 
-                            <th class="py-2 px-4 border-b text-center">Aksi</th> 
+                            {{-- <th class="py-2 px-4 border-b text-center">Aksi</th>  --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -67,11 +67,11 @@
                                     @endif
                                 </td>
                                 <td class="py-4 px-4 border-b border-gray-300 text-center text-gray-600">{{ $item->status }}</td>
-                                <td class="py-2 px-4 border-b text-center">
+                                {{-- <td class="py-2 px-4 border-b text-center">
                                     <a href="{{ route('kehadiran.edit', $item->id) }}" class="bg-yellow-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-yellow-500 transition duration-300 ease-in-out">
                                         <i class="fas fa-edit mr-1"></i> Edit
                                     </a>
-                                </td>
+                                </td> --}}
                             </tr>
                         @endforeach
                     </tbody>

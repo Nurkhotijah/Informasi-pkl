@@ -47,7 +47,7 @@
                         <tr>
                             <td class="py-2 px-4 border-b text-center">{{ $index + 1 }}</td>
                             <td class="py-2 px-4 border-b text-left">{{ $siswa->kegiatan }}</td>
-                            <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($siswa->tanggal)->format('d M Y') }}</td>
+                            <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($siswa->tanggal)->format('Y-m-d') }}</td>
                             <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($siswa->waktu_mulai)->format('H:i') }}</td>
                             <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($siswa->waktu_selesai)->format('H:i') }}</td>
                             <td class="py-2 px-4 border-b text-center">
@@ -116,7 +116,7 @@
         
         filteredData = rows.filter(row => {
             const dateCell = row.querySelector('td:nth-child(3)').textContent;
-            return selectedDate ? dateCell === moment(selectedDate).format('d M Y') : true;
+            return selectedDate ? dateCell === selectedDate : true;
         });
 
         currentPage = 1;

@@ -1,4 +1,11 @@
-<p>Halo {{ $namaSekolah }},</p>
-<p>Selamat, pengajuan sekolah Anda telah diterima.</p>
-<p>Alamat: {{ $alamatSekolah }}</p>
-<p>Silakan login ke sistem untuk mengajukan siswa PKL.</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Status Diterima</title>
+</head>
+<body>
+    <h1>Halo, {{ $sekolah->nama }}</h1>
+    <p>Selamat, sekolah Anda telah diterima.</p>
+    <p>Terima kasih.</p>
+</body>
+</html>

@@ -9,6 +9,10 @@
         <!-- Header Section -->
         <div class="mb-4">
             <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Detail Jurnal Siswa</h1>
+            <div class="flex items-center">
+                <label for="dateFilter" class="mr-2">Tanggal:</label>
+                <input type="date" id="dateFilter" class="border rounded p-2" onchange="filterByDate()">
+            </div>
         </div>
 
         <!-- Table Section -->
@@ -23,9 +27,9 @@
                     <th class="py-2 px-4 border-b text-center">Foto Kegiatan</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="journalTableBody">
                 @foreach ($listdetail as $item)
-                <tr>
+                <tr data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}">
                     <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                     <td class="py-2 px-4 border-b text-left">{{ $item->kegiatan }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($item->tanggal)->locale('id')->format('d F Y') }}</td>
@@ -52,11 +56,6 @@
                 <img id="activityImage" src="" alt="Activity Image" class="w-full rounded-md">
             </div>
         </div>
-
-        <!-- Pagination Section -->
-        <div class="flex justify-end items-center mt-4">
-            {{-- {{ $listdetail->links() }} <!-- Laravel's built-in pagination links --> --}}
-        </div>
     </div>
 </main>
 
@@ -73,6 +72,21 @@
     function closeModal() {
         const modal = document.getElementById('imageModal');
         modal.classList.add('hidden');
+    }
+
+    // Fungsi untuk memfilter tabel berdasarkan tanggal
+    function filterByDate() {
+        const filterDate = document.getElementById('dateFilter').value;
+        const rows = document.querySelectorAll('#journalTableBody tr');
+
+        rows.forEach(row => {
+            const rowDate = row.getAttribute('data-tanggal');
+            if (rowDate === filterDate) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
     }
 </script>
 

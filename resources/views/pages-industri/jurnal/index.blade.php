@@ -8,7 +8,7 @@
     <div class="max-w-7xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
         <!-- Header Section -->
         <div class="mb-4">
-            <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Laporan Siswa</h1>
+            <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Jurnal Siswa</h1>
             <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
                 <div class="relative w-full sm:w-auto">
                     <input class="border rounded-l p-2 pl-10 w-full sm:w-64" id="search" name="search" placeholder="Cari Nama atau sekolah" type="text" value="{{ request()->search }}" oninput="this.form.submit()">

@@ -20,11 +20,7 @@ class SekolahAcceptedMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Status Pengajuan Sekolah Diterima')
-            ->view('emails.sekolah-accepted')
-            ->with([
-                'namaSekolah' => $this->sekolah->nama,
-                'alamatSekolah' => $this->sekolah->alamat,
-            ]);
+        return $this->subject('Sekolah Diterima')
+                    ->view('emails.sekolah-accepted');
     }
 }

@@ -86,7 +86,8 @@
 </div>
 
 <script>
-     / function updateJumlahJurnal() {
+    // Fungsi untuk memperbarui jumlah jurnal
+    function updateJumlahJurnal() {
         fetch("/api/jumlah-jurnal")  // Pastikan route ini sudah ada
             .then(response => response.json())
             .then(data => {
@@ -96,6 +97,7 @@
                 console.error('Error:', error);
             });
     }
+
     // Timer untuk Waktu Saat Ini
     function updateTime() {
         const timeElement = document.getElementById("current-time");
@@ -258,6 +260,7 @@
     // Memulai kamera saat halaman dimuat
     window.addEventListener("DOMContentLoaded", () => {
         updateTime();
+        updateJumlahJurnal(); // Memanggil fungsi untuk memperbarui jumlah jurnal saat halaman dimuat
     });
 
     // Fungsi untuk membuka modal

@@ -9,6 +9,10 @@ use App\Models\Sekolah;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SekolahAcceptedMail;
+use Illuminate\Support\Facades\Log;
+
 
 class SekolahController extends Controller
 {
@@ -22,6 +26,32 @@ class SekolahController extends Controller
         return view('pages-industri.sekolah.index', compact('listSekolah'));
     }
 
+    public function updateStatusSekolah(Request $request, $id)
+{
+    try {
+        // Temukan data sekolah berdasarkan ID
+        $sekolah = Sekolah::findOrFail($id); // Ambil satu data Sekolah.
+
+        // Update status sekolah menjadi "diterima"
+        $sekolah->status = 'diterima';
+        $sekolah->save();
+
+        // Kirimkan email pemberitahuan ke sekolah
+        Mail::to($sekolah->user->email)->send(new SekolahAcceptedMail($sekolah));
+
+        // Set pesan sukses menggunakan session
+    } catch (\Exception $e) {
+        Log::error('Gagal mengirim email: ' . $e->getMessage());
+
+        // Set pesan error menggunakan session
+        $request->session()->flash('error', 'Gagal memperbarui status sekolah.');
+    }
+
+    // Redirect kembali ke halaman index
+    return redirect()->route('sekolah.index');
+}
+
+    
     /**
      * Show the form for creating a new resource.
      */

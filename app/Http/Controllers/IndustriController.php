@@ -131,26 +131,7 @@ class IndustriController extends Controller
         return view('pages-industri.data-sekolah', compact('listSekolah'));
     }
 
-    public function updateStatusSekolah(Request $request, $id)
-{
-    // Temukan data sekolah berdasarkan ID
-    $sekolah = Sekolah::findOrFail($id);
-
-    // Update status sekolah menjadi "Diterima"
-    $sekolah->status = 'Diterima';
-    $sekolah->save();
-
-    // Kirimkan email pemberitahuan ke sekolah
-    $user = $sekolah->user; // Ambil user terkait
-    Mail::to($user->email)->send(new SekolahAcceptedMail($sekolah));
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Status berhasil diperbarui dan email terkirim.',
-    ]);
-}
-
-    public function lihatSiswa($id)
+       public function lihatSiswa($id)
     {
         $listSiswa = Pengajuan::where('id_sekolah', $id)->get();
         return view('pages-industri.lihat-siswa', compact('listSiswa'));

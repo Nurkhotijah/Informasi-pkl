@@ -42,7 +42,7 @@ class JurnalIndustriController extends Controller
      */
     public function show(string $id)
     {
-        $listdetail = Jurnal::where('user_id', $id)->get();
+        $listdetail = Jurnal::where('user_id', $id)->paginate(2); // Added pagination
 
         // Mengirim data detail jurnal ke tampilan
         return view('pages-industri.jurnal.detail', compact('listdetail'));

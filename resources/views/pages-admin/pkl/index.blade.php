@@ -10,15 +10,22 @@
             <div class="mb-4">
                 <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4"> Data PKL </h1>
                 <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
+                    @if (session('error'))
+                    <div class="bg-red-500 text-white text-sm px-4 py-2 rounded mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                     <div class="relative w-full sm:w-auto">
                         <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" placeholder="Cari Nama " type="text" oninput="searchTable()">
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
-                    <div class="mt-2 sm:mt-0">
-                        <a href="{{ route('pkl.create') }}" class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out">
-                            <i class="fas fa-plus mr-2"></i>Tambah Data
-                        </a>
-                    </div>
+                     <a href="{{ Auth::user()->sekolah->status === 'diterima' ? route('pkl.create') : '#' }}" 
+                        class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out" 
+                        {{ Auth::user()->sekolah->status !== 'diterima' ? 'disabled' : '' }}>
+                        <i class="fas fa-plus mr-2"></i>Tambah Data
+                    </a>
+
                 </div>
             </div>
 

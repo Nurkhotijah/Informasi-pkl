@@ -53,9 +53,9 @@
             </div>
 
            <!-- Pagination -->
-        <div class="mt-4">
+        {{-- <div class="mt-4">
             {{ $kehadiran->links('pagination::tailwind') }}
-        </div>
+        </div> --}}
 
         </div>
     </main>

@@ -107,7 +107,7 @@ Route::delete('hapus-siswa/{id}', [SiswaController::class, 'destroy'])->name('ha
 
 Route::prefix('sekolah')->name('sekolah.')->group(function () {
     Route::get('', [SekolahController::class, 'index'])->name('index');
-    Route::post('/sekolah/{id}/update-status', [IndustriController::class, 'updateStatusSekolah'])->name('sekolah.updateStatus');
+    Route::post('/{id}/update-status', [SekolahController::class, 'updateStatusSekolah'])->name('updateStatus');
     Route::get('/show/{id}', [SekolahController::class, 'show'])->name('show');
     Route::get('/detail-siswa/{id}', [SekolahController::class, 'detailSiswa'])->name('detail-siswa');
     Route::post('/update-status-siswa', [SekolahController::class, 'updateStatusSiswa'])->name('update-status-siswa');
@@ -213,6 +213,7 @@ Route::post('/laporan-pkl', [LaporanController::class, 'store'])->name('laporan.
 
 Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riwayat-absensi');
 Route::post('/kehadiran', [KehadiranController::class, 'store'])->name('kehadiran.store');
+
 Route::get('/dashboard-user', [UserController::class, 'dashboard'])->name('user.dashboard');
 
 Route::get('/penilaian-user', [PenilaianController::class, 'showuser'])->name('penilaian.show.user');

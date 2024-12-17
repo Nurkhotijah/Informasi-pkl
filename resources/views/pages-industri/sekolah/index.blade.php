@@ -3,6 +3,13 @@
 @section('title', 'Data Sekolah')
 
 @section('content')
+
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="bg-gray-100">
     <main class="p-6 overflow-y-auto h-full">
         <div class="max-w-7xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
@@ -21,6 +28,17 @@
             <div class="overflow-x-auto">
                 <table class="min-w-full bg-white border" id="schoolTable">
                     <thead class="bg-gray-200">
+                        @if (session('success'))
+                    <div class="bg-green-500 text-white px-4 py-3 rounded shadow-md mb-4">
+                        <p>{{ session('success') }}</p>
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="bg-red-500 text-white px-4 py-3 rounded shadow-md mb-4">
+                        <p>{{ session('error') }}</p>
+                    </div>
+                @endif
                         <tr>
                             <th class="py-2 px-4 border-b text-center">No</th>
                             <th class="py-2 px-4 border-b text-left">Nama Sekolah</th>
@@ -39,11 +57,19 @@
                                 <td class="py-2 px-4 border-b text-left">{{ $item->email }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->sekolah->alamat }}</td>
                                 <td class="py-2 px-4 border-b text-center">
-                                    <button onclick="updateStatus({{ $item->sekolah->id }}, this)" 
-                                            id="status-{{ $item->sekolah->id }}" 
-                                            class="bg-yellow-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-green-500 transition duration-300 ease-in-out">
-                                        Pending
-                                    </button>
+                                    <form action="/sekolah/{{ $item->sekolah->id }}/update-status" method="POST">
+                                        @csrf
+                                        <button type="submit" 
+                                            class="text-xs px-3 py-1 rounded shadow transition duration-300 ease-in-out
+                                                @if ($item->sekolah->status === 'pending')
+                                                    bg-yellow-500 text-white
+                                                @elseif ($item->sekolah->status === 'diterima')
+                                                    bg-green-500 text-white
+                                                @endif">
+                                            {{ $item->sekolah->status }}
+                                        </button>
+                                    </form>
+                                    
                                 </td>                                
                                 <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
@@ -73,35 +99,35 @@
             </div>
 
  <script>
- function updateStatus(sekolahId) {
-        const url = `/sekolah/${sekolahId}/update-status`;
-        const button = document.getElementById(`status-${sekolahId}`);
+//  function updateStatus(sekolahId) {
+//         const url = `/sekolah/${sekolahId}/update-status`;
+//         const button = document.getElementById(`status-${sekolahId}`);
         
-        // Kirim permintaan AJAX ke server
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Ubah teks tombol menjadi "Diterima"
-                button.textContent = 'Diterima';
-                button.classList.remove('bg-yellow-500');
-                button.classList.add('bg-green-500');
-            } else {
-                alert('Gagal memperbarui status.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Terjadi kesalahan.');
-        });
-    }
+//         // Kirim permintaan AJAX ke server
+//         fetch(url, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+//             },
+//             body: JSON.stringify({})
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.success) {
+//                 // Ubah teks tombol menjadi "Diterima"
+//                 button.textContent = 'Diterima';
+//                 button.classList.remove('bg-yellow-500');
+//                 button.classList.add('bg-green-500');
+//             } else {
+//                 alert('Gagal memperbarui status.');
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//             alert('Terjadi kesalahan.');
+//         });
+//     }
          let currentPage = 1;
                 const rowsPerPage = 5;
                 const rows = document.querySelectorAll('.school-row');
@@ -163,24 +189,24 @@
     }
 
     // Function to update status
-    function updateStatus(schoolId) {
-        const statusButton = document.getElementById(`status-${schoolId}`);
-        if (statusButton.textContent.trim() === 'Pending') {
-            statusButton.textContent = 'Diterima';
-            statusButton.classList.remove('bg-yellow-500');
-            statusButton.classList.add('bg-green-500');
-            // Here you would make an API call to update the status in the backend
-            // fetch('/api/school/status/' + schoolId, {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         status: 'accepted'
-            //     })
-            // });
-        }
-    }
+    // function updateStatus(schoolId) {
+    //     const statusButton = document.getElementById(`status-${schoolId}`);
+    //     if (statusButton.textContent.trim() === 'Pending') {
+    //         statusButton.textContent = 'Diterima';
+    //         statusButton.classList.remove('bg-yellow-500');
+    //         statusButton.classList.add('bg-green-500');
+    //         // Here you would make an API call to update the status in the backend
+    //         // fetch('/api/school/status/' + schoolId, {
+    //         //     method: 'POST',
+    //         //     headers: {
+    //         //         'Content-Type': 'application/json',
+    //         //     },
+    //         //     body: JSON.stringify({
+    //         //         status: 'accepted'
+    //         //     })
+    //         // });
+    //     }
+    // }
    
     // Function to view students for a selected school
     function viewStudents(school) {

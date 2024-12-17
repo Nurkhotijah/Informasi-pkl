@@ -36,37 +36,50 @@ class PklController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+    
+        // Periksa status sekolah
+        if ($user->sekolah->status !== 'diterima') {
+            return redirect('/pkl')->with('error', 'Sekolah Anda belum disetujui oleh industri.');
+        }
+    
         return view('pages-admin.pkl.create');
     }
-
+    
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+    
+        // Periksa status sekolah
+        if ($user->sekolah->status !== 'diterima') {
+            return redirect('/pkl')->with('error', 'Sekolah Anda belum disetujui oleh industri.');
+        }
+    
         $request->validate([
             'judul' => 'required|string|max:255',
             'tahun' => 'required|string|max:255',
             'pembimbing' => 'required|string|max:255',
             'lampiran' => 'required|mimes:pdf',
         ]);
-
-        $users = Auth::user();
-        // Menyimpan file CV ke direktori public
+    
+        // Simpan file lampiran
         $filePath = $request->file('lampiran')->store('pengajuan-pkl', 'public');
-
-        // Menyimpan pengajuan siswa ke dalam database
+    
+        // Simpan data pengajuan ke database
         Pkl::create([
             'judul_pkl' => $request->judul,
             'tahun' => $request->tahun,
             'pembimbing' => $request->pembimbing,
             'lampiran' => $filePath,
-            'id_sekolah' => $users->sekolah->id, // ID Sekolah yang login
+            'id_sekolah' => $user->sekolah->id,
         ]);
-
+    
         return redirect('/pkl')->with('success', 'Pengajuan siswa berhasil diajukan.');
     }
-
+    
     /**
      * Display the specified resource.
      */
