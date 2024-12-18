@@ -25,6 +25,7 @@ class Profile extends Model
         'user_id',
         'id_sekolah',
         'alamat',
+        'jurusan',
         'foto_profile',
         'tanggal_mulai',
         'tanggal_selesai',

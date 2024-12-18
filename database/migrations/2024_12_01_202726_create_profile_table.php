@@ -13,6 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('id_sekolah')->nullable();
             $table->text('alamat')->nullable();
+            $table->string('jurusan')->nullable();
             $table->string('foto_profile')->nullable();
             $table->date('tanggal_mulai')->nullable();
             $table->date('tanggal_selesai')->nullable();

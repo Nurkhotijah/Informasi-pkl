@@ -63,7 +63,7 @@
 
         <!-- Jumlah Absen -->
         <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-lg font-semibold">Jumlah Absen yang Telah Dilakukan</h2>
+            <h2 class="text-lg font-semibold">Jumlah Absen</h2>
             <p class="text-3xl font-bold mt-4" id="jumlah-absen">{{ $jumlahKehadiran }}</p>
         </div>
     </div>
