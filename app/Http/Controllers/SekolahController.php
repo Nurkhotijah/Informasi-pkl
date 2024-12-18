@@ -27,31 +27,31 @@ class SekolahController extends Controller
     }
 
     public function updateStatusSekolah(Request $request, $id)
-{
-    try {
-        // Temukan data sekolah berdasarkan ID
-        $sekolah = Sekolah::findOrFail($id); // Ambil satu data Sekolah.
+    {
+        try {
+            // Temukan data sekolah berdasarkan ID
+            $sekolah = Sekolah::findOrFail($id); // Ambil satu data Sekolah.
 
-        // Update status sekolah menjadi "diterima"
-        $sekolah->status = 'diterima';
-        $sekolah->save();
+            // Update status sekolah menjadi "diterima"
+            $sekolah->status = 'diterima';
+            $sekolah->save();
 
-        // Kirimkan email pemberitahuan ke sekolah
-        Mail::to($sekolah->user->email)->send(new SekolahAcceptedMail($sekolah));
+            // Kirimkan email pemberitahuan ke sekolah
+            Mail::to($sekolah->user->email)->send(new SekolahAcceptedMail($sekolah));
 
-        // Set pesan sukses menggunakan session
-    } catch (\Exception $e) {
-        Log::error('Gagal mengirim email: ' . $e->getMessage());
+            // Set pesan sukses menggunakan session
+        } catch (\Exception $e) {
+            Log::error('Gagal mengirim email: ' . $e->getMessage());
 
-        // Set pesan error menggunakan session
-        $request->session()->flash('error', 'Gagal memperbarui status sekolah.');
+            // Set pesan error menggunakan session
+            $request->session()->flash('error', 'Gagal memperbarui status sekolah.');
+        }
+
+        // Redirect kembali ke halaman index
+        return redirect()->route('sekolah.index');
     }
 
-    // Redirect kembali ke halaman index
-    return redirect()->route('sekolah.index');
-}
 
-    
     /**
      * Show the form for creating a new resource.
      */
@@ -108,7 +108,23 @@ class SekolahController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $sekolah = Sekolah::find($id);
+
+            Pkl::where('id_sekolah', $id)->delete();
+            Pengajuan::where('id_sekolah', $id)->delete();
+            User::whereHas('profile', function ($q) use ($id) {
+                $q->where('id_sekolah', $id);
+            })->delete();
+            User::where('id', $sekolah->user_id)->delete();
+            Profile::where('user_id', $sekolah->user_id)->delete();
+            Profile::where('id_sekolah', $id)->delete();
+            $sekolah->delete();
+
+            return response()->json(['message' => 'Data sekolah berhasil dihapus.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal menghapus data sekolah.', 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function updateStatusSiswa(Request $request)
@@ -136,6 +152,7 @@ class SekolahController extends Controller
             'user_id' => $user->id,
             'id_sekolah' => $pengajuanSiswa->id_sekolah,
             'alamat' => null,
+            'jurusan' => $pengajuanSiswa->jurusan,
             'tanggal_mulai' => $pengajuanSiswa->tanggal_mulai,
             'tanggal_selesai' => $pengajuanSiswa->tanggal_selesai,
             'cv_file' => $pengajuanSiswa->cv_file,

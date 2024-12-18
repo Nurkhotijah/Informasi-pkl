@@ -23,13 +23,13 @@
                     <h3 class="bg-blue-500 text-white p-3 font-semibold text-center rounded-t-lg">Informasi</h3>
                     <div class="p-3 text-left space-y-2">
                         <p class="font-sans text-base">
-                            <span class="font-medium">Nama Sekolah:</span> {{ $pengajuan->user->sekolah->nama ?? 'Sekolah tidak ditemukan' }}
+                            <span class="font-medium">Nama Sekolah:</span> {{ $profilesiswa->profile->sekolah->nama ?? 'Sekolah tidak ditemukan' }}
                         </p>
                         <p class="font-sans text-base">
-                            <span class="font-medium">Jurusan:</span> {{ $pengajuan->user->pengajuan->jurusan ?? '-' }}
+                            <span class="font-medium">Jurusan:</span> {{ $profilesiswa->profile->jurusan ?? '-' }}
                         </p>
                         <p class="font-sans text-base">
-                            <span class="font-medium">Nama Pembimbing:</span> {{ $pengajuan->pkl->pembimbing ?? 'Pembimbing tidak ditemukan' }}
+                            <span class="font-medium">Nama Pembimbing:</span> {{ $profilesiswa->profile->pembimbing ?? 'Pembimbing tidak ditemukan' }}
                         </p>
                         <p class="font-sans text-base">
                             <span class="font-medium">Tanggal Mulai PKL:</span> {{ \Carbon\Carbon::parse($profilesiswa->profile->tanggal_mulai)->format('d M Y') ?? 'Tanggal tidak ditemukan' }}

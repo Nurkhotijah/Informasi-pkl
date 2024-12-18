@@ -111,6 +111,7 @@ Route::prefix('sekolah')->name('sekolah.')->group(function () {
     Route::get('/show/{id}', [SekolahController::class, 'show'])->name('show');
     Route::get('/detail-siswa/{id}', [SekolahController::class, 'detailSiswa'])->name('detail-siswa');
     Route::post('/update-status-siswa', [SekolahController::class, 'updateStatusSiswa'])->name('update-status-siswa');
+    Route::delete('/delete/{id}', [SekolahController::class, 'destroy'])->name('delete');
 });
 Route::get('lihat-detail', [IndustriController::class, 'lihatdetail'])->name('lihat-detail');
 

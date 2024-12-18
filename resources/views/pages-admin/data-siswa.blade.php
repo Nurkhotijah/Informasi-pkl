@@ -36,7 +36,7 @@
                             <tr class="student-row" data-id="{{ $item->id }}">
                                 <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->name }}</td>
-                                <td class="py-2 px-4 border-b text-left">{{ $item->user->pengajuan->jurusan ?? 'Jurusan Tidak Tersedia' }}</td>
+                                <td class="py-2 px-4 border-b text-left">{{ $item->profile->jurusan ?? 'Jurusan Tidak Tersedia' }}</td>
                                 <td class="py-2 px-4 border-b text-center">
                                     @if ($item->profile && $item->profile->tanggal_selesai && $item->profile->tanggal_selesai <= now())
                                         <a href="{{ route('penilaiansiswa.unduh', $item->id) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600"> 

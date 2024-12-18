@@ -52,7 +52,7 @@
                         <!-- Example rows for schools -->
                         @foreach ($listSekolah as $item)
                             <tr class="school-row" data-school="smkn_1_ciomas">
-                                <td class="py-2 px-4 border-b text-center">1</td>
+                                <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->name }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->email }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->sekolah->alamat }}</td>
@@ -76,7 +76,7 @@
                                         <button onclick="window.open('{{ route('sekolah.show', $item->sekolah->id) }}', '_blank')" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
                                             <i class="fas fa-eye"></i> 
                                         </button>                                    
-                                        <button onclick="deleteSchool(1)" class="bg-red-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-600 transition duration-300 ease-in-out">
+                                        <button onclick="deleteSchool({{ $item->sekolah->id }})" class="bg-red-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-600 transition duration-300 ease-in-out">
                                             <i class="fas fa-trash"></i> 
                                         </button>
                                     </div>
@@ -166,8 +166,27 @@
     // Function to handle deletion of school data
     function deleteSchool(schoolId) {
         if (confirm('Apakah Anda yakin ingin menghapus data sekolah ini?')) {
-            alert(`Data sekolah dengan ID ${schoolId} dihapus.`);
-            // Here, you would normally call an API to delete the school
+            const url = `{{ route('sekolah.delete', ':schoolId') }}`.replace(':schoolId', schoolId);
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // If using Laravel CSRF protection
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert(`Data sekolah berhasil dihapus.`);
+                    location.reload();
+                } else {
+                    alert('Terjadi kesalahan saat menghapus data sekolah.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Gagal menghapus data sekolah. Coba lagi nanti.');
+            });
         }
     }
 
