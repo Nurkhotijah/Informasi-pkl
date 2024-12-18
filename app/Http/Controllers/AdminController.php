@@ -200,6 +200,8 @@ class AdminController extends Controller
             $profile->foto_profile = $path;
         }
 
+        
+
         if ($request->filled('password')) {
             $profile->password = Hash::make($request->password);
         }

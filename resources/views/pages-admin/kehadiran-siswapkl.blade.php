@@ -124,7 +124,7 @@ function filterTable() {
 
 // Pagination variables
 let currentPage = 1;
-const rowsPerPage = 10;
+const rowsPerPage = 1;
 
 function showPage(page) {
     const table = document.getElementById('attendanceTable');

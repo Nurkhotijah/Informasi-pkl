@@ -114,7 +114,7 @@
 <body>
     <div class="certificate">
         <div class="logo left">
-            <img src="{{ public_path('storage/profile_pictures/' . $siswa->profile->sekolah->user->foto_profile) }}" alt="Logo sekolah">
+            <img src="{{ public_path('storage/profile_pictures' . $siswa->profile->sekolah->user->foto_profile) }}" class="bg" style="width: 50px" alt="Logo sekolah">
         </div>
         <div class="logo right">
             <img src="{{ public_path('assets/certificate/qelopak.png') }}" class="bg" alt="Logo qelopak">

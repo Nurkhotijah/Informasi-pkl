@@ -15,7 +15,6 @@
                         <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" placeholder="Cari Nama atau sekolah" type="text" oninput="searchTable()">
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
-                                   
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -29,15 +28,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($kehadiran as $item)
-                            <tr>
-                                <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
+                        @foreach ($kehadiran as $index => $item)
+                            <tr class="school-row">
+                                <td class="py-2 px-4 border-b text-center">{{ $index + 1 + ($kehadiran->currentPage() - 1) * $kehadiran->perPage() }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->user->name ?? 'Nama tidak ditemukan' }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->profile?->sekolah?->nama ?? 'Sekolah tidak ditemukan' }}</td>
-                              
                                 <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
-                                       
                                         <a href="{{ route('kehadiran.detail', $item->user_id) }}" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
                                             <i class="fas fa-eye mr-1"></i> Lihat
                                         </a>
@@ -52,10 +49,16 @@
                 </table>
             </div>
 
-           <!-- Pagination -->
-        {{-- <div class="mt-4">
-            {{ $kehadiran->links('pagination::tailwind') }}
-        </div> --}}
+         <!-- Pagination Section -->
+ <div class="flex justify-end items-center mt-4">
+    <span class="mr-4" id="pageNumber">Halaman {{ $kehadiran->currentPage() }}</span>
+    <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()" id="prevButton" {{ $kehadiran->currentPage() == 1 ? 'disabled' : '' }}>
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()" id="nextButton" {{ $kehadiran->currentPage() == $kehadiran->lastPage() ? 'disabled' : '' }}>
+        <i class="fas fa-chevron-right"></i>
+    </button>
+</div>
 
         </div>
     </main>
@@ -74,10 +77,50 @@
             </div>
         </div>
     </div>
-</div>
 
+</div>
 <script>
 
+let currentPage = 1;
+const rowsPerPage = 2;
+const rows = document.querySelectorAll('.school-row');
+const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+function showPage(page) {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    rows.forEach((row, index) => {
+        if (index >= start && index < end) {
+            row.style.display = '';
+            // Update nomor urut
+            row.querySelector('td:first-child').textContent = index + 1 + start;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    document.getElementById('pageNumber').textContent = `Halaman ${page}`;
+    document.getElementById('prevButton').disabled = page === 1;
+    document.getElementById('nextButton').disabled = page === totalPages;
+}
+
+function nextPage() {
+    if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+    }
+}
+
+function prevPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+    }
+}
+
+// Initialize first page
+showPage(currentPage);
 
 function openModal(imageUrl) {
     const modal = document.getElementById("modal");
@@ -91,7 +134,9 @@ function closeModal() {
     modal.classList.add("hidden");
 }
 
-document.addEventListener('DOMContentLoaded', initializeTable);
+document.addEventListener('DOMContentLoaded', () => {
+    showPage(currentPage);
+});
 </script>
 
 @endsection

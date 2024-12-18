@@ -11,7 +11,7 @@
             <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Jurnal Siswa</h1>
             <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
                 <div class="relative w-full sm:w-auto">
-                    <input class="border rounded-l p-2 pl-10 w-full sm:w-64" id="search" name="search" placeholder="Cari Nama atau sekolah" type="text" value="{{ request()->search }}" oninput="this.form.submit()">
+                    <input class="border rounded-l p-2 pl-10 w-full sm:w-64" id="search" name="search" placeholder="Cari Nama atau sekolah" type="text" value="{{ request()->get('search') }}" oninput="searchTable()">
                     <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                 </div>
             </div>
@@ -91,6 +91,27 @@
     function closeReportPreview() {
         const modal = document.getElementById('reportModal');
         modal.classList.add('hidden');
+    }
+
+    function searchTable() {
+        const input = document.getElementById('search');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('pengajuanTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            const tdName = tr[i].getElementsByTagName('td')[1];
+            const tdSchool = tr[i].getElementsByTagName('td')[2];
+            if (tdName || tdSchool) {
+                const txtValueName = tdName.textContent || tdName.innerText;
+                const txtValueSchool = tdSchool.textContent || tdSchool.innerText;
+                if (txtValueName.toLowerCase().indexOf(filter) > -1 || txtValueSchool.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }       
+        }
     }
 </script>
 

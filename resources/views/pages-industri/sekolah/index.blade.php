@@ -99,37 +99,9 @@
             </div>
 
  <script>
-//  function updateStatus(sekolahId) {
-//         const url = `/sekolah/${sekolahId}/update-status`;
-//         const button = document.getElementById(`status-${sekolahId}`);
-        
-//         // Kirim permintaan AJAX ke server
-//         fetch(url, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-//             },
-//             body: JSON.stringify({})
-//         })
-//         .then(response => response.json())
-//         .then(data => {
-//             if (data.success) {
-//                 // Ubah teks tombol menjadi "Diterima"
-//                 button.textContent = 'Diterima';
-//                 button.classList.remove('bg-yellow-500');
-//                 button.classList.add('bg-green-500');
-//             } else {
-//                 alert('Gagal memperbarui status.');
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//             alert('Terjadi kesalahan.');
-//         });
-//     }
+
          let currentPage = 1;
-                const rowsPerPage = 5;
+                const rowsPerPage = 2;
                 const rows = document.querySelectorAll('.school-row');
                 const totalPages = Math.ceil(rows.length / rowsPerPage);
                 
@@ -168,12 +140,8 @@
                 
                 // Initialize first page
                 showPage(1);
-            </script>
-        </div>
-    </main>
-</div>
+         
 
-<script>
     // Function to handle searching in the table
     function searchTable() {
         const searchInput = document.getElementById('search').value.toLowerCase();
@@ -188,25 +156,6 @@
         });
     }
 
-    // Function to update status
-    // function updateStatus(schoolId) {
-    //     const statusButton = document.getElementById(`status-${schoolId}`);
-    //     if (statusButton.textContent.trim() === 'Pending') {
-    //         statusButton.textContent = 'Diterima';
-    //         statusButton.classList.remove('bg-yellow-500');
-    //         statusButton.classList.add('bg-green-500');
-    //         // Here you would make an API call to update the status in the backend
-    //         // fetch('/api/school/status/' + schoolId, {
-    //         //     method: 'POST',
-    //         //     headers: {
-    //         //         'Content-Type': 'application/json',
-    //         //     },
-    //         //     body: JSON.stringify({
-    //         //         status: 'accepted'
-    //         //     })
-    //         // });
-    //     }
-    // }
    
     // Function to view students for a selected school
     function viewStudents(school) {
@@ -224,5 +173,9 @@
 
    
 </script>
+  
+        </div>
+    </main>
+</div>
 
 @endsection

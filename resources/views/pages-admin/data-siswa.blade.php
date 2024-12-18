@@ -11,7 +11,7 @@
                 <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Kelola Data Siswa</h1>
                 <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
                     <div class="relative w-full sm:w-auto">
-                        <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" placeholder="Cari Nama Sekolah" type="text" oninput="searchTable()">
+                        <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" placeholder="Cari Nama atau Jurusan" type="text" oninput="searchTable()">
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                     </thead>
                     <tbody>
                         @foreach ($siswa as $item)
-                            <tr class="student-row" data-id="1">
+                            <tr class="student-row" data-id="{{ $item->id }}">
                                 <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->name }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->user->pengajuan->jurusan ?? 'Jurusan Tidak Tersedia' }}</td>
@@ -67,7 +67,6 @@
                 </table>
             </div>
            
- 
             <!-- Pagination Section -->
             <div class="flex justify-end items-center mt-4">
                 <span class="mr-4" id="pageNumber">Halaman 1</span>
@@ -83,20 +82,87 @@
 </div>
 
 <script>
+// Pagination variables
+let currentPage = 1;
+const rowsPerPage = 1;
 
-    function deleteStudent(studentId) {
-        // Tampilkan dialog konfirmasi
-        const confirmDelete = confirm("Apakah Anda yakin ingin menghapus data siswa ini?");
-        if (confirmDelete) {
-            // Hapus baris siswa berdasarkan ID
-            const studentRow = document.querySelector(`.student-row[data-id="${studentId}"]`);
-            if (studentRow) {
-                studentRow.remove();
-            } else {
-                alert("Data siswa tidak ditemukan!");
-            }
+function showPage(page) {
+    const table = document.getElementById('studentTable');
+    const rows = table.getElementsByTagName('tr');
+    const totalRows = rows.length - 1; // Subtract 1 to exclude header row
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
+    
+    // Update current page
+    currentPage = Math.min(Math.max(1, page), totalPages);
+    
+    // Calculate start and end rows for current page
+    const start = ((currentPage - 1) * rowsPerPage) + 1; // Add 1 to skip header
+    const end = Math.min(start + rowsPerPage - 1, totalRows);
+    
+    // Hide all rows first
+    for (let i = 1; i < rows.length; i++) {
+        rows[i].style.display = 'none';
+    }
+    
+    // Show rows for current page
+    for (let i = start; i <= end; i++) {
+        if (rows[i]) {
+            rows[i].style.display = '';
         }
     }
+    
+    // Update page number display
+    document.getElementById('pageNumber').textContent = `Halaman ${currentPage}`;
+}
+
+function nextPage() {
+    showPage(currentPage + 1);
+}
+
+function prevPage() {
+    showPage(currentPage - 1);
+}
+
+// Search function
+function searchTable() {
+    const input = document.getElementById('search');
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById('studentTable');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) {
+        const nameCell = rows[i].getElementsByTagName('td')[1];
+        const majorCell = rows[i].getElementsByTagName('td')[2];
+        if (nameCell || majorCell) {
+            const nameValue = nameCell.textContent || nameCell.innerText;
+            const majorValue = majorCell.textContent || majorCell.innerText;
+            if (nameValue.toLowerCase().indexOf(filter) > -1 || majorValue.toLowerCase().indexOf(filter) > -1) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }       
+    }
+}
+
+// Initialize pagination
+window.onload = function() {
+    showPage(1);
+};
+
+function deleteStudent(studentId) {
+    // Tampilkan dialog konfirmasi
+    const confirmDelete = confirm("Apakah Anda yakin ingin menghapus data siswa ini?");
+    if (confirmDelete) {
+        // Hapus baris siswa berdasarkan ID
+        const studentRow = document.querySelector(`.student-row[data-id="${studentId}"]`);
+        if (studentRow) {
+            studentRow.remove();
+        } else {
+            alert("Data siswa tidak ditemukan!");
+        }
+    }
+}
 </script>
 
 @endsection
