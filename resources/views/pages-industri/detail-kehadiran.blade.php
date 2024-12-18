@@ -35,7 +35,6 @@
                             <th class="py-2 px-4 border-b text-center">Foto Keluar</th> 
                             <th class="py-2 px-4 border-b text-center">Foto Izin</th>
                             <th class="py-2 px-4 border-b text-center">Status</th> 
-                            {{-- <th class="py-2 px-4 border-b text-center">Aksi</th>  --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -67,11 +66,6 @@
                                     @endif
                                 </td>
                                 <td class="py-4 px-4 border-b border-gray-300 text-center text-gray-600">{{ $item->status }}</td>
-                                {{-- <td class="py-2 px-4 border-b text-center">
-                                    <a href="{{ route('kehadiran.edit', $item->id) }}" class="bg-yellow-400 text-white text-xs px-3 py-1 rounded shadow hover:bg-yellow-500 transition duration-300 ease-in-out">
-                                        <i class="fas fa-edit mr-1"></i> Edit
-                                    </a>
-                                </td> --}}
                             </tr>
                         @endforeach
                     </tbody>
@@ -80,11 +74,11 @@
 
             <!-- Pagination Section -->
             <div class="flex justify-end items-center mt-4 space-x-2">
-                <button id="prevPage" class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                <button id="prevPage" class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed" onclick="prevPage()">
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 <span id="pageInfo" class="text-sm text-gray-600"></span>
-                <button id="nextPage" class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                <button id="nextPage" class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed" onclick="nextPage()">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
@@ -95,7 +89,7 @@
     <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden" id="modal" onclick="closeModal()">
         <div class="bg-white rounded-lg shadow-lg p-6 w-96" onclick="event.stopPropagation();">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold">Foto Absensi</h2>
+                <h2 class="text-xl font-bold"></h2>
                 <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
                     <i class="fas fa-times"></i>
                 </button>
@@ -109,6 +103,10 @@
 
 <script>
 
+const ITEMS_PER_PAGE = 1; // Set to 5 for better pagination
+let currentPage = 1;
+let filteredData = [];
+
 function filterByDate() {
     const selectedDate = document.getElementById('date').value;
     const tableBody = document.querySelector('#attendanceTable tbody');
@@ -118,7 +116,7 @@ function filterByDate() {
         filteredData = rows;
     } else {
         filteredData = rows.filter(row => {
-            const dateCell = row.querySelector('td:nth-child(4)');
+            const dateCell = row.querySelector('td:nth-child(2)'); // Corrected to match the date column
             return dateCell.textContent.includes(selectedDate);
         });
     }
@@ -126,50 +124,11 @@ function filterByDate() {
     currentPage = 1;
     updateTableDisplay();
 }
-
-
-const ITEMS_PER_PAGE = 10;
-let currentPage = 1;
-let filteredData = [];
 
 function initializeTable() {
     const tableBody = document.querySelector('#attendanceTable tbody');
     const rows = Array.from(tableBody.querySelectorAll('tr'));
     filteredData = rows;
-    updateTableDisplay();
-}
-
-function searchTable() {
-    const searchTerm = document.getElementById('search').value.toLowerCase();
-    const tableBody = document.querySelector('#attendanceTable tbody');
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
-    
-    filteredData = rows.filter(row => {
-        const nameCell = row.querySelector('td:nth-child(2)');
-        const schoolCell = row.querySelector('td:nth-child(3)');
-        return nameCell.textContent.toLowerCase().includes(searchTerm) || 
-               schoolCell.textContent.toLowerCase().includes(searchTerm);
-    });
-    
-    currentPage = 1;
-    updateTableDisplay();
-}
-
-function filterByDate() {
-    const selectedDate = document.getElementById('date').value;
-    const tableBody = document.querySelector('#attendanceTable tbody');
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
-    
-    if (!selectedDate) {
-        filteredData = rows;
-    } else {
-        filteredData = rows.filter(row => {
-            const dateCell = row.querySelector('td:nth-child(4)');
-            return dateCell.textContent.includes(selectedDate);
-        });
-    }
-    
-    currentPage = 1;
     updateTableDisplay();
 }
 

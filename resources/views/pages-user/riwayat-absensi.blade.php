@@ -50,21 +50,11 @@
                 </thead>
                 <tbody class="text-gray-600 text-sm font-light">
                     @foreach($kehadiran as $absensi)
-                    @php
-                        $tanggalAbsen = \Carbon\Carbon::parse($absensi->tanggal);
-                        $now = \Carbon\Carbon::now();
-                        $diffInHours = $tanggalAbsen->diffInHours($now);
-                        
-                        // Set status tidak hadir jika lebih dari 24 jam tidak ada aktivitas
-                        if ($diffInHours >= 24 && !$absensi->foto_masuk && !$absensi->foto_keluar && !$absensi->foto_izin) {
-                            $absensi->status = 'Tidak Hadir';
-                            $absensi->save();
-                        }
-                    @endphp
+                    @if($loop->iteration <= 2) <!-- Limit to 2 entries per page -->
                     <tr class="bg-white hover:bg-gray-50 transition duration-200 ease-in-out kehadiran-row">
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-700">{{ $loop->iteration + ($kehadiran->currentPage() - 1) * $kehadiran->perPage() }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-800">{{ Auth::user()->name }}</td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600 tanggal-cell">{{ $tanggalAbsen->format('Y-m-d') }}</td>
+                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ \Carbon\Carbon::parse($absensi->tanggal)->format('Y-m-d') }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->foto_izin ? 'Izin' : $absensi->status }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->waktu_masuk ? \Carbon\Carbon::parse($absensi->waktu_masuk)->format('H:i:s') : '-' }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->waktu_keluar ? \Carbon\Carbon::parse($absensi->waktu_keluar)->format('H:i:s') : '-' }}</td>
@@ -105,25 +95,67 @@
                             @endif
                         </td>
                     </tr>
+                    @endif
                     @endforeach
                 </tbody>
             </table>
         </div>
-
-        <!-- Pagination -->
-        <div class="flex justify-end absensis-center mt-4">
+        <div class="flex justify-end items-center mt-4">
             <span class="mr-4" id="pageNumber">Halaman {{ $kehadiran->currentPage() }}</span>
-            <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" @if($kehadiran->onFirstPage()) disabled @endif onclick="window.location='{{ $kehadiran->previousPageUrl() }}'">
+            <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()" id="prevButton" {{ $kehadiran->currentPage() == 1 ? 'disabled' : '' }}>
                 <i class="fas fa-chevron-left"></i>
             </button>
-            <button class="bg-gray-300 text-gray-700 p-2 rounded" @if(!$kehadiran->hasMorePages()) disabled @endif onclick="window.location='{{ $kehadiran->nextPageUrl() }}'">
+            <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()" id="nextButton" {{ $kehadiran->currentPage() == 1 ? 'disabled' : '' }}>
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
+        
     </div>
 </main>
+ <!-- Pagination Section -->
+ 
 
 <script>
+
+let currentPage = {{ $kehadiran->currentPage() }};
+const rowsPerPage = 1; // Set to 2 entries per page
+const rows = document.querySelectorAll('.kehadiran-row');
+const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+function showPage(page) {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    
+    rows.forEach((row, index) => {
+        if (index >= start && index < end) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    
+    document.getElementById('pageNumber').textContent = `Halaman ${page}`;
+    document.getElementById('prevButton').disabled = page === 1;
+    document.getElementById('nextButton').disabled = page === totalPages;
+}
+
+function nextPage() {
+    if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+    }
+}
+
+function prevPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+    }
+}
+
+// Initialize first page
+showPage(currentPage);
+
 function submitForm() {
     const form = document.getElementById('formIzin');
     const fileInput = document.getElementById('uploadIzin');

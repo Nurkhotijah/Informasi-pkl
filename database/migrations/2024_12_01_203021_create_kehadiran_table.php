@@ -26,8 +26,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::table('kehadiran', function (Blueprint $table) {
-            $table->dropColumn(['foto_izin', 'status']);
-        });
+        Schema::dropIfExists('kehadiran');
     }
 };
