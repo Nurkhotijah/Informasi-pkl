@@ -42,9 +42,9 @@
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Tanggal</th>
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Status</th>
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Waktu Masuk</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Waktu Keluar</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Waktu Pulang</th>
                         <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700 border-b border-gray-300">Foto Masuk</th>
-                        <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700 border-b border-gray-300">Foto Keluar</th>
+                        <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700 border-b border-gray-300">Foto Pulang</th>
                         <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700 border-b border-gray-300">Foto izin</th>
                     </tr>
                 </thead>
@@ -55,7 +55,7 @@
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-700">{{ $loop->iteration + ($kehadiran->currentPage() - 1) * $kehadiran->perPage() }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-800">{{ Auth::user()->name }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ \Carbon\Carbon::parse($absensi->tanggal)->format('Y-m-d') }}</td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->foto_izin ? 'Izin' : $absensi->status }}</td>
+                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600 text-center">{{ $absensi->foto_izin ? 'Izin' : $absensi->status }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->waktu_masuk ? \Carbon\Carbon::parse($absensi->waktu_masuk)->format('H:i:s') : '-' }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->waktu_keluar ? \Carbon\Carbon::parse($absensi->waktu_keluar)->format('H:i:s') : '-' }}</td>
                         <td class="py-4 px-4 border-b border-gray-300 text-center">

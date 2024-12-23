@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kehadiran;
 use App\Models\Penilaian;
 use App\Models\Profile;
+use App\Models\Jurnal;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -17,13 +18,15 @@ class AdminController extends Controller
 
     public function dashboard()
     {
+        $jumlahjurnal = Jurnal::count(); // Menghitung total semua jurnal yang siswa kirim
+
         return view('pages-admin.dashboard-admin');
     }
-    public function kehadiranSiswapkl()
-    {
-        // Logika untuk mengelola kehadiran
-        return view('pages-admin.kehadiran-siswapkl');
-    }
+    // public function kehadiranSiswapkl()
+    // {
+    //     // Logika untuk mengelola kehadiran
+    //     return view('pages-admin.kehadiran-siswapkl');
+    // }
     public function index()
     {
         $kehadiran = Kehadiran::with('user')->whereHas('user.profile', function($query) {
@@ -48,26 +51,49 @@ class AdminController extends Controller
     }
     
 
-    public function pengajuanSiswa()
-    {
-        // Logika untuk mengelola pengajuan
-        return view('pages-admin.pengajuan-siswa');
-    }
+    // public function pengajuanSiswa()
+    // {
+    //     // Logika untuk mengelola pengajuan
+    //     return view('pages-admin.pengajuan-siswa');
+    // }
 
-    public function tambahSiswa()
-    {
-        // Logika untuk mengelola pengajuan
-        return view('pages-admin.tambah-siswa');
-    }
-    public function dataSiswa()
-    {
+    // public function tambahSiswa()
+    // {
+    //     // Logika untuk mengelola pengajuan
+    //     return view('pages-admin.tambah-siswa');
+    // }
+
+/* -------------------------------------------------------------------------- */
+/*                                  START DATA SISWA                          */
+/* -------------------------------------------------------------------------- */
+
+public function dataSiswa()
+{
+    $siswa = User::whereHas('profile', function ($query) {
+        $query->where('id_sekolah', Auth::user()->sekolah->id);
+    })->get();
+
+    return view('pages-admin.data-siswa', compact('siswa'));
+}
+
+public function downloadPenilaian($id)
+{
+    
+    $penilaian = Penilaian::find($id);
+
+    if (!$penilaian) {
         $siswa = User::whereHas('profile', function ($query) {
             $query->where('id_sekolah', Auth::user()->sekolah->id);
         })->get();
-
-        // Logika untuk mengelola pengajuan
-        return view('pages-admin.data-siswa', compact('siswa'));
+    
+        return view('pages-admin.data-siswa', compact('siswa'))
+            ->with('error', 'Data Penilaian tidak ditemukan.');
     }
+    
+    $data = ['penilaian' => $penilaian];
+    $pdf = Pdf::loadView('template-penilaian', $data);
+    return $pdf->download('penilaian_' . $penilaian->id . '.pdf');
+}
 
     public function kehadiransekolah($userId)
     {
@@ -108,25 +134,7 @@ class AdminController extends Controller
     
         // Mengunduh PDF
         return $pdf->download('rekap-kehadiran-' . $userId . '.pdf');
-    }
-    
-    public function downloadpenilaian($id)
-    {
-        $penilaian = Penilaian::find($id); // Gunakan find dulu untuk debug
-    
-        if (!$penilaian) {
-            return response()->json([
-                'message' => 'Data Penilaian tidak ditemukan.',
-                'id' => $id,
-            ], 404); // Tampilkan pesan error jika tidak ditemukan
-        }
-    
-        // Lanjutkan jika data ditemukan
-        $data = ['penilaian' => $penilaian];
-        $pdf = Pdf::loadView('template-penilaian', $data);
-        return $pdf->download('penilaian_' . $penilaian->id . '.pdf');
-    }
-    
+    } 
 
     public function cetakSertifikatSiswa($id)
     {
@@ -137,17 +145,22 @@ class AdminController extends Controller
         return $pdf->stream($siswa->name . '-sertifikat.pdf');
     }
 
-    public function jurnalSiswa()
-    {
-        // Logika untuk menampilkan jurnal siswa
-        return view('pages-admin.jurnal-siswa');
-    }
+/* -------------------------------------------------------------------------- */
+/*                                  END DATA SISWA                            */
+/* -------------------------------------------------------------------------- */
 
-    public function jurnalDetail()
-    {
-        // Logika untuk menampilkan jurnal siswa
-        return view('pages-admin.jurnal-detail');
-    }
+
+    // public function jurnalSiswa()
+    // {
+    //     // Logika untuk menampilkan jurnal siswa
+    //     return view('pages-admin.jurnal-siswa');
+    // }
+
+    // public function jurnalDetail()
+    // {
+    //     // Logika untuk menampilkan jurnal siswa
+    //     return view('pages-admin.jurnal-detail');
+    // }
 
     public function nilaiSiswa()
     {

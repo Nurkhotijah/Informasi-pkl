@@ -206,23 +206,5 @@ class KehadiranController extends Controller
     }
 
     // Command to update attendance status daily
-    public function updateDailyAttendance()
-    {
-        $users = User::all();
-        $today = Carbon::now()->toDateString();
-
-        foreach ($users as $user) {
-            $kehadiran = Kehadiran::where('user_id', $user->id)
-                ->whereDate('tanggal', $today)
-                ->first();
-
-            if (!$kehadiran) {
-                $kehadiran = new Kehadiran();
-                $kehadiran->user_id = $user->id;
-                $kehadiran->tanggal = $today;
-                $kehadiran->status = 'Tidak Hadir'; // Default status
-                $kehadiran->save();
-            }
-        }
-    }
+   
 }    

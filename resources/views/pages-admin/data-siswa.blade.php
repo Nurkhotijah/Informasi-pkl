@@ -10,12 +10,19 @@
             <div class="mb-4">
                 <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Kelola Data Siswa</h1>
                 <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
+                   
                     <div class="relative w-full sm:w-auto">
                         <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" placeholder="Cari Nama atau Jurusan" type="text" oninput="searchTable()">
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
                 </div>
             </div>
+            @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+         @endif
+
 
             <!-- Table Section -->
             <div class="overflow-x-auto">
@@ -102,8 +109,8 @@
 
 <script>
 // Pagination variables
-let currentPage = 1;
-const rowsPerPage = 1;
+let currentPage = 5;
+const rowsPerPage = 5;
 
 function showPage(page) {
     const table = document.getElementById('studentTable');

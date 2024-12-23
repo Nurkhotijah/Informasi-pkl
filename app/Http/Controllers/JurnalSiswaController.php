@@ -57,12 +57,12 @@ class JurnalSiswaController extends Controller
             'user_id' => $users->id,  // ID pengguna yang login (siswa)
         ]);
 
-        // Menghitung jumlah jurnal yang sudah dikirim oleh pengguna
-        $jumlahJurnal = Jurnal::where('user_id', $users->id)->count();
+        // // Menghitung jumlah jurnal yang sudah dikirim oleh pengguna
+        // $jumlahJurnal = Jurnal::where('user_id', $users->id)->count();
 
         // Redirect ke halaman jurnal kegiatan dengan pesan sukses dan jumlah jurnal yang baru
-        return view('pages-user.jurnal.index')->with('success', 'Jurnal kegiatan berhasil ditambahkan!')
-                                                    ->with('jumlah_jurnal', $jumlahJurnal);
+        return redirect()->route('jurnal-siswa.index')->with('success', 'Jurnal kegiatan berhasil ditambahkan!');
+                                                    
     }
 
 

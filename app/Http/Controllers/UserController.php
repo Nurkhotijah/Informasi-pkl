@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Jurnal;
+use App\Models\Kehadiran;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,12 +15,14 @@ class UserController extends Controller
     $users = Auth::user();
 
     // Ambil semua jurnal yang dimiliki pengguna
-    $jurnal = Jurnal::where('user_id', $users->id)->get();
+   // Menghitung jumlah kehadiran
+   $jumlahKehadiran = Kehadiran::where('user_id', auth()->user()->id)->count();
 
-    // Hitung jumlah jurnal yang sudah dikirim oleh pengguna
-    $jumlahJurnal = $jurnal->count();
+   // Menghitung jumlah jurnal
+   $jumlahJurnal = Jurnal::where('user_id', auth()->user()->id)->count();
 
-    return view('pages-user.Dashboard-user', compact('jurnal', 'jumlahJurnal'));
+
+    return view('pages-user.Dashboard-user', compact('jumlahJurnal', 'jumlahKehadiran'));
 }
 
     

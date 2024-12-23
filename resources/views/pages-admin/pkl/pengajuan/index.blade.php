@@ -47,7 +47,7 @@
                             <td class="py-2 px-4 border-b text-center">{{ $item->tanggal_mulai }}</td>
                             <td class="py-2 px-4 border-b text-center">{{ $item->tanggal_selesai }}</td>
                             <td class="py-2 px-4 border-b text-center">
-                                <a href="{{ asset('storage/' . $item->cv_file) }}" target="_blank" class="text-blue-500 hover:underline">Download</a>
+                                <a href="{{ asset('storage/' . $item->cv_file) }}" target="_blank" class="text-blue-500 hover:underline">Lihat</a>
                             </td>
                             <td class="py-2 px-4 border-b text-center">
                                 @if ($item->status_persetujuan == 'pending')

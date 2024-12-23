@@ -30,7 +30,7 @@
             <tbody id="journalTableBody">
                 @foreach ($listdetail as $item)
                 <tr data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}">
-                    <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ $loop->iteration + ($listdetail->currentPage() - 1) * $listdetail->perPage() }}</td>
                     <td class="py-2 px-4 border-b text-left">{{ $item->kegiatan }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($item->tanggal)->locale('id')->format('d F Y') }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($item->waktu_mulai)->locale('id')->format('H:i') }}</td>
@@ -56,10 +56,52 @@
                 <img id="activityImage" src="" alt="Activity Image" class="w-full rounded-md">
             </div>
         </div>
+         <!-- Pagination Section -->
+         <div class="flex justify-end items-center mt-4">
+            <span class="mr-4" id="pageNumber">Halaman {{ $listdetail->currentPage() }}</span>
+            <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
     </div>
 </main>
 
 <script>
+    // Pagination functions
+    let currentPage = 1;
+    const rowsPerPage = 5; 
+    const totalRows = {{ $listdetail->total() }}; // Total rows from pagination
+
+    function updateTable() {
+        const rows = document.querySelectorAll('#journalTableBody tr');
+        rows.forEach((row, index) => {
+            if (index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        document.getElementById('pageNumber').textContent = `Halaman ${currentPage}`;
+    }
+
+    function nextPage() {
+        if (currentPage * rowsPerPage < totalRows) {
+            currentPage++;
+            updateTable();
+        }
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            updateTable();
+        }
+    }
+
+    updateTable();
    // Fungsi untuk menampilkan gambar besar di modal
    function showActivityImage(imageSrc) {
         const modal = document.getElementById('imageModal');

@@ -95,7 +95,7 @@
 
 <script>
     let currentPage = 1;
-    const ITEMS_PER_PAGE = 10;
+    const ITEMS_PER_PAGE = 2;
     let filteredData = [];
 
     function showActivityImage(imageSrc) {

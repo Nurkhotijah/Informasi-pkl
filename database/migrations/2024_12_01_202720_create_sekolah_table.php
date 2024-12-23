@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('nama');
             $table->text('alamat');
-            $table->enum('status', ['diterima', 'pending']);
+            $table->enum('status', ['diterima', 'pending'])->default('pending');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

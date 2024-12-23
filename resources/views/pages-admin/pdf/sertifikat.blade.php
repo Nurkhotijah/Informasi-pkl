@@ -17,7 +17,7 @@
         }
 
         .certificate {
-            width: 800px;
+            width: 95%;
             height: 600px;
             border: 10px solid #4a90e2;
             background: white;
@@ -114,7 +114,7 @@
 <body>
     <div class="certificate">
         <div class="logo left">
-            <img src="{{ public_path('storage/' . $siswa->profile->sekolah->user->foto_profile) }}" class="bg" style="width: 50px" alt="Logo sekolah">
+            <img src="{{ public_path('storage/' . $siswa->profile->sekolah->user->foto_profile) }}" class="bg" style="width: 70px" alt="Logo sekolah">
         </div>
         <div class="logo right">
             <img src="{{ public_path('assets/certificate/qelopak.png') }}" class="bg" alt="Logo qelopak">
