@@ -14,161 +14,52 @@ use Illuminate\Console\Command;
 
 class KehadiranController extends Controller
 {
+    
+    // Menampilkan riwayat kehadiran
     public function index(Request $request)
     {
-        // Get search query and date filter
-        $search = $request->input('search');
-        $tanggal = $request->input('tanggal');
+        // Ambil data kehadiran berdasarkan user yang login
+        $kehadiran = Kehadiran::where('user_id', Auth::id())
+            ->orderBy('tanggal', 'desc');
 
-        // Mendapatkan data kehadiran berdasarkan user yang sedang login
-        $kehadiran = Kehadiran::with('user')
-            ->where('user_id', Auth::id());
-
-        // Apply search filter if search query exists
-        if ($search) {
-            $kehadiran->whereHas('user', function($query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%');
-            });
+        // Filter berdasarkan tanggal
+        if ($request->has('tanggal')) {
+            $kehadiran = $kehadiran->whereDate('tanggal', $request->tanggal);
         }
 
-        // Apply date filter if date is selected
-        if ($tanggal) {
-            $kehadiran->whereDate('tanggal', $tanggal);
-        }
+        // Mengambil data kehadiran dengan paginasi
+        $kehadiran = $kehadiran->paginate(2); // 2 entries per page
 
-        // Menerapkan pagination dengan 10 data per halaman
-        $kehadiran = $kehadiran->orderBy('tanggal', 'desc')->paginate(10);
-
-        // Hitung jumlah kehadiran user
-        $jumlahKehadiran = Kehadiran::where('user_id', Auth::id())
-            ->where('status', 'Hadir')
-            ->count();
-
-        // Cek status absen hari ini untuk menentukan jenis button yang ditampilkan
-        $today = Carbon::now()->toDateString();
-        $absenHariIni = Kehadiran::where('user_id', Auth::id())
-            ->whereDate('tanggal', $today)
-            ->first();
-
-        $jenisButton = 'masuk'; // Default button masuk
-
-        if ($absenHariIni) {
-            if ($absenHariIni->foto_masuk && !$absenHariIni->foto_keluar) {
-                $jenisButton = 'pulang';
-            } else if ($absenHariIni->foto_masuk && $absenHariIni->foto_keluar) {
-                $jenisButton = 'selesai';
-            }
-        }
-
-        // Tambahkan URL foto untuk setiap kehadiran
-        foreach ($kehadiran as $absen) {
-            $absen->foto_masuk_url = $absen->foto_masuk ? Storage::url($absen->foto_masuk) : null;
-            $absen->foto_keluar_url = $absen->foto_keluar ? Storage::url($absen->foto_keluar) : null;
-            $absen->foto_izin_url = $absen->foto_izin ? Storage::url($absen->foto_izin) : null;
-        }
-
-        return view('pages-user.riwayat-absensi', compact('kehadiran', 'jenisButton', 'jumlahKehadiran'));
+        return view('pages-user.riwayat-absensi', compact('kehadiran'));
     }
 
+    // Menyimpan data kehadiran termasuk foto izin
     public function store(Request $request)
     {
-        try {
-            $user = Auth::user();
-            $now = Carbon::now();
-            $tanggal = $now->toDateString();
+        // Validasi input
+        $request->validate([
+            'foto_izin' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Max size 2MB
+        ]);
 
-            // Cek apakah sudah absen hari ini
-            $kehadiran = Kehadiran::where('user_id', $user->id)
-                ->whereDate('tanggal', $tanggal)
-                ->first();
-
-            // Cek jika user sudah absen masuk atau pulang
-            if ($kehadiran && ($kehadiran->foto_masuk || $kehadiran->foto_keluar)) {
-                return response()->json(['message' => 'Anda sudah absen masuk atau pulang, tidak bisa upload foto izin.'], 400);
-            }
-
-            // Cek jika user sudah upload foto izin
-            if ($kehadiran && ($kehadiran->foto_izin)) {
-                return response()->json(['message' => 'Anda sudah upload foto izin, tidak bisa absen masuk atau pulang.'], 400);
-            }
-
-            // Validasi request
-            if ($request->hasFile('foto_izin')) {
-                $request->validate([
-                    'foto_izin' => 'required|file|image|max:2048'
-                ]);
-            } else {
-                $request->validate([
-                    'foto_absen' => 'required|file|image|max:2048',
-                    'jenis_absen' => 'required|in:masuk,pulang'
-                ]);
-            }
-
-            // Jika upload foto izin
-            if ($request->hasFile('foto_izin')) {
-                if (!$kehadiran) {
-                    $kehadiran = new Kehadiran();
-                    $kehadiran->user_id = $user->id;
-                    $kehadiran->tanggal = $tanggal;
-                } else {
-                    return response()->json(['message' => 'Anda tidak bisa upload, karena sudah melakukan absen.'], 400);
-                }
-                
-                $fotoPath = $request->file('foto_izin')->store('kehadiran/izin', 'public');
-                $kehadiran->foto_izin = $fotoPath;
-                $kehadiran->status = 'Izin';
-                $kehadiran->save();
-
-                return response()->json([
-                    'message' => 'Foto izin berhasil diupload',
-                    'status' => 'Izin'
-                ]);
-            }
-
-            // Jika absen normal (masuk/pulang)
-            if ($request->jenis_absen === 'masuk') {
-                // Hapus pengecekan foto_masuk karena ini adalah absen masuk pertama
-                if (!$kehadiran) {
-                    $kehadiran = new Kehadiran();
-                    $kehadiran->user_id = $user->id;
-                    $kehadiran->tanggal = $tanggal;
-                    $kehadiran->status = 'Hadir';
-                }
-
-                $fotoPath = $request->file('foto_absen')->store('kehadiran/masuk', 'public');
-                $kehadiran->foto_masuk = $fotoPath;
-                $kehadiran->waktu_masuk = $now->toTimeString();
-            } else { // Jika absen pulang
-                if (!$kehadiran || !$kehadiran->foto_masuk) {
-                    return response()->json(['message' => 'Anda belum absen masuk hari ini.'], 400);
-                }
-                if ($kehadiran->foto_keluar) {
-                    return response()->json(['message' => 'Anda sudah absen pulang hari ini.'], 400);
-                }
-
-                $fotoPath = $request->file('foto_absen')->store('kehadiran/keluar', 'public');
-                $kehadiran->foto_keluar = $fotoPath;
-                $kehadiran->waktu_keluar = $now->toTimeString();
-            }
-            
-            $kehadiran->save();
-        
-            // Hitung jumlah kehadiran
-            $jumlahKehadiran = Kehadiran::where('user_id', $user->id)
-                ->where('status', 'Hadir')
-                ->count();
-        
-            return response()->json([
-                'message' => 'Data kehadiran berhasil disimpan',
-                'jumlah_kehadiran' => $jumlahKehadiran,
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
+        // Menyimpan foto izin jika ada
+        if ($request->hasFile('foto_izin')) {
+            $fotoIzin = $request->file('foto_izin')->store('public/foto_izin');
+        } else {
+            $fotoIzin = null;
         }
+
+        // Menyimpan data kehadiran
+        Kehadiran::create([
+            'user_id' => Auth::id(),
+            'sekolah_id' => Auth::user()->sekolah_id,  // Jika ada relasi dengan sekolah
+            'tanggal' => now(),
+            'status' => 'Hadir', // Default status
+            'foto_izin' => $fotoIzin, // Foto izin jika ada
+        ]);
+
+        return response()->json(['message' => 'Kehadiran berhasil disimpan!']);
     }
+
 
     public function rekapkehadiran()
     {

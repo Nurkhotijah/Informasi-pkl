@@ -8,6 +8,7 @@ use App\Models\Profile;
 use App\Models\Jurnal;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -75,7 +76,6 @@ public function dataSiswa()
 
     return view('pages-admin.data-siswa', compact('siswa'));
 }
-
 public function downloadPenilaian($id)
 {
     
@@ -90,10 +90,12 @@ public function downloadPenilaian($id)
             ->with('error', 'Data Penilaian tidak ditemukan.');
     }
     
-    $data = ['penilaian' => $penilaian];
-    $pdf = Pdf::loadView('template-penilaian', $data);
-    return $pdf->download('penilaian_' . $penilaian->id . '.pdf');
+    $penilaian = ['penilaian' => $penilaian];
+    $pdf = Pdf::loadView('template-penilaian', $penilaian);
+    $pdf->setPaper('A4', 'portrait');
+    return $pdf->download('Laporan_Penilaian_PKL.pdf');
 }
+
 
     public function kehadiransekolah($userId)
     {

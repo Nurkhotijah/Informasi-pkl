@@ -61,30 +61,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $('form').on('submit', function (e) {
-        e.preventDefault();
 
-        var form = $(this);
-        var formData = new FormData(form[0]);
-
-        $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                // Update jumlah jurnal di dashboard
-                $('#jumlah-jurnal').text(response.jumlah_jurnal);
-                alert('Jurnal kegiatan berhasil ditambahkan!');
-            },
-            error: function (response) {
-                alert('Terjadi kesalahan. Silakan coba lagi.');
-            }
-        });
-    });
-</script>
 
 
 @endsection

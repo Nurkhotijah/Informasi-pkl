@@ -33,11 +33,10 @@ Route::get('register', function () {
     return view('auth.register');  // Menampilkan halaman registrasi
 })->name('register.form');
 Route::post('register', [AuthController::class, 'register'])->name('register');
-// // Route lupa password 
-// Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-// Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
-// INDUSTRI
+/* -------------------------------------------------------------------------- */
+/*                                 START INDUSTRI                             */
+/* -------------------------------------------------------------------------- */
 
 Route::get('/dashboard-industri', [IndustriController::class, 'dashboard'])->name('industri.dashboard');
 
@@ -53,44 +52,43 @@ Route::get('/profile-industri', [IndustriController::class, 'showProfile'])->nam
 Route::get('/update-industri', [IndustriController::class, 'editProfile'])->name('update-industri');
 Route::post('/update-industri', [IndustriController::class, 'updateProfile'])->name('update-industri.save');
 
-Route::get('/pages-industri/edit-pengajuan/{id}', function ($id) {
-    return view('pages-industri.edit-pengajuan', compact('id'));
-})->name('edit-pengajuan');
+// Route::get('/pages-industri/edit-pengajuan/{id}', function ($id) {
+//     return view('pages-industri.edit-pengajuan', compact('id'));
+// })->name('edit-pengajuan');
 
 
-Route::get('/pages-industri/edit-kehadiran/{id}', function ($id) {
-    return view('pages-industri.edit-kehadiran', compact('id'));
-})->name('edit-kehadiran');
+// Route::get('/pages-industri/edit-kehadiran/{id}', function ($id) {
+//     return view('pages-industri.edit-kehadiran', compact('id'));
+// })->name('edit-kehadiran');
 
-Route::get('/pages-industri/tambah-kehadiran/{id}', function ($id) {
-    return view('pages-industri.tambah-kehadiran', compact('id'));
-})->name('tambah-kehadiran');
+// Route::get('/pages-industri/tambah-kehadiran/{id}', function ($id) {
+//     return view('pages-industri.tambah-kehadiran', compact('id'));
+// })->name('tambah-kehadiran');
 
-Route::get('/pages-industri/cetak-rekap/{id}', function ($id) {
-    return view('pages-industri.cetak-rekap', compact('id'));
-})->name('cetak-rekap');
+// Route::get('/pages-industri/cetak-rekap/{id}', function ($id) {
+//     return view('pages-industri.cetak-rekap', compact('id'));
+// })->name('cetak-rekap');
 
-Route::get('/pages-industri/edit-rekap/{id}', function ($id) {
-    return view('pages-industri.edit-rekap', compact('id'));
-})->name('edit-rekap');
+// Route::get('/pages-industri/edit-rekap/{id}', function ($id) {
+//     return view('pages-industri.edit-rekap', compact('id'));
+// })->name('edit-rekap');
 
-Route::get('/pages-industri/tambah-rekap/{id}', function ($id) {
-    return view('pages-industri.tambah-rekap', compact('id'));
-})->name('tambah-rekap');
+// Route::get('/pages-industri/tambah-rekap/{id}', function ($id) {
+//     return view('pages-industri.tambah-rekap', compact('id'));
+// })->name('tambah-rekap');
 
-Route::get('/pages-industri/lihat-rekap/{id}', function ($id) {
-    return view('pages-industri.lihat-rekap', compact('id'));
-})->name('lihat-rekap');
+// Route::get('/pages-industri/lihat-rekap/{id}', function ($id) {
+//     return view('pages-industri.lihat-rekap', compact('id'));
+// })->name('lihat-rekap');
 
-Route::get('/pages-industri/hapus-rekap/{id}', function ($id) {
-    return view('pages-industri.hapus-rekap', compact('id'));
-})->name('hapus-rekap');
+// Route::get('/pages-industri/hapus-rekap/{id}', function ($id) {
+//     return view('pages-industri.hapus-rekap', compact('id'));
+// })->name('hapus-rekap');
 
 
 
 // ADMIN
 
-Route::get('/dashboard-admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 // Rute untuk mengelola kehadiran
 Route::get('kehadiran-siswapkl', [AdminController::class, 'index'])->name('kehadiran-siswapkl');
 
@@ -115,7 +113,7 @@ Route::prefix('sekolah')->name('sekolah.')->group(function () {
 });
 Route::get('lihat-detail', [IndustriController::class, 'lihatdetail'])->name('lihat-detail');
 
-Route::prefix('penilaian')->name('penilaian.')->group(function () {
+Route::prefix('s')->name('penilaian.')->group(function () {
     Route::get('/', [IndustriController::class, 'indexpenilaian'])->name('index');
     Route::get('/create', [IndustriController::class, 'create'])->name('create');
     Route::post('/', [IndustriController::class, 'store'])->name('store');
@@ -186,7 +184,6 @@ Route::prefix('jurnal-siswa')->name('jurnal-siswa.')->group(function () {
 Route::get('/unduh-penilaian/{id}', [AdminController::class, 'downloadpenilaian'])->name('penilaiansiswa.unduh');
 Route::get('/unduh-kehadiran/{userId}', [AdminController::class, 'kehadiransekolah'])->name('kehadiransiswa.unduh');
 
-// Route::get('/penilaian/{id}', [PenilaianController::class, 'showPenilaian'])->name('penilaian.show');
 
 /* -------------------------------------------------------------------------- */
 /*                                  END SISWA                                 */
@@ -196,9 +193,9 @@ Route::get('/data-siswa', [AdminController::class, 'dataSiswa'])->name('data-sis
 Route::get('/cetak-sertifikat-siswa/{id}', [AdminController::class, 'cetakSertifikatSiswa'])->name('cetak-sertifikat-siswa');
 Route::get('/laporan', [AdminController::class, 'indexlaporan'])->name('pages-admin.data-siswa');
 
-// Route::get('/tambah-siswa', [AdminController::class, 'tambahSiswa'])->name('tambah-siswa');
 
-Route::get('/nilai-siswa', [AdminController::class, 'nilaiSiswa'])->name('nilai-siswa');
+// Route::get('/nilai-siswa', [AdminController::class, 'nilaiSiswa'])->name('nilai-siswa');
+
 
 Route::get('/kehadiran', [KehadiranController::class, 'index'])->name('kehadiran');
 Route::get('edit/{id}', [KehadiranController::class, 'edit'])->name('edit'); // Halaman edit kehadiran
@@ -219,7 +216,7 @@ Route::get('/dashboard-user', [UserController::class, 'dashboard'])->name('user.
 
 Route::get('/penilaian-user', [PenilaianController::class, 'showuser'])->name('penilaian.show.user');
 
-Route::get('/profile', [ProfileController::class, 'showprofilsiswa'])->name('profilesiswa');
+Route::get('/profile', [UserController::class, 'showprofilsiswa'])->name('profilesiswa');
 
 Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riwayat-absensi');
 Route::post('/upload-foto-izin', [KehadiranController::class, 'uploadFotoIzin'])->name('uploadFotoIzin');
@@ -227,7 +224,7 @@ Route::get('/unduh-rekap', [KehadiranController::class, 'downloadRekap'])->name(
 
 Route::get('/laporan-pkl', [UserController::class, 'laporanpkl'])->name('laporan-pkl');
 
-Route::get('/cetak-sertifikat/{id}', [CertificateController::class, 'cetakSertifikat'])->name('cetak-sertifikat');
+Route::get('/cetak-sertifikat/{id}', [UserController::class, 'cetakSertifikat'])->name('cetak-sertifikat');
 
 
 

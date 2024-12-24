@@ -6,70 +6,62 @@ use App\Models\Kehadiran;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
-
     public function dashboard()
-{
-    $users = Auth::user();
-
-    // Ambil semua jurnal yang dimiliki pengguna
-   // Menghitung jumlah kehadiran
-   $jumlahKehadiran = Kehadiran::where('user_id', auth()->user()->id)->count();
-
-   // Menghitung jumlah jurnal
-   $jumlahJurnal = Jurnal::where('user_id', auth()->user()->id)->count();
-
-
-    return view('pages-user.Dashboard-user', compact('jumlahJurnal', 'jumlahKehadiran'));
-}
-
+    {
+        $user = Auth::user();
+        $today = Carbon::now()->toDateString();
     
-    public function riwayatabsensi() {
-    return view('pages-user.riwayat-absensi');
-}
+        // Ambil data kehadiran hari ini
+        $absenHariIni = Kehadiran::where('user_id', $user->id)
+            ->whereDate('tanggal', $today)
+            ->first();
+    
+        // Tentukan teks tombol "Ayo Absen"
+        $buttonText = "Ayo Absen";
+        if ($absenHariIni) {
+            if ($absenHariIni->foto_masuk && !$absenHariIni->foto_keluar) {
+                $buttonText = "Ayo Pulang";
+            } elseif ($absenHariIni->foto_masuk && $absenHariIni->foto_keluar) {
+                $buttonText = "Selesai";
+            }
+        }
+    
+        // Hitung jumlah kehadiran
+        $jumlahKehadiran = Kehadiran::where('user_id', $user->id)
+            ->where('status', 'Hadir')
+            ->count();
+    
+        // Hitung jumlah jurnal
+        $jumlahJurnal = Jurnal::where('user_id', $user->id)->count();
+    
+        return view('pages-user.Dashboard-user', compact('jumlahJurnal', 'jumlahKehadiran', 'buttonText', 'absenHariIni'));
+    }
+    
+    public function cetakSertifikat($id)
+    {
+        $siswa = User::with('profile.sekolah.user')->findOrFail($id);
+        // dd($siswa->profile->sekolah->user->foto_profile);
 
-public function uploadFotoizin() {
-    return view('pages-user.uploadFotoizin');
-}
-     public function pengajuanizin() {
-    return view('pages-user.Pengajuan-izin');
-}
-// public function jurnalKegiatan() {
-//     return view('pages-user.Jurnal-kegiatan');
-// }
+        // Load view dan generate PDF
+        $pdf = Pdf::loadView('pages-user.pdf.sertifikatuser', compact('siswa'));
+        $pdf->setPaper('A4', 'landscape');
 
-public function editjurnal() {
-    return view('pages-user.Edit-jurnal');
-}
+        // Return PDF untuk di-download
+        return $pdf->download($siswa->name . '-sertifikat.pdf');
+    }
 
-public function profile() {
-    return view('pages-user.Profile');
-}
+    public function showprofilsiswa()
+    {
+        $profilesiswa = User::with(['sekolah', 'profile', 'pengajuan.sekolah', 'pengajuan.pkl'])->findOrFail(Auth::user()->id);
 
- // Metode untuk menampilkan halaman edit pengajuan
- public function editizin()
-{
-    return view('pages-user.Edit-izin'); 
-}
+        return view('pages-user.profile', compact('profilesiswa'));
+    }
 
-public function tambahjurnal()
-{
-    return view('pages-user.Tambah-jurnal'); 
-}
-
-public function hapusizin()
-{
-    return view('pages-user.Hapus-izin'); 
-}
-
-public function laporanpkl()
-{
-    return view('pages-user.laporan-pkl'); 
-}
-
-   
     public function logout(Request $request)
     {
         Auth::logout(); // Menggunakan facade Auth untuk logout

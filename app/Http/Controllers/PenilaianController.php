@@ -22,8 +22,10 @@ class PenilaianController extends Controller
         return redirect()->action([JurnalSiswaController::class, 'index']);
     }
 
-    // Jika penilaian ditemukan, tampilkan halaman show
-    return view('pages-user.penilaian.show', compact('penilaian'));
+    // Jika penilaian ditemukan, buat PDF dan download
+    $pdf = Pdf::loadView('template-penilaian', compact('penilaian'));
+    $pdf->setPaper('A4', 'portrait');
+    return $pdf->download('Laporan_Penilaian_PKL.pdf');
 }
 
 }

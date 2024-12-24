@@ -14,37 +14,18 @@
         <p class="text-lg font-semibold mb-1">Selamat Datang di SI-PKL</p>
         <div class="flex space-x-4">
             <a class="bg-blue-500 text-white px-4 py-2 rounded-lg" href="{{ route('jurnal-siswa.index') }}">Lihat Jurnal</a>
-            @php
-                $today = \Carbon\Carbon::now()->toDateString();
-                $absenHariIni = \App\Models\Kehadiran::where('user_id', Auth::id())
-                    ->whereDate('tanggal', $today)
-                    ->first();
-                    
-                $buttonText = "Ayo Absen";
-                if ($absenHariIni) {
-                    if ($absenHariIni->foto_masuk && !$absenHariIni->foto_keluar) {
-                        $buttonText = "Ayo Pulang";
-                    } else if ($absenHariIni->foto_masuk && $absenHariIni->foto_keluar) {
-                        $buttonText = "Selesai";
-                    }
-                }
-
-                // Hitung jumlah kehadiran
-                $jumlahKehadiran = \App\Models\Kehadiran::where('user_id', Auth::id())
-                    ->where('status', 'Hadir')
-                    ->count();
-            @endphp
+            
             <button class="bg-green-500 text-white px-4 py-2 rounded-lg {{ $buttonText === 'Selesai' ? 'opacity-50 cursor-not-allowed' : '' }}" 
                     id="ayo-absen" 
                     {{ $buttonText === 'Selesai' ? 'disabled' : '' }}>
                 {{ $buttonText }}
             </button>
+            
             <a class="bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center gap-2" 
-            href="{{ route('cetak-sertifikat', Auth::user()->id) }}">
-             <i class="fas fa-download"></i>
-             Sertifikat PKL
-         </a>         
-
+               href="{{ route('cetak-sertifikat', Auth::user()->id) }}">
+                <i class="fas fa-download"></i>
+                Sertifikat PKL
+            </a>
         </div>
     </div>
 
@@ -57,17 +38,16 @@
 
         <div class="bg-white p-6 rounded-lg shadow">
             <h2 class="text-lg font-semibold">Jumlah Jurnal</h2>
-            <p class="text-3xl font-bold mt-4" id="jumlah-jurnal">{{ $jumlahJurnal }}</p>
+            <p class="text-3xl font-bold mt-4">{{ $jumlahJurnal }}</p>
         </div>
-        
 
-        <!-- Jumlah Absen -->
         <div class="bg-white p-6 rounded-lg shadow">
             <h2 class="text-lg font-semibold">Jumlah Absen</h2>
-            <p class="text-3xl font-bold mt-4" id="jumlah-absen">{{ $jumlahKehadiran }}</p>
+            <p class="text-3xl font-bold mt-4">{{ $jumlahKehadiran }}</p>
         </div>
     </div>
 </div>
+
 
 <!-- Modal Kamera -->
 <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden" id="cameraModal">
@@ -86,18 +66,6 @@
 </div>
 
 <script>
-    // Fungsi untuk memperbarui jumlah jurnal
-    function updateJumlahJurnal() {
-        fetch("/api/jumlah-jurnal")  // Pastikan route ini sudah ada
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('jumlah-jurnal').textContent = data.jumlah_jurnal;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-
     // Timer untuk Waktu Saat Ini
     function updateTime() {
         const timeElement = document.getElementById("current-time");
@@ -219,71 +187,24 @@
         }
     }
 
-    // Menangani klik tombol Ambil Foto
-    captureButton.addEventListener("click", capturePhoto);
+    // Menampilkan modal saat tombol absen diklik
+    document.getElementById("ayo-absen").addEventListener("click", function() {
+        // Tampilkan modal kamera
+        cameraModal.classList.remove("hidden");
+        
+        // Mulai kamera
+        startCamera();
+    });
 
-    // Fungsi untuk menonaktifkan tombol setelah absen
-    function disableButton() {
-        const absensiButton = document.getElementById("ayo-absen");
-        absensiButton.disabled = true;
-        absensiButton.classList.add("cursor-not-allowed");
-        absensiButton.classList.add("opacity-50");
-    }
-
-    // Menangani klik tombol Tutup
-    closeButton.addEventListener("click", () => {
+    // Menutup modal
+    closeButton.addEventListener("click", function() {
         cameraModal.classList.add("hidden");
         if (videoElement.srcObject) {
             videoElement.srcObject.getTracks().forEach(track => track.stop());
         }
-        // Reset tampilan untuk penggunaan berikutnya
-        captureButton.textContent = "Mulai Foto";
-        captureButton.classList.remove("bg-green-500");
-        captureButton.classList.add("bg-blue-500");
-        videoElement.classList.remove("hidden");
-        capturedImage.classList.add("hidden");
     });
 
-    // Menangani klik untuk membuka modal kamera
-    document.getElementById("ayo-absen").addEventListener("click", () => {
-        capturedImage.classList.add("hidden");
-        capturedImage.src = "";
-        videoElement.classList.remove("hidden");
-        captureButton.textContent = "Mulai Foto";
-        captureButton.classList.remove("bg-green-500");
-        captureButton.classList.add("bg-blue-500");
-
-        cameraModal.classList.remove("hidden");
-        startCamera();
-    });
-
-    // Memulai kamera saat halaman dimuat
-    window.addEventListener("DOMContentLoaded", () => {
-        updateTime();
-        updateJumlahJurnal(); // Memanggil fungsi untuk memperbarui jumlah jurnal saat halaman dimuat
-    });
-
-    // Fungsi untuk membuka modal
-    function openModal(absensiId) {
-        document.getElementById('modal-' + absensiId).classList.remove('hidden');
-    }
-
-    // Fungsi untuk menutup modal
-    function closeModal(absensiId) {
-        document.getElementById('modal-' + absensiId).classList.add('hidden');
-    }
-
-    // Fungsi untuk menampilkan gambar absen (Masuk/Pulang)
-    function showImage(type, absensiId) {
-        if (type === 'checkIn') {
-            document.getElementById('checkInImage-' + absensiId).classList.remove('hidden');
-            document.getElementById('checkOutImage-' + absensiId).classList.add('hidden');
-        } else if (type === 'checkOut') {
-            document.getElementById('checkOutImage-' + absensiId).classList.remove('hidden');
-            document.getElementById('checkInImage-' + absensiId).classList.add('hidden');
-        }
-    }
-
+    // Menangani pengambilan foto
+    captureButton.addEventListener("click", capturePhoto);
 </script>
-
 @endsection

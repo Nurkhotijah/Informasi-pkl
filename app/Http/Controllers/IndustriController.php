@@ -29,49 +29,16 @@ class IndustriController extends Controller
 /*                                  START KEHADIRAN                           */
 /* -------------------------------------------------------------------------- */
 
-    public function Kehadiran()
-    {
-        // Ambil data kehadiran dengan pagination (2 item per halaman)
-        $kehadiran = Kehadiran::paginate(2);
-        return view('pages-industri.kelola-kehadiran', compact('kehadiran'));
-    }
+public function Kehadiran()
+{
+    // Ambil data kehadiran unik berdasarkan user_id
+    $kehadiran = Kehadiran::select('user_id')
+        ->distinct()
+        ->with(['user', 'profile.sekolah'])
+        ->paginate(2);
 
-    public function edit($id)
-    {
-        $item = Kehadiran::with('user')->find($id);
-        $item = Kehadiran::findOrFail($id);
-        return view('pages-industri.edit-kehadiran', compact('item'));
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        // Update status kehadiran berdasarkan ID
-        $kehadiran = Kehadiran::findOrFail($id);
-        
-        // Validasi dan perbarui status
-        $kehadiran->status = $request->status;
-        $kehadiran->save();
-
-        // Ambil semua data kehadiran untuk ditampilkan di halaman kelola-kehadiran
-        $dataKehadiran = Kehadiran::with('user')->get();
-
-        // Kembali ke halaman kelola kehadiran dengan data terbaru
-        return view('pages-industri.detail-kehadiran', [
-            'kehadiran' => $dataKehadiran,
-            'success' => 'Status kehadiran berhasil diperbarui',
-        ]);
-    }
-
-    public function detail($userId)
-    {
-        // Cari data kehadiran berdasarkan user_id
-        $kehadiran = Kehadiran::where('user_id', $userId)
-            ->orderBy('tanggal', 'desc')
-            ->get();
-
-        return view('pages-industri.detail-kehadiran', compact('kehadiran'));
-    }
+    return view('pages-industri.kelola-kehadiran', compact('kehadiran'));
+}
 
     public function cetakkehadiranuser($userId)
 {
@@ -115,6 +82,31 @@ class IndustriController extends Controller
     // Kembalikan PDF sebagai download
     return $pdf->download('laporan_kehadiran_' . $user->name . '.pdf');
 }
+ // public function edit($id)
+    // {
+    //     $item = Kehadiran::with('user')->find($id);
+    //     $item = Kehadiran::findOrFail($id);
+    //     return view('pages-industri.edit-kehadiran', compact('item'));
+    // }
+
+    // public function update(Request $request, $id)
+    // {
+    //     // Update status kehadiran berdasarkan ID
+    //     $kehadiran = Kehadiran::findOrFail($id);
+        
+    //     // Validasi dan perbarui status
+    //     $kehadiran->status = $request->status;
+    //     $kehadiran->save();
+
+    //     // Ambil semua data kehadiran untuk ditampilkan di halaman kelola-kehadiran
+    //     $dataKehadiran = Kehadiran::with('user')->get();
+
+    //     // Kembali ke halaman kelola kehadiran dengan data terbaru
+    //     return view('pages-industri.detail-kehadiran', [
+    //         'kehadiran' => $dataKehadiran,
+    //         'success' => 'Status kehadiran berhasil diperbarui',
+    //     ]);
+    // }
 
 
 

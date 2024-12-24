@@ -8,16 +8,5 @@ use Illuminate\Support\Facades\Auth;
 
 class CertificateController extends Controller
 {
-    public function cetakSertifikat($id)
-    {
-        $siswa = User::with('profile.sekolah.user')->findOrFail($id);
-        // dd($siswa->profile->sekolah->user->foto_profile);
-
-        // Load view dan generate PDF
-        $pdf = Pdf::loadView('pages-user.pdf.sertifikatuser', compact('siswa'));
-        $pdf->setPaper('A4', 'landscape');
-
-        // Return PDF untuk di-download
-        return $pdf->download($siswa->name . '-sertifikat.pdf');
-    }
+    
 }

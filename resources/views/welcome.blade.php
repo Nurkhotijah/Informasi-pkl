@@ -36,7 +36,7 @@
   <nav class="hidden md:flex space-x-8 text-base">
       <a href="#home" class="nav-link text-blue-400 transition duration-300 hover:text-blue-400 hover:underline">Beranda</a>
       <a href="#about" class="nav-link text-blue-400 transition duration-300 hover:text-blue-400 hover:underline">Tentang</a>
-      <a href="#service" class="nav-link text-blue-400 transition duration-300 hover:text-white hover:underline">Fitur</a>
+      <a href="#service" class="nav-link text-blue-400 transition duration-300 hover:text-blue-400 hover:underline">Fitur</a>
   </nav>
 
   <div class="hidden md:flex space-x-4">
