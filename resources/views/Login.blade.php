@@ -12,11 +12,10 @@
         }
     </style>
 </head>
+<body class="bg-blue-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+        <h2 class="text-2xl font-bold mb-6 text-center">Masuk</h2>
 
-<body class="flex items-center justify-center min-h-screen">
-
-    <div class="w-full max-w-md p-8 bg-white rounded-2xl shadow-xl border border-gray-200">
-        <h2 class="text-3xl font-semibold mb-8 text-center text-gray-800">Masuk</h2>
         @if ($errors->any())
             <div class="bg-red-500 text-white p-4 mb-4">
                 <ul>
@@ -30,44 +29,24 @@
         <form method="POST" action={{ route('login') }}>
             <!-- CSRF Token -->
             @csrf
-
-            <!-- Email -->
-            <div class="mb-6">
-                <label for="email" class="block text-sm font-medium text-gray-600 mb-2">Email</label>
-                <input type="email" id="email" name="email" required
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-                    placeholder="you@gmail.com">
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 mb-2" for="email">Email</label>
+                <input type="email" id="email" name="email" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" id="email" placeholder="you@gmail.com">
             </div>
-
-            <!-- Password -->
-            <div class="mb-6">
-                <label for="password" class="block text-sm font-medium text-gray-600 mb-2">Kata Sandi</label>
-                <input type="password" id="password" name="password" required
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-                    placeholder="Masukkan Kata Sandi">
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700 mb-2" for="password">Kata Sandi</label>
+                <input type="password" id="password" name="password" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" id="password" placeholder="Masukkan Kata Sandi">
             </div>
-
-            <!-- Remember Me -->
-            <div class="mb-6 flex items-center justify-between">
-                <label for="remember_me" class="flex items-center text-gray-600">
-                    <input type="checkbox" id="remember_me" name="remember" class="h-4 w-4 text-blue-500 border-gray-300 rounded">
-                    <span class="ml-2 text-sm">Ingat Saya</span>
-                </label>
-                <a href="/forgot-password" class="text-sm text-blue-500 hover:text-blue-600 transition duration-300">Lupa Kata Sandi?</a>
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <input type="checkbox" id="remember_me" name="remember" class="mr-2">
+                    <label for="remember" class="text-gray-700">Ingat Saya</label>
+                </div>
+                <a href="/forgot-password" class="text-blue-500">Lupa Kata Sandi?</a>
             </div>
-
-            <!-- Submit Button -->
-            <button type="submit"
-                class="w-full py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 font-semibold">Masuk</button>
-
+            <button class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Masuk</button>
         </form>
-
-        <!-- Register Link -->
-        <p class="mt-6 text-center text-gray-600">
-            Belum punya akun? <a href="{{ route('register') }}" class="text-blue-500 font-semibold hover:text-blue-600 transition duration-300">Daftar sekarang</a>
-        </p>
+        <p class="mt-6 text-center text-gray-700">Belum punya akun? <a href="{{ route('register') }}" class="text-blue-500">Daftar sekarang</a></p>
     </div>
-
 </body>
-
 </html>

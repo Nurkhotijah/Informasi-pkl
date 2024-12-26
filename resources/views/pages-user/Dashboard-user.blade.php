@@ -3,83 +3,60 @@
 @section('title', 'Dashboard Siswa')
 
 @section('content')
-<div class="flex-1 p-6 bg-gray-100">
-    <div class="bg-white p-4 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-2">
-            Hai {{ Auth::user()->name }}
-            <span class="ml-2">
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <div class="flex items-center mb-4">
+                <h1 class="text-2xl font-bold mr-2">Hai {{ Auth::user()->name }}</h1>
                 <i class="fas fa-star text-yellow-500"></i>
-            </span>
-        </h1>
-        <p class="text-lg font-semibold mb-1">Selamat Datang di SI-PKL</p>
-        <div class="flex space-x-4">
-            <a class="bg-blue-500 text-white px-4 py-2 rounded-lg" href="{{ route('jurnal-siswa.index') }}">Lihat Jurnal</a>
-            
+            </div>
+            <p class="mb-4">Selamat Datang di SI-PKL</p>
+            <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
+            <a class="bg-blue-500 text-white px-4 py-2 rounded flex items-center justify-center" href="{{ route('jurnal-siswa.index') }}">Lihat Jurnal</a>
             <button class="bg-green-500 text-white px-4 py-2 rounded-lg {{ $buttonText === 'Selesai' ? 'opacity-50 cursor-not-allowed' : '' }}" 
-                    id="ayo-absen" 
-                    {{ $buttonText === 'Selesai' ? 'disabled' : '' }}>
-                {{ $buttonText }}
-            </button>
-            
-            <a class="bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center gap-2" 
-               href="{{ route('cetak-sertifikat', Auth::user()->id) }}">
-                <i class="fas fa-download"></i>
-                Sertifikat PKL
+                id="ayo-absen" 
+                {{ $buttonText === 'Selesai' ? 'disabled' : '' }}>
+            {{ $buttonText }}
+            </button>                
+            <a class="bg-gray-800 text-white px-4 py-2 rounded flex items-center justify-center"
+                href="{{ route('cetak-sertifikat', Auth::user()->id) }}">
+                <i class="fas fa-download mr-2"></i>
+                Sertifikat           
             </a>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <p class="text-gray-600 mb-2">Waktu Saat Ini</p>
+                <p class="text-2xl font-bold" id="current-time">--:--:-- WIB</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <p class="text-gray-600 mb-2">Jumlah Jurnal</p>
+                <p class="text-2xl font-bold">{{ $jumlahJurnal }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <p class="text-gray-600 mb-2">Jumlah Absen</p>
+                <p class="text-2xl font-bold">{{ $jumlahKehadiran }}</p>
+            </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        <!-- Waktu Saat Ini -->
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-lg font-semibold">Waktu Saat Ini</h2>
-            <p class="text-3xl font-bold mt-4" id="current-time">--:--:-- WIB</p>
-        </div>
-
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-lg font-semibold">Jumlah Jurnal</h2>
-            <p class="text-3xl font-bold mt-4">{{ $jumlahJurnal }}</p>
-        </div>
-
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-lg font-semibold">Jumlah Absen</h2>
-            <p class="text-3xl font-bold mt-4">{{ $jumlahKehadiran }}</p>
+    <!-- Modal Kamera -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden" id="cameraModal">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">Kamera</h2>
+                <button class="text-gray-600 hover:text-gray-800" id="closeButton"><i class="fas fa-times"></i></button>
+            </div>
+            <video autoplay class="w-full h-auto bg-gray-200 rounded-lg" id="video"></video>
+            <!-- Tempat Menampilkan Gambar Setelah Foto diambil -->
+            <img id="captured-image" class="hidden mt-4 w-full h-auto bg-gray-200 rounded-lg" />
+            <div class="flex justify-center mt-4">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2" id="captureButton">Mulai Foto</button>
+            </div>
         </div>
     </div>
-</div>
-
-
-<!-- Modal Kamera -->
-<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden" id="cameraModal">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold">Kamera</h2>
-            <button class="text-gray-600 hover:text-gray-800" id="closeButton"><i class="fas fa-times"></i></button>
-        </div>
-        <video autoplay class="w-full h-auto bg-gray-200 rounded-lg" id="video"></video>
-        <!-- Tempat Menampilkan Gambar Setelah Foto diambil -->
-        <img id="captured-image" class="hidden mt-4 w-full h-auto bg-gray-200 rounded-lg" />
-        <div class="flex justify-center mt-4">
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2" id="captureButton">Mulai Foto</button>
-        </div>
-    </div>
-</div>
-
 <script>
-    // Timer untuk Waktu Saat Ini
-    function updateTime() {
-        const timeElement = document.getElementById("current-time");
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        timeElement.textContent = `${hours}:${minutes}:${seconds} WIB`;
-    }
-
-    // Update waktu setiap detik
-    setInterval(updateTime, 1000);
-
-    // Mendapatkan elemen modal dan tombol
     const cameraModal = document.getElementById("cameraModal");
     const captureButton = document.getElementById("captureButton");
     const videoElement = document.getElementById("video");
@@ -127,12 +104,13 @@
 
             canvas.toBlob(async (blob) => {
                 const formData = new FormData();
-                formData.append('foto_absen', blob, 'foto_absen.jpg');
+                formData.append('foto_masuk', blob, 'foto_absen.jpg');
                 
                 // Tentukan jenis absen berdasarkan teks tombol
                 const absensiButton = document.getElementById("ayo-absen");
-                const jenisAbsen = absensiButton.textContent.toLowerCase().includes("absen") ? "masuk" : "pulang";
+                const jenisAbsen = absensiButton ? (absensiButton.textContent.toLowerCase().includes("absen") ? "masuk" : "pulang") : "masuk";
                 formData.append('jenis_absen', jenisAbsen);
+                formData.append('id', "{{$absenHariIni?->id}}");
 
                 try {
                     const response = await fetch("{{ route('kehadiran.store') }}", {
@@ -149,15 +127,19 @@
                         alert(jenisAbsen === "masuk" ? "Absensi masuk berhasil dicatat!" : "Absensi pulang berhasil dicatat!");
                         
                         // Update jumlah kehadiran dari response server
-                        document.getElementById("jumlah-absen").textContent = result.jumlah_kehadiran;
+                        const jumlahAbsenElement = document.getElementById("jumlah-absen");
+                        if (jumlahAbsenElement) {
+                            jumlahAbsenElement.textContent = result.jumlah_kehadiran;
+                        }
                         
-                        const absensiButton = document.getElementById("ayo-absen");
-                        if (jenisAbsen === "masuk") {
-                            absensiButton.textContent = "Ayo Pulang";
-                        } else {
-                            absensiButton.textContent = "Selesai";
-                            absensiButton.disabled = true;
-                            absensiButton.classList.add("opacity-50", "cursor-not-allowed");
+                        if (absensiButton) {
+                            if (jenisAbsen === "masuk") {
+                                absensiButton.textContent = "Ayo Pulang";
+                            } else {
+                                absensiButton.textContent = "Selesai";
+                                absensiButton.disabled = true;
+                                absensiButton.classList.add("opacity-50", "cursor-not-allowed");
+                            }
                         }
                         
                         // Tutup modal dan reset kamera
@@ -206,5 +188,19 @@
 
     // Menangani pengambilan foto
     captureButton.addEventListener("click", capturePhoto);
+
+      // Timer untuk Waktu Saat Ini
+      function updateTime() {
+        const timeElement = document.getElementById("current-time");
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        timeElement.textContent = `${hours}:${minutes}:${seconds} WIB`;
+    }
+
+    // Update waktu setiap detik
+    setInterval(updateTime, 1000);
 </script>
+
 @endsection

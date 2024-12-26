@@ -13,34 +13,40 @@
             <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
                 {{ session('success') }}
             </div>
-        @endif
-        
-        @if($errors->any())
+            @endif
+
+            @if($errors->any())
             <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
                 @foreach($errors->all() as $error)
                     <p>{{ $error }}</p>
                 @endforeach
             </div>
-        @endif
-        
-
+            @endif
         </div>
 
         <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <input type="file" id="fileUpload" name="file" accept=".pdf" class="hidden" onchange="handleFileUpload(event)">
-            <button type="button" onclick="document.getElementById('fileUpload').click()" 
-                    class="bg-blue-500 text-white text-sm px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
-                <i class="fas fa-upload mr-2"></i> Upload Laporan PKL
-            </button>
-            <button type="submit" class="mt-2 bg-green-500 text-white text-sm px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out">
-                Simpan
-            </button>
+            <div class="flex flex-col sm:flex-row items-center gap-4 mb-4">
+                <!-- File Upload Button -->
+                <div class="flex items-center w-full sm:w-auto">
+                    <input type="file" id="fileUpload" name="file" accept=".pdf" class="hidden" onchange="handleFileUpload(event)">
+                    <button type="button" onclick="document.getElementById('fileUpload').click()" 
+                            class="bg-blue-500 text-white text-sm px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out w-full sm:w-auto flex items-center justify-center">
+                        <i class="fas fa-upload mr-2"></i> Upload Laporan PKL
+                    </button>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex items-center w-full sm:w-auto">
+                    <button type="submit" class="mt-2 sm:mt-0 bg-green-500 text-white text-sm px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out w-full sm:w-auto">
+                        Simpan
+                    </button>
+                </div>
+            </div>
         </form>
-        
 
         <!-- Preview Section -->
-        <div id="previewContainer" class="hidden mt-4">
+        <div id="previewContainer" class="hidden mt-4 w-full sm:w-auto">
             <h2 class="text-lg font-semibold mb-2">Pratinjau Laporan PKL</h2>
             <div class="border rounded-lg overflow-hidden">
                 <iframe id="filePreview" src="" class="w-full h-96"></iframe>

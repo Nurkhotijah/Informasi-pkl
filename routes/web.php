@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
@@ -39,6 +38,8 @@ Route::post('register', [AuthController::class, 'register'])->name('register');
 /* -------------------------------------------------------------------------- */
 
 Route::get('/dashboard-industri', [IndustriController::class, 'dashboard'])->name('industri.dashboard');
+Route::get('/dashboard-admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
 
 Route::get('/update-industri', [IndustriController::class, 'updateIndustri'])->name('update-industri');
 
@@ -192,6 +193,8 @@ Route::get('/unduh-kehadiran/{userId}', [AdminController::class, 'kehadiransekol
 Route::get('/data-siswa', [AdminController::class, 'dataSiswa'])->name('data-siswa');
 Route::get('/cetak-sertifikat-siswa/{id}', [AdminController::class, 'cetakSertifikatSiswa'])->name('cetak-sertifikat-siswa');
 Route::get('/laporan', [AdminController::class, 'indexlaporan'])->name('pages-admin.data-siswa');
+Route::get('/laporan/download/{id}', [AdminController::class, 'downloadLaporan'])->name('download-laporan');
+
 
 
 // Route::get('/nilai-siswa', [AdminController::class, 'nilaiSiswa'])->name('nilai-siswa');
@@ -211,6 +214,9 @@ Route::post('/laporan-pkl', [LaporanController::class, 'store'])->name('laporan.
 
 Route::get('/riwayat-absensi', [KehadiranController::class, 'index'])->name('riwayat-absensi');
 Route::post('/kehadiran', [KehadiranController::class, 'store'])->name('kehadiran.store');
+Route::post('/absen-masuk', [KehadiranController::class, 'absenMasuk'])->name('kehadiran.absen-masuk');
+Route::post('/absen-keluar', [KehadiranController::class, 'absenKeluar'])->name('kehadiran.absen-keluar');
+
 
 Route::get('/dashboard-user', [UserController::class, 'dashboard'])->name('user.dashboard');
 
@@ -224,10 +230,11 @@ Route::get('/unduh-rekap', [KehadiranController::class, 'downloadRekap'])->name(
 
 Route::get('/laporan-pkl', [UserController::class, 'laporanpkl'])->name('laporan-pkl');
 
+
 Route::get('/cetak-sertifikat/{id}', [UserController::class, 'cetakSertifikat'])->name('cetak-sertifikat');
 
 
 
 
 // Route untuk mengganti kata sandi
-Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+// Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');

@@ -33,33 +33,54 @@ class KehadiranController extends Controller
         return view('pages-user.riwayat-absensi', compact('kehadiran'));
     }
 
-    // Menyimpan data kehadiran termasuk foto izin
     public function store(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'foto_izin' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Max size 2MB
+{
+    // Validasi input
+    $request->validate([
+        'id'=> 'nullable',
+        'foto_keluar' => 'nullable|image|mimes:jpeg,png,jpg|max:5000', 
+        'foto_masuk' => 'nullable|image|mimes:jpeg,png,jpg|max:5000', 
+        'foto_izin' => 'nullable|image|mimes:jpeg,png,jpg|max:5000', 
+    ]);
+
+    // Menyimpan foto masuk jika ada
+    if ($request->hasFile('foto_masuk')) {
+        $fotoMasuk = $request->file('foto_masuk')->store('kehadiran/masuk', 'public');
+    } else {
+        $fotoMasuk = null;
+    }
+
+    // Menyimpan foto izin jika ada
+    if ($request->hasFile('foto_izin')) {
+        $fotoIzin = $request->file('foto_izin')->store('kehadiran/izin', 'public');
+    } else {
+        $fotoIzin = null;
+    }
+
+    // Menentukan status kehadiran
+    $status = $fotoIzin ? 'Izin' : 'Hadir';
+
+    if ($request->id){
+        // update data kehadiran
+        Kehadiran::find($request->id)?->update([
+            'waktu_keluar' => $status === 'Hadir' ? now()->toTimeString() : null, // Set waktu pulang hanya jika status 'Hadir'
+            'foto_keluar' => $fotoMasuk,
         ]);
-
-        // Menyimpan foto izin jika ada
-        if ($request->hasFile('foto_izin')) {
-            $fotoIzin = $request->file('foto_izin')->store('public/foto_izin');
-        } else {
-            $fotoIzin = null;
-        }
-
+    } else {
         // Menyimpan data kehadiran
         Kehadiran::create([
             'user_id' => Auth::id(),
-            'sekolah_id' => Auth::user()->sekolah_id,  // Jika ada relasi dengan sekolah
+            'sekolah_id' => Auth::user()->profile->id_sekolah,
             'tanggal' => now(),
-            'status' => 'Hadir', // Default status
-            'foto_izin' => $fotoIzin, // Foto izin jika ada
+            'waktu_masuk' => $status === 'Hadir' ? now()->toTimeString() : null, // Set waktu masuk hanya jika status 'Hadir'
+            'status' => $status,
+            'foto_masuk' => $fotoMasuk,
+            'foto_izin' => $fotoIzin,
         ]);
-
-        return response()->json(['message' => 'Kehadiran berhasil disimpan!']);
     }
 
+    return response()->json(['message' => 'Kehadiran berhasil disimpan!']);
+    }
 
     public function rekapkehadiran()
     {
@@ -95,7 +116,5 @@ class KehadiranController extends Controller
         // Mengunduh PDF
         return $pdf->download('rekap-kehadiran-' . $user->name . '.pdf');
     }
-
-    // Command to update attendance status daily
    
 }    

@@ -31,8 +31,8 @@
                         @foreach ($kehadiran as $index => $item)
                             <tr class="school-row">
                                 <td class="py-2 px-4 border-b text-center">{{ $index + 1 + ($kehadiran->currentPage() - 1) * $kehadiran->perPage() }}</td>
-                                <td class="py-2 px-4 border-b text-left">{{ $item->user->name ?? 'Nama tidak ditemukan' }}</td>
-                                <td class="py-2 px-4 border-b text-left">{{ $item->profile?->sekolah?->nama ?? 'Sekolah tidak ditemukan' }}</td>
+                                <td class="py-2 px-4 border-b text-left">{{ $item->user->name }}</td>
+                                <td class="py-2 px-4 border-b text-left">{{ $item->user->profile->sekolah->nama }}</td>
                                 <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
                                         <a href="{{ route('kehadiran.detail', $item->user_id) }}" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">

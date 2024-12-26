@@ -62,9 +62,9 @@
                                         <button type="submit" 
                                             class="text-xs px-3 py-1 rounded shadow transition duration-300 ease-in-out
                                                 @if ($item->sekolah->status === 'pending')
-                                                    bg-yellow-500 text-white
+                                                    bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded-full
                                                 @elseif ($item->sekolah->status === 'diterima')
-                                                    bg-green-500 text-white
+                                                    bg-green-200 text-green-800 text-xs px-2 py-1 rounded-full
                                                 @endif">
                                             {{ $item->sekolah->status }}
                                         </button>
@@ -73,9 +73,9 @@
                                 </td>                                
                                 <td class="py-2 px-4 border-b text-center">
                                     <div class="flex justify-center space-x-2">
-                                        <button onclick="window.open('{{ route('sekolah.show', $item->sekolah->id) }}', '_blank')" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
+                                        <button onclick="window.location.href='{{ route('sekolah.show', $item->sekolah->id) }}'" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
                                             <i class="fas fa-eye"></i> 
-                                        </button>                                    
+                                        </button>                                                                         
                                         <button onclick="deleteSchool({{ $item->sekolah->id }})" class="bg-red-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-600 transition duration-300 ease-in-out">
                                             <i class="fas fa-trash"></i> 
                                         </button>

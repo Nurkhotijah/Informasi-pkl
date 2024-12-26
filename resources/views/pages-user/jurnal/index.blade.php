@@ -7,26 +7,27 @@
 <main class="p-6 overflow-y-auto h-full">
     <div class="max-w-7xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
         <!-- Header Section -->
-        <div class="mb-4 flex justify-between items-center">
+        <div class="mb-4 flex flex-col sm:flex-row justify-between items-center">
             <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Jurnal</h1>
-            <div class="flex items-center">
+            <div class="flex items-center w-full sm:w-auto">
                 <label for="dateFilter" class="mr-2">Tanggal:</label>
-                <input type="date" id="dateFilter" class="border rounded p-2" onchange="filterByDate()">
+                <input type="date" id="dateFilter" class="border rounded p-2 w-full sm:w-auto" onchange="filterByDate()">
             </div>
         </div>
-
+        
         <!-- Action Buttons Section -->
-        <div class="flex space-x-4 mb-6">
+        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
             <!-- Tombol Tambah Jurnal -->
-            <a href="{{ route('jurnal-siswa.create') }}" class="bg-blue-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
+            <a href="{{ route('jurnal-siswa.create') }}" class="bg-blue-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out w-full sm:w-auto text-center">
                 <i class="fas fa-user-plus mr-2"></i> Tambah Jurnal
             </a>
-
+        
             <!-- Tombol Lihat Jurnal -->
-            <a href="{{ route('penilaian.show.user') }}" class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out">
+            <a href="{{ route('penilaian.show.user') }}" class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out w-full sm:w-auto text-center">
                 <i class="fas fa-eye mr-2"></i> Lihat Penilaian
             </a>
         </div>
+        
 
         <!-- Table Section -->
         <div class="overflow-x-auto">

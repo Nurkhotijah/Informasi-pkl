@@ -71,4 +71,9 @@ class UserController extends Controller
 
         return redirect()->route('login');
     }
+
+    public function laporanpkl()
+{
+    return view('pages-user.laporan-pkl'); 
+}
 }

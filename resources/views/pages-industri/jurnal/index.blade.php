@@ -37,7 +37,7 @@
                         <td class="py-2 px-4 border-b text-left">{{ $item->profile->sekolah->nama }}</td> <!-- Menampilkan Nama Sekolah -->
                         <td class="py-2 px-4 border-b text-center">
                             @if ($item->laporan)
-                            <a href="{{ asset('storage/' . $item->laporan->file_path) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                            <a href="{{ asset('storage/' . $item->laporan->file_path) }}"  class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                                 <i class="fas fa-file-pdf"></i> 
                             </a><!-- Klik untuk melihat laporan -->
                             @else

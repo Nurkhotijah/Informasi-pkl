@@ -44,8 +44,8 @@
                             <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                             <td class="py-2 px-4 border-b">{{ $item->nama }}</td>
                             <td class="py-2 px-4 border-b">{{ $item->jurusan }}</td>
-                            <td class="py-2 px-4 border-b text-center">{{ $item->tanggal_mulai }}</td>
-                            <td class="py-2 px-4 border-b text-center">{{ $item->tanggal_selesai }}</td>
+                            <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($item->tanggal_mulai)->locale('id')->format('d F Y') }}</td>
+                            <td class="py-2 px-4 border-b text-center">{{ \Carbon\Carbon::parse($item->tanggal_selesai)->locale('id')->format('d F Y') }}</td>
                             <td class="py-2 px-4 border-b text-center">
                                 <a href="{{ asset('storage/' . $item->cv_file) }}" target="_blank" class="text-blue-500 hover:underline">Lihat</a>
                             </td>

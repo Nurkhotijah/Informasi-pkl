@@ -8,6 +8,7 @@ use App\Models\Kehadiran;
 use App\Models\Penilaian;
 use App\Models\Profile;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,19 +30,28 @@ class IndustriController extends Controller
 /*                                  START KEHADIRAN                           */
 /* -------------------------------------------------------------------------- */
 
-public function Kehadiran()
-{
-    // Ambil data kehadiran unik berdasarkan user_id
-    $kehadiran = Kehadiran::select('user_id')
-        ->distinct()
-        ->with(['user', 'profile.sekolah'])
-        ->paginate(2);
+    public function Kehadiran()
+    {
+        // Ambil data kehadiran unik berdasarkan user_id
+        $kehadiran = Kehadiran::select('user_id')
+            ->distinct()
+            ->with(['user', 'profile.sekolah'])
+            ->paginate(2);
 
-    return view('pages-industri.kelola-kehadiran', compact('kehadiran'));
-}
+        return view('pages-industri.kelola-kehadiran', compact('kehadiran'));
+    }
+    public function detail($userId)
+    {
+        // Cari data kehadiran berdasarkan user_id
+        $kehadiran = Kehadiran::where('user_id', $userId)
+            ->orderBy('tanggal', 'desc')
+            ->get();
+
+        return view('pages-industri.detail-kehadiran', compact('kehadiran'));
+    }
 
     public function cetakkehadiranuser($userId)
-{
+    {
     // Ambil semua data kehadiran untuk user berdasarkan user_id
     $kehadiran = Kehadiran::where('user_id', $userId)->get();
 
@@ -81,7 +91,7 @@ public function Kehadiran()
 
     // Kembalikan PDF sebagai download
     return $pdf->download('laporan_kehadiran_' . $user->name . '.pdf');
-}
+    }
  // public function edit($id)
     // {
     //     $item = Kehadiran::with('user')->find($id);
@@ -173,25 +183,6 @@ public function Kehadiran()
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
-/*                                  START JURNAL                              */
-/* -------------------------------------------------------------------------- */
-    // public function index()
-    // {
-    //     $jurnal = User::whereHas('profile', function ($query) {
-    //             $query->where('id_sekolah', '!=', null);
-    //         })
-    //         ->where('role', 'siswa')
-    //         ->with('laporan')
-    //         ->get();
-
-    //     return view('pages-industri.jurnal.index', compact('jurnal'));
-    // }
-
-/* -------------------------------------------------------------------------- */
-/*                                  END JURNAL                                */
-/* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
 /*                                  START PENILAIAN                           */
 /* -------------------------------------------------------------------------- */
     public function indexpenilaian()
@@ -224,14 +215,18 @@ public function Kehadiran()
     }
 
     public function show($id)
-    {
-        $penilaian = Penilaian::with(['user.sekolah'])->findOrFail($id);
-        return view('pages-industri.penilaian.show', compact('penilaian'));
+{
+    $penilaian = Penilaian::with(['user.sekolah.profile'])->findOrFail($id);
+
+    // Ambil tanggal mulai dan selesai dari tabel profile
+    $tanggalMulai = Carbon::parse($penilaian->user->profile->tanggal_mulai)->translatedFormat('d F Y');
+    $tanggalSelesai = Carbon::parse($penilaian->user->profile->tanggal_selesai)->translatedFormat('d F Y');
+
+    return view('pages-industri.penilaian.show', compact('penilaian', 'tanggalMulai', 'tanggalSelesai'));
     }
-    
 
     public function destroy($id)
-{
+    {
     // Cari data penilaian berdasarkan ID
     $penilaian = Penilaian::findOrFail($id);
 
@@ -241,17 +236,24 @@ public function Kehadiran()
     // Redirect kembali ke halaman index dengan pesan sukses
     return redirect()->route('penilaian.index')
         ->with('success', 'Penilaian berhasil dihapus!');
-}
-
+    }
 
     public function cetakPdf($id)
     {
-        $penilaian = Penilaian::with(['user', 'sekolah'])->findOrFail($id);
-        $pdf = Pdf::loadView('template-penilaian', compact('penilaian'));
-        $pdf->setPaper('A4', 'portrait');
-        return $pdf->download('Laporan_Penilaian_PKL.pdf');
+        // Ambil data penilaian beserta relasi user dan profile
+        $penilaian = Penilaian::with(['user.profile.sekolah'])->findOrFail($id);
+    
+        // Format tanggal menggunakan Carbon
+        $tanggalMulai = Carbon::parse($penilaian->user->profile->tanggal_mulai)->translatedFormat('d-m-Y');
+        $tanggalSelesai = Carbon::parse($penilaian->user->profile->tanggal_selesai)->translatedFormat('d-m-Y');
+    
+        // Generate PDF menggunakan template Blade
+        $pdf = Pdf::loadView('template-penilaian', compact('penilaian', 'tanggalMulai', 'tanggalSelesai'))
+                  ->setPaper('A4', 'portrait');
+    
+        // Unduh file PDF
+        return $pdf->download('Laporan_Penilaian_PKL_' . $penilaian->user->name . '.pdf');
     }
-
 /* -------------------------------------------------------------------------- */
 /*                                  END PENILAIAN                             */
 /* -------------------------------------------------------------------------- */

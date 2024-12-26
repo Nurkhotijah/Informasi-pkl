@@ -43,50 +43,50 @@
                             <tr class="student-row" data-id="{{ $item->id }}">
                                 <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->name }}</td>
-                                <td class="py-2 px-4 border-b text-left">{{ $item->profile->jurusan ?? 'Jurusan Tidak Tersedia' }}</td>
+                                <td class="py-2 px-4 border-b text-left">{{ $item->profile->jurusan }}</td>
                                 <td class="py-2 px-4 border-b text-center">
                                     @if ($item->profile && $item->profile->tanggal_selesai && $item->profile->tanggal_selesai <= now() && $item->penilaian) 
-                                        <a href="{{ route('penilaiansiswa.unduh', $item->id) }}" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600"> 
-                                            <i class="fas fa-eye mr-1"></i> 
+                                        <a href="{{ route('penilaiansiswa.unduh', $item->id) }}" class="inline-flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
+                                            Lihat
                                         </a>
                                     @else
-                                        <button class="inline-flex items-center justify-center p-2 bg-gray-400 text-white rounded cursor-not-allowed" disabled>
-                                            <i class="fas fa-eye mr-1"></i> 
-                                        </button>
+                                        <span class="inline-flex items-center justify-center px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md cursor-not-allowed opacity-50">
+                                            Lihat
+                                        </span>
                                     @endif
                                 </td>
                                 <td class="py-2 px-4 border-b text-center">
                                     @if ($item->profile && $item->profile->tanggal_selesai && $item->profile->tanggal_selesai <= now())
-                                        <a href="{{ route('kehadiransiswa.unduh', ['userId' => $item->id]) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                                            <i class="fas fa-eye mr-1"></i>                                   
+                                        <a href="{{ route('kehadiransiswa.unduh', ['userId' => $item->id]) }}"  class="inline-flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
+                                            Lihat                                   
                                         </a>
                                     @else
-                                        <button class="inline-flex items-center justify-center p-2 bg-gray-400 text-white rounded cursor-not-allowed" disabled>
-                                            <i class="fas fa-eye mr-1"></i> 
-                                        </button>
+                                        <span class="inline-flex items-center justify-center px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md cursor-not-allowed opacity-50">
+                                            Lihat
+                                        </span>
                                     @endif
                                 </td>
-                                
                                 <td class="py-2 px-4 border-b text-center">
                                     @if ($item->profile && $item->profile->tanggal_selesai && $item->profile->tanggal_selesai <= now())
-                                        <a href="{{ route('cetak-sertifikat-siswa', $item->id) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                                            <i class="fas fa-eye mr-1"></i>                                    
+                                        <a href="{{ route('cetak-sertifikat-siswa', $item->id) }}"  class="inline-flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
+                                            Lihat                                  
                                         </a>
                                     @else
-                                        <button class="inline-flex items-center justify-center p-2 bg-gray-400 text-white rounded cursor-not-allowed" disabled>
-                                            <i class="fas fa-eye mr-1"></i> 
-                                        </button>
+                                        <span class="inline-flex items-center justify-center px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md cursor-not-allowed opacity-50">
+                                            Lihat
+                                        </span>
                                     @endif
                                 </td>                                
                                 <td class="py-2 px-4 border-b text-center">
                                     @if ($item->laporan)
-                                    <a href="{{ asset('storage/' . $item->laporan->file_path) }}" target="_blank" class="inline-flex items-center justify-center p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                                        <i class="fas fa-eye mr-1"></i> 
-                                    </a>
+                                    <a href="{{ route('download-laporan', $item->laporan->id) }}" 
+                                        class="inline-flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300">
+                                         Lihat
+                                     </a>                                     
                                     @else
-                                    <p class="text-gray-500">Belum ada laporan</p>
+                                        <p class="text-gray-500">Belum ada laporan</p>
                                     @endif
-                                </td>
+                                </td>                                                                                                                         
                         @endforeach
                     </tbody>
                 </table>

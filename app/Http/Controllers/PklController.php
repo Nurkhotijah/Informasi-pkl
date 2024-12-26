@@ -12,24 +12,26 @@ class PklController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $users = Auth::user();
-        
-        // Ambil query pencarian dari input
-        $search = $request->input('search');
+{
+    $users = Auth::user();
     
-        // Ambil data pengajuan berdasarkan id_sekolah dan filter berdasarkan pencarian
-        $pengajuan = Pkl::where('id_sekolah', $users->sekolah->id)
-                        ->where(function ($query) use ($search) {
+    // Ambil query pencarian dari input
+    $search = $request->input('search');
+    
+    // Ambil data pengajuan berdasarkan id_sekolah dan filter berdasarkan pencarian
+    $pengajuan = Pkl::where('id_sekolah', $users->sekolah->id)
+                    ->where(function ($query) use ($search) {
+                        if ($search) {
                             $query->where('tahun', 'like', "%$search%")
                                   ->orWhere('judul_pkl', 'like', "%$search%")
                                   ->orWhere('pembimbing', 'like', "%$search%");
-                        })
-                        ->get();
+                        }
+                    })
+                    ->get();
     
-        return view('pages-admin.pkl.index', compact('pengajuan'));
-    }
-    
+    return view('pages-admin.pkl.index', compact('pengajuan'));
+}
+
 
     /**
      * Show the form for creating a new resource.

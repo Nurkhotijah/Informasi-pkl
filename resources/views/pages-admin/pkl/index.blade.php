@@ -3,50 +3,41 @@
 @section('title', 'Pengajuan Siswa')
 
 @section('content')
-<div class="bg-gray-100">
-    <main class="p-6 overflow-y-auto h-full">
-        <div class="max-w-7xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
-            <!-- Header Section -->
-            <div class="mb-4">
-                <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4"> Data PKL </h1>
-                <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
-                    @if (session('error'))
-                    <div class="bg-red-500 text-white text-sm px-4 py-2 rounded mb-4">
-                        {{ session('error') }}
-                    </div>
-                @endif
 
-                    <div class="relative w-full sm:w-auto">
-                        <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" placeholder="Cari Nama " type="text" oninput="searchTable()">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                    </div>
-                     <a href="{{ Auth::user()->sekolah->status === 'diterima' ? route('pkl.create') : '#' }}" 
-                        class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out" 
-                        {{ Auth::user()->sekolah->status !== 'diterima' ? 'disabled' : '' }}>
-                        <i class="fas fa-plus mr-2"></i>Tambah Data
-                    </a>
-
-                </div>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold">Data PKL</h1>
             </div>
-
-            <!-- Table Section -->
+            <div class="mb-4 flex justify-between items-center">
+                <div class="relative w-1/3">
+                        <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" name="search" placeholder="Cari Tahun " type="text" value="{{ request('search') }}">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>              
+                 </div>
+                <a href="{{ Auth::user()->sekolah->status === 'diterima' ? route('pkl.create') : '#' }}" 
+                    class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out" 
+                    {{ Auth::user()->sekolah->status !== 'diterima' ? 'disabled' : '' }}>
+                    <i class="fas fa-plus mr-2"></i>Tambah Data
+                </a>
+            </div>
             <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border" id="studentTable">
-                    <thead class="bg-gray-200">
-                        <tr>
-                            <th class="py-2 px-4 border-b text-center">No</th>
-                            <th class="py-2 px-4 border-b text-left">Judul PKL</th>
-                            <th class="py-2 px-4 border-b text-center">Tahun Ajaran</th>
-                            <th class="py-2 px-4 border-b text-left">Nama Pembimbing</th>
-                            <th class="py-2 px-4 border-b text-center">Lampiran</th>
-                            <th class="py-2 px-4 border-b text-center">Aksi</th>
+                <table class="w-full table-auto border-collapse">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="py-2 px-4 text-center">No</th>
+                            <th class="py-2 px-4 text-left">Judul PKL</th>
+                            <th class="py-2 px-4 text-center">Tahun Ajaran</th>
+                            <th class="py-2 px-4 text-left">Nama Pembimbing</th>
+                            <th class="py-2 px-4 text-center">Lampiran</th>
+                            <th class="py-2 px-4 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($pengajuan as $item)
                         <tr>
                             <td class="py-2 px-4 border-b text-center">{{ $loop->iteration }}</td>
-                            <td class="py-2 px-4 border-b">{{ $item->judul_pkl }}</td>
+                            <td class="py-2 px-4 border-b ">{{ $item->judul_pkl }}</td>
                             <td class="py-2 px-4 border-b text-center">{{ $item->tahun }}</td>
                             <td class="py-2 px-4 border-b">{{ $item->pembimbing }}</td>
                             <td class="py-2 px-4 border-b text-center">
@@ -65,8 +56,8 @@
                 </table>
             </div>
         </div>
-    </main>
-</div>
+    </div>
+</body>
 
 <script>
     const ITEMS_PER_PAGE = 10;

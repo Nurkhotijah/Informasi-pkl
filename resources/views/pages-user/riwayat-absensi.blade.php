@@ -4,119 +4,146 @@
 
 @section('content')
 <!-- Main Content -->
-<main class="bg-gray-100 p-8">
-    <div class="container mx-auto bg-white p-6 shadow-lg rounded-lg">
-        <h1 class="text-2xl font-bold mb-4">Riwayat Kehadiran</h1>
-        <!-- Tombol Upload Foto Izin dan Filter Tanggal -->
-        <div class="mt-4 sm:mt-0 mb-4 flex items-center justify-between">
-            <div class="flex absensis-center space-x-4">
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <div class="bg-white rounded-lg shadow p-6">
+            <h1 class="text-2xl font-bold mb-4">Riwayat Kehadiran</h1>
+            <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+                <!-- Form for Upload Foto Izin -->
                 <form action="{{ route('kehadiran.store') }}" method="POST" enctype="multipart/form-data" id="formIzin">
                     @csrf
                     <input type="hidden" name="jenis_absen" value="masuk">
-                    <label for="uploadIzin" class="bg-blue-500 text-white text-xs px-6 py-3 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out cursor-pointer flex absensis-center w-auto">
-                        <i class="fas fa-upload mr-2"></i> Upload Foto Izin
-                    </label>
-                    <input type="file" id="uploadIzin" name="foto_izin" class="hidden" accept="image/jpeg, image/png" onchange="submitForm()">
-                </form>    
-
-                <!-- Tombol Unduh Rekap Kehadiran -->
-                <a class="bg-green-500 text-white text-xs px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out flex absensis-center space-x-2 w-auto" 
-                   href="{{ route('rekap.kehadiran') }}">
-                    <i class="fas fa-download"></i>
-                    <span>Rekap Kehadiran</span>
-                </a>
+                    <div class="flex flex-col md:flex-row md:space-x-4 mb-4 md:mb-0 w-full">
+                        <div class="flex space-x-2 mb-4 md:mb-0 w-full md:w-auto">
+                            <label for="uploadIzin" class="bg-blue-500 text-white text-xs px-6 py-3 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out cursor-pointer flex items-center w-full">
+                                <i class="fas fa-upload mr-2"></i> Upload Foto Izin
+                            </label>
+                            <input type="file" id="uploadIzin" name="foto_izin" class="hidden" accept="image/jpeg, image/png" onchange="submitForm()">
+                        </div>
+            
+                        <!-- Tombol Unduh Rekap Kehadiran -->
+                        <div class="w-full md:w-auto">
+                            <a class="bg-green-500 text-white text-xs px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out flex items-center space-x-2 w-full justify-center md:justify-start" href="{{ route('rekap.kehadiran') }}">
+                                <i class="fas fa-download"></i>
+                                <span>Rekap Kehadiran</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            
+                <!-- Filter Tanggal -->
+                <div class="mt-4 md:mt-0">
+                    <input type="date" id="filterTanggal" class="border rounded p-2 w-full md:w-auto" onchange="filterByDate()">
+                </div>
             </div>
-            <!-- Filter Tanggal -->
-            <div>
-                <input type="date" id="filterTanggal" class="border rounded p-2" onchange="filterByDate()">
-            </div>
-        </div>
-
-        <!-- Tabel Riwayat Kehadiran -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                <thead class="bg-gray-200">
-                    <tr class="text-gray-600 text-sm">
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">No</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Nama Lengkap</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Tanggal</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Status</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Waktu Masuk</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-700 border-b border-gray-300">Waktu Pulang</th>
-                        <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700 border-b border-gray-300">Foto Masuk</th>
-                        <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700 border-b border-gray-300">Foto Pulang</th>
-                        <th class="py-3 px-4 text-center text-sm font-semibold text-gray-700 border-b border-gray-300">Foto izin</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-600 text-sm font-light">
-                    @foreach($kehadiran as $absensi)
+                        
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b">No</th>
+                            <th class="py-2 px-4 border-b">Nama Lengkap</th>
+                            <th class="py-2 px-4 border-b">Tanggal</th>
+                            <th class="py-2 px-4 border-b">Status</th>
+                            <th class="py-2 px-4 border-b">Waktu Masuk</th>
+                            <th class="py-2 px-4 border-b">Waktu Pulang</th>
+                            <th class="py-2 px-4 border-b">Foto Masuk</th>
+                            <th class="py-2 px-4 border-b">Foto Pulang</th>
+                            <th class="py-2 px-4 border-b">Foto Izin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($kehadiran as $absensi)
                     @if($loop->iteration <= 2) <!-- Limit to 2 entries per page -->
-                    <tr class="bg-white hover:bg-gray-50 transition duration-200 ease-in-out kehadiran-row">
-                        <td class="py-4 px-4 border-b border-gray-300 text-gray-700">{{ $loop->iteration + ($kehadiran->currentPage() - 1) * $kehadiran->perPage() }}</td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-gray-800">{{ Auth::user()->name }}</td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ \Carbon\Carbon::parse($absensi->tanggal)->format('Y-m-d') }}</td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600 text-center">{{ $absensi->foto_izin ? 'Izin' : $absensi->status }}</td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->waktu_masuk ? \Carbon\Carbon::parse($absensi->waktu_masuk)->format('H:i:s') : '-' }}</td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-gray-600">{{ $absensi->waktu_keluar ? \Carbon\Carbon::parse($absensi->waktu_keluar)->format('H:i:s') : '-' }}</td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-center">
-                            @if($absensi->foto_masuk)
-                            <a href="{{ asset('storage/' . $absensi->foto_masuk) }}" target="_blank">
-                                <img class="w-16 h-16 object-cover rounded-full mx-auto hover:opacity-75 transition duration-300" 
-                                     src="{{ asset('storage/' . $absensi->foto_masuk) }}" 
-                                     alt="Foto Masuk"
-                                     title="Klik untuk memperbesar">
-                            </a>
-                            @else
-                            <span class="text-gray-400">Tidak ada foto</span>
-                            @endif
-                        </td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-center">
-                            @if($absensi->foto_keluar)
-                            <a href="{{ asset('storage/' . $absensi->foto_keluar) }}" target="_blank">
-                                <img class="w-16 h-16 object-cover rounded-full mx-auto hover:opacity-75 transition duration-300" 
-                                     src="{{ asset('storage/' . $absensi->foto_keluar) }}" 
-                                     alt="Foto Keluar"
-                                     title="Klik untuk memperbesar">
-                            </a>
-                            @else
-                            <span class="text-gray-400">Tidak ada foto</span>
-                            @endif
-                        </td>
-                        <td class="py-4 px-4 border-b border-gray-300 text-center">
-                            @if($absensi->foto_izin)
-                            <a href="{{ asset('storage/' . $absensi->foto_izin) }}" target="_blank">
-                                <img class="w-16 h-16 object-cover rounded-full mx-auto hover:opacity-75 transition duration-300" 
-                                     src="{{ asset('storage/' . $absensi->foto_izin) }}" 
-                                     alt="Foto Izin"
-                                     title="Klik untuk memperbesar">
-                            </a>
-                            @else
-                            <span class="text-gray-400">Tidak ada foto izin</span>
-                            @endif
-                        </td>
-                    </tr>
-                    @endif
-                    @endforeach
-                </tbody>
-            </table>
+                        <tr class="kehadiran-row">
+                            <td class="py-2 px-4 border-b">1</td>
+                            <td class="py-2 px-4 border-b">{{ Auth::user()->name }}</td>
+                            <td class="py-2 px-4 border-b tanggal-cell">{{ \Carbon\Carbon::parse($absensi->tanggal)->format('Y-m-d') }}</td>
+                            <td class="py-2 px-4 border-b">{{ $absensi->foto_izin ? 'Izin' : $absensi->status }}</td>
+                            <td class="py-2 px-4 border-b">{{ $absensi->waktu_masuk ? \Carbon\Carbon::parse($absensi->waktu_masuk)->format('H:i:s') : '-' }}</td>
+                            <td class="py-2 px-4 border-b">{{ $absensi->waktu_keluar ? \Carbon\Carbon::parse($absensi->waktu_keluar)->format('H:i:s') : '-' }}</td>
+                            <td class="py-2 px-4 border-b">
+                                @if($absensi->foto_masuk)
+                                <a href="{{ asset('storage/' . $absensi->foto_masuk) }}" target="_blank">
+                                    <img class="w-10 h-10 object-cover rounded-full mx-auto hover:opacity-75 transition duration-300"
+                                         src="{{ asset('storage/' . $absensi->foto_masuk) }}" 
+                                         alt="Foto Masuk" 
+                                         title="Klik untuk memperbesar">
+                                </a>
+                                @else
+                                <span class="text-gray-400">Tidak ada foto</span>
+                                @endif
+                            </td>
+                            
+                            <td class="py-2 px-4 border-b">
+                                @if($absensi->foto_keluar)
+                                <a href="{{ asset('storage/' . $absensi->foto_keluar) }}" target="_blank">
+                                    <img class="w-10 h-10 object-cover rounded-full mx-auto hover:opacity-75 transition duration-300"
+                                         src="{{ asset('storage/' . $absensi->foto_keluar) }}" 
+                                         alt="Foto Pulang" 
+                                         title="Klik untuk memperbesar">
+                                </a>
+                                @else
+                                <span class="text-gray-400">Tidak ada foto</span>
+                                @endif
+                            </td>
+                            
+                            <td class="py-2 px-4 border-b">
+                                @if($absensi->foto_izin)
+                                <a href="{{ asset('storage/' . $absensi->foto_izin) }}" target="_blank">
+                                    <img class="w-10 h-10 object-cover rounded-full mx-auto hover:opacity-75 transition duration-300"
+                                         src="{{ asset('storage/' . $absensi->foto_izin) }}" 
+                                         alt="Foto Izin" 
+                                         title="Klik untuk memperbesar">
+                                </a>
+                                @else
+                                <span class="text-gray-400">Tidak ada foto izin</span>
+                                @endif
+                            </td>                            
+                        </tr>
+                        @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex justify-between items-center mt-4">
+                <!-- Page Number Display -->
+                <div class="flex items-center space-x-1" id="pageNumber">
+                    <!-- Previous Page Button -->
+                    <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="prevPage()" id="prevButton" 
+                        {{ $kehadiran->currentPage() == 1 ? 'disabled' : '' }}>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <!-- Halaman Text -->
+                    <span>Halaman {{ $kehadiran->currentPage() }}</span>
+            
+                    <!-- Next Page Button -->
+                    <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()" id="nextButton" 
+                        {{ $kehadiran->currentPage() == $kehadiran->lastPage() ? 'disabled' : '' }}>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Pagination Buttons -->
+                <div class="flex space-x-2">
+                    <!-- Previous Page Button -->
+                    <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()" id="prevButton" 
+                        {{ $kehadiran->currentPage() == 1 ? 'disabled' : '' }}>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <!-- Next Page Button -->
+                    <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()" id="nextButton" 
+                        {{ $kehadiran->currentPage() == $kehadiran->lastPage() ? 'disabled' : '' }}>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>            
         </div>
-        <div class="flex justify-end items-center mt-4">
-            <span class="mr-4" id="pageNumber">Halaman {{ $kehadiran->currentPage() }}</span>
-            <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()" id="prevButton" {{ $kehadiran->currentPage() == 1 ? 'disabled' : '' }}>
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()" id="nextButton" {{ $kehadiran->currentPage() == 1 ? 'disabled' : '' }}>
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-        
     </div>
-</main>
- <!-- Pagination Section -->
- 
-
+</body>
 <script>
-
 let currentPage = {{ $kehadiran->currentPage() }};
 const rowsPerPage = 1; // Set to 2 entries per page
 const rows = document.querySelectorAll('.kehadiran-row');
@@ -197,6 +224,6 @@ document.getElementById('filterTanggal').addEventListener('change', function() {
         }
     });
 });
-</script>
 
+</script>
 @endsection

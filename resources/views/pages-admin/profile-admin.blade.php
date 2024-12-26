@@ -1,46 +1,37 @@
 @extends('components.layout-admin')
 
-@section('title', 'Profile Admin')
+@section('title', 'Profile Sekolah')
 
 @section('content')
-
 <body class="bg-gray-100 flex items-center justify-center h-screen">
-    <main class="w-full p-4 flex-1">
-        <div class="max-w-6xl mx-auto mt-10 bg-white rounded-lg shadow-md relative"> 
-            <div class="flex flex-col md:flex-row items-center md:items-start py-8 px-8">
-                <!-- Foto Profil di Pojok Kiri -->
-                <div class="flex-shrink-0 mb-4 md:mb-0 md:w-1/3 text-center relative">
-                    <img id="profilePic" class="w-auto h-20 mx-auto" src="{{ $profilesekolah->foto_profile ? asset('storage/' . $profilesekolah->foto_profile) : asset('assets/default-profile.png') }}" alt="Profile Picture">
-                    <input type="file" id="fileInput" class="hidden" onchange="changePhoto()">
-                    <div class="mt-4">
-                        <h2 class="text-2xl font-semibold text-gray-800">{{ $profilesekolah->name }}</h2>
-                        <p class="text-gray-600">{{ $profilesekolah->role }}</p>
-                    </div>
-                </div>                              
-                
-                <!-- Data Industri di Sebelah Kanan -->
-                <div class="w-full md:w-2/3 text-center md:text-left md:pl-8">
-                    <div class="max-w-2xl mx-auto border border-gray-300 rounded-lg mb-6">
-                        <h3 class="bg-blue-500 text-white p-3 font-semibold text-center rounded-t-lg">Informasi Sekolah</h3>
-                        <div class="p-3 text-left space-y-2">
-                            <p class="font-sans text-base"><span class="font-medium">Nama Sekolah:</span> {{ $profilesekolah->name }}</p>
-                            <p class="font-sans text-base"><span class="font-medium">Email:</span> {{ $profilesekolah->email }}</p>
-                            <p class="font-sans text-base"><span class="font-medium">Alamat:</span>  {{ $profilesekolah->alamat }}</p>                            
-                        </div>
-                    </div>                    
-                    <!-- Tombol Edit di bawah Info Sekolah -->
-                    <div class="flex justify-end mt-4">
-                        <button class="bg-yellow-400 text-white text-base px-4 py-2 rounded-lg shadow-lg hover:bg-yellow-500 transition duration-300 ease-in-out flex items-center transform hover:scale-105">
-                            <a href="{{ route('profile.edit') }}" class="flex items-center">
-                                <i class="fas fa-edit mr-2"></i>
-                                Edit
-                            </a>                            
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
+  <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row w-full">
+    <div class="bg-gray-100 flex items-center justify-center w-full md:w-1/3 p-6">
+      <div class="text-center">
+        <img alt="Profile picture of the student" class="rounded-full mx-auto mb-2" height="100" src="{{ $profilesekolah->foto_profile ? asset('storage/' . $profilesekolah->foto_profile) : asset('assets/default-profile.png') }}" width="100"/>
+        <h2 class="text-2xl font-semibold text-gray-800">{{ $profilesekolah->name }}</h2>
+        <p class="text-gray-700">{{ $profilesekolah->role }}</p>
+      </div>
+    </div>
+    <div class="bg-white w-full md:w-2/3 p-6">
+      <h2 class="text-xl font-bold mb-4">Profile Sekolah</h2>
+      <p class="mb-2">
+        <span class="font-semibold">Nama Sekolah</span><br/>
+        {{ $profilesekolah->name }}
+      </p>
+      <p class="mb-2">
+        <span class="font-semibold">Email</span><br/>
+        {{ $profilesekolah->email }}
+      </p>
+      <p class="mb-2">
+        <span class="font-semibold">Alamat</span><br/>
+        {{ $profilesekolah->alamat }}
+      </p>
+      <a href="{{ route('profile.edit') }}" class=" px-6 py-2 bg-yellow-400 text-white text-sm rounded-lg shadow-lg hover:bg-yellow-500 transition duration-300 ease-in-out transform hover:scale-105">
+        Edit
+      </a>    
+    </div>
+  </div>
 </body>
 @endsection
+
+

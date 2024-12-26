@@ -4,62 +4,64 @@
 
 @section('content')
 
-<main class="bg-white p-4 md:p-8">
-    <div class="max-w-2xl mx-auto border p-4 md:p-8">
-        <h1 class="text-center text-lg md:text-xl font-bold mb-6 md:mb-8">PENILAIAN PRAKTIK KERJA LAPANGAN (PKL)</h1>
-        
+<body class="bg-white font-sans">
+    <div class="max-w-3xl mx-auto my-8 p-6 bg-white rounded-lg shadow-lg relative">
+        <!-- Logo -->
+        {{-- <img src="{{ asset('assets/certificate/qelopak.png') }}" alt="Logo" class="absolute top-6 right-6 w-24"> --}}
+
+        <!-- Title -->
+        <h1 class="text-2xl font-bold text-center text-gray-700 mb-6">Penilaian PKL</h1>
+
         <!-- Informasi Siswa -->
-        <div class="mb-4">
-            <div class="flex flex-wrap justify-between mb-2">
-                <span class="w-1/2 sm:w-auto">Nama Siswa</span>
-                <span class="w-1/2 sm:w-auto text-right">: {{ $penilaian->user->name }}</span>
-            </div>
-            <div class="flex flex-wrap justify-between mb-2">
-                <span class="w-1/2 sm:w-auto">Sekolah</span>
-                <span class="w-1/2 sm:w-auto text-right">: {{ $penilaian->user->profile->sekolah->nama ?? 'Data Sekolah Tidak Tersedia' }}</span>
-            </div>
+        <div class="mb-6 text-gray-700">
+            <p class="mb-2"><strong>Nama Siswa:</strong> {{ $penilaian->user->name }}</p>
+            <p class="mb-2"><strong>Sekolah:</strong> {{ $penilaian->user->profile->sekolah->nama }}</p>
+            <p class="mb-2"><strong>Periode PKL:</strong> {{ $tanggalMulai }} - {{ $tanggalSelesai }}</p>
         </div>
 
-        <!-- Tabel Penilaian PKL -->
-        <table class="w-full border-collapse border border-black mb-4 text-xs md:text-sm">
-            <thead>
+       <!-- Table -->
+    <div class="overflow-x-auto mb-6">
+        <table class="w-full border border-gray-200">
+            <thead class="bg-gray-100 text-gray-700">
                 <tr>
-                    <th class="border border-black p-1 md:p-2">No</th>
-                    <th class="border border-black p-1 md:p-2">Kategori Penilaian</th>
-                    <th class="border border-black p-1 md:p-2">Nilai</th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">No</th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">Aspek Penilaian</th>
+                    <th class="border border-gray-300 px-4 py-2 text-center">Nilai</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td class="border border-black p-1 md:p-2 text-center">1</td>
-                    <td class="border border-black p-1 md:p-2">Nilai Sikap</td>
-                    <td class="border border-black p-1 md:p-2">{{ $penilaian->sikap }}</td>
+            <tbody class="text-gray-700">
+                <tr class="even:bg-gray-50">
+                    <td class="border border-gray-300 px-4 py-2 text-center">1</td>
+                    <td class="border border-gray-300 px-4 py-2">Nilai Sikap</td>
+                    <td class="border border-gray-300 px-4 py-2 text-left">{{ $penilaian->sikap }}</td>
                 </tr>
-                <tr>
-                    <td class="border border-black p-1 md:p-2 text-center">2</td>
-                    <td class="border border-black p-1 md:p-2">Nilai Microteaching</td>
-                    <td class="border border-black p-1 md:p-2">{{ $penilaian->microteaching }}</td>
+                <tr class="even:bg-gray-50">
+                    <td class="border border-gray-300 px-4 py-2 text-center">2</td>
+                    <td class="border border-gray-300 px-4 py-2">Nilai Microteaching</td>
+                    <td class="border border-gray-300 px-4 py-2 text-left">{{ $penilaian->microteaching }}</td>
                 </tr>
-                <tr>
-                    <td class="border border-black p-1 md:p-2 text-center">3</td>
-                    <td class="border border-black p-1 md:p-2">Nilai Kehadiran</td>
-                    <td class="border border-black p-1 md:p-2">{{ $penilaian->kehadiran }}</td>
+                <tr class="even:bg-gray-50">
+                    <td class="border border-gray-300 px-4 py-2 text-center">3</td>
+                    <td class="border border-gray-300 px-4 py-2">Nilai Kehadiran</td>
+                    <td class="border border-gray-300 px-4 py-2 text-left">{{ $penilaian->kehadiran }}</td>
                 </tr>
-                <tr>
-                    <td class="border border-black p-1 md:p-2 text-center">4</td>
-                    <td class="border border-black p-1 md:p-2">Nilai Project</td>
-                    <td class="border border-black p-1 md:p-2">{{ $penilaian->project }}</td>
+                <tr class="even:bg-gray-50">
+                    <td class="border border-gray-300 px-4 py-2 text-center">4</td>
+                    <td class="border border-gray-300 px-4 py-2">Nilai Project</td>
+                    <td class="border border-gray-300 px-4 py-2 text-left">{{ $penilaian->project }}</td>
                 </tr>
             </tbody>
         </table>
-
-        <div class="flex justify-end">
-            <a href="{{ route('penilaian.cetak.pdf', $penilaian->id) }}" 
-               class="bg-green-400 text-white text-xs px-5 py-2 shadow hover:bg-green-500 transition duration-300 ease-in-out">
-                <i class="fas fa-print mr-1"></i> Cetak
-            </a>
-        </div>        
     </div>
-</main>
+
+    <!-- Button -->
+    <div class="flex justify-end">
+        <a href="{{ route('penilaian.cetak.pdf', $penilaian->id) }}" 
+        class="bg-green-400 text-white text-xs px-5 py-2 shadow hover:bg-green-500 transition duration-300 ease-in-out">
+            <i class="fas fa-print mr-1"></i> Cetak
+        </a>
+    </div>
+    </div>
+</body>
 
 @endsection

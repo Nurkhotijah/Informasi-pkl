@@ -75,8 +75,7 @@
         <div class="info">
             <p><strong>Nama Siswa:</strong> {{ $user->name }}</p>
             <p><strong>Sekolah:</strong> {{ $user->profile->sekolah->nama ?? 'Data Sekolah Tidak Tersedia' }}</p>
-            <p><strong>Tanggal Mulai PKL:</strong> {{ $tanggalMulai }}</p>
-            <p><strong>Tanggal Selesai PKL:</strong> {{ $tanggalSelesai }}</p>
+            <p><strong>Periode PKL:</strong> {{ $tanggalMulai }} - {{ $tanggalSelesai }}</p>
         </div>
 
         <table>
