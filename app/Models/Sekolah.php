@@ -36,7 +36,10 @@ class Sekolah extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class, 'id_sekolah');
+    }
     public function sekolah()
 {
     return $this->belongsTo(Sekolah::class, 'id_sekolah');

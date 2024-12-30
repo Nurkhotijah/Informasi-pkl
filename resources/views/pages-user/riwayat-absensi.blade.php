@@ -22,19 +22,25 @@
                         </div>
             
                         <!-- Tombol Unduh Rekap Kehadiran -->
-                        <div class="w-full md:w-auto">
-                            <a class="bg-green-500 text-white text-xs px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out flex items-center space-x-2 w-full justify-center md:justify-start" href="{{ route('rekap.kehadiran') }}">
-                                <i class="fas fa-download"></i>
-                                <span>Rekap Kehadiran</span>
-                            </a>
-                        </div>
+                    <div class="w-full md:w-auto">
+                        <a 
+                            class="bg-green-500 text-white text-xs px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out flex items-center space-x-2 w-full justify-center md:justify-start 
+                                {{ !$isPklSelesai ? 'cursor-not-allowed opacity-50' : '' }}" 
+                            href="{{ route('rekap.kehadiran') }}"
+                            {{ !$isPklSelesai ? 'disabled' : '' }}>
+                            <i class="fas fa-download"></i>
+                            <span>Rekap Kehadiran</span>
+                        </a>
+                    </div>
                     </div>
                 </form>
             
                 <!-- Filter Tanggal -->
-                <div class="mt-4 md:mt-0">
-                    <input type="date" id="filterTanggal" class="border rounded p-2 w-full md:w-auto" onchange="filterByDate()">
-                </div>
+            <div class="mt-4 md:mt-0">
+                <form action="{{ route('riwayat-absensi') }}" method="GET">
+                    <input type="date" name="tanggal" class="border rounded p-2 w-full md:w-auto" value="{{ request()->tanggal }}" onchange="this.form.submit()">
+                </form>
+            </div>
             </div>
                         
             <div class="overflow-x-auto">
@@ -125,25 +131,47 @@
                     </button>
                 </div>
                 
-                <!-- Pagination Buttons -->
-                <div class="flex space-x-2">
-                    <!-- Previous Page Button -->
-                    <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()" id="prevButton" 
-                        {{ $kehadiran->currentPage() == 1 ? 'disabled' : '' }}>
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <!-- Next Page Button -->
-                    <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()" id="nextButton" 
-                        {{ $kehadiran->currentPage() == $kehadiran->lastPage() ? 'disabled' : '' }}>
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
+                
             </div>            
         </div>
     </div>
 </body>
 <script>
+function submitForm() {
+    const form = document.getElementById('formIzin');
+    const fileInput = document.getElementById('uploadIzin');
+
+    if (!form) {
+        alert("Form tidak ditemukan!");
+        return;
+    }
+
+    if (fileInput.files.length > 0) {
+        const formData = new FormData(form);
+        
+        fetch("{{ route('kehadiran.store') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert('Foto izin berhasil diupload');
+                window.location.reload();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengupload foto izin');
+        });
+    } else {
+        alert("Silakan pilih file foto izin sebelum mengupload.");
+    }
+}
+
 let currentPage = {{ $kehadiran->currentPage() }};
 const rowsPerPage = 1; // Set to 2 entries per page
 const rows = document.querySelectorAll('.kehadiran-row');
@@ -180,50 +208,24 @@ function prevPage() {
     }
 }
 
-// Initialize first page
-showPage(currentPage);
+// // Initialize first page
+// showPage(currentPage);
 
-function submitForm() {
-    const form = document.getElementById('formIzin');
-    const fileInput = document.getElementById('uploadIzin');
-    
-    if (fileInput.files.length > 0) {
-        const formData = new FormData(form);
-        
-        fetch("{{ route('kehadiran.store') }}", {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                alert('Foto izin berhasil diupload');
-                window.location.reload();
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Terjadi kesalahan saat mengupload foto izin');
-        });
-    }
-}
 
-document.getElementById('filterTanggal').addEventListener('change', function() {
-    const selectedDate = this.value;
-    const filteredRows = document.querySelectorAll('.kehadiran-row'); // Assuming each row has a class 'kehadiran-row'
+// document.getElementById('filterTanggal').addEventListener('change', function() {
+//     const selectedDate = this.value;
+//     const filteredRows = document.querySelectorAll('.kehadiran-row'); // Mengambil semua baris yang memiliki class 'kehadiran-row'
     
-    filteredRows.forEach(row => {
-        const rowDate = row.querySelector('.tanggal-cell').textContent; // Assuming the date is in a cell with class 'tanggal-cell'
-        if (rowDate === selectedDate || selectedDate === '') {
-            row.style.display = ''; // Show the row if the date matches or if no date is selected
-        } else {
-            row.style.display = 'none'; // Hide the row if it doesn't match
-        }
-    });
-});
+//     filteredRows.forEach(row => {
+//         const rowDate = row.querySelector('.tanggal-cell').textContent; // Mendapatkan tanggal dari setiap baris (dengan class 'tanggal-cell')
+//         if (rowDate === selectedDate || selectedDate === '') {
+//             row.style.display = ''; // Menampilkan baris jika tanggalnya sesuai atau jika tidak ada tanggal yang dipilih
+//         } else {
+//             row.style.display = 'none'; // Menyembunyikan baris jika tanggalnya tidak sesuai
+//         }
+//     });
+// });
+
 
 </script>
 @endsection

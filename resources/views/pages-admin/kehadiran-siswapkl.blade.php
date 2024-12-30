@@ -9,13 +9,13 @@
         <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
             <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-0">Kelola Kehadiran</h1>
         </div>
-        <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-4 sm:space-y-0 sm:space-x-4">
             <div class="relative w-full sm:w-auto">
                 <input class="border rounded p-2 pl-10 w-full sm:w-64" id="searchInput" placeholder="Cari Nama" type="text">
                 <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
             </div>
             <div class="flex items-center">
-              <label class="mr-2" for="date">Pilih Tanggal:</label>
+              <label class="mr-2" for="date">Tanggal:</label>
               <input class="border rounded p-2" id="dateInput" type="date" />
           </div>
         </div>
@@ -46,21 +46,21 @@
                             @if ($data->foto_masuk)
                                 <img src="{{ asset('storage/' . $data->foto_masuk) }}" alt="Foto Masuk" class="w-16 h-16 object-cover rounded-full cursor-pointer" onclick="bukaModal('{{ asset('storage/' . $data->foto_masuk) }}')">
                             @else
-                                -
+                                - 
                             @endif
                         </td>
                         <td class="py-2 px-4 border-b text-center">
                             @if ($data->foto_keluar)
                                 <img src="{{ asset('storage/' . $data->foto_keluar) }}" alt="Foto Keluar" class="w-16 h-16 object-cover rounded-full cursor-pointer" onclick="bukaModal('{{ asset('storage/' . $data->foto_keluar) }}')">
                             @else
-                                -
+                                - 
                             @endif
                         </td>
                         <td class="py-2 px-4 border-b text-center">
                             @if ($data->foto_izin)
                                 <img src="{{ asset('storage/' . $data->foto_izin) }}" alt="Foto Izin" class="w-16 h-16 object-cover rounded-full cursor-pointer" onclick="bukaModal('{{ asset('storage/' . $data->foto_izin) }}')">
                             @else
-                                -
+                                - 
                             @endif
                         </td>
                         <td class="py-4 px-4 border-b border-gray-300 text-center text-gray-600">{{ $data->status }}</td>

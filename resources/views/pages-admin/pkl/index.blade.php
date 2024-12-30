@@ -1,6 +1,6 @@
 @extends('components.layout-admin')
 
-@section('title', 'Pengajuan Siswa')
+@section('title', 'Pengajuan Data PKL')
 
 @section('content')
 
@@ -10,17 +10,30 @@
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-2xl font-bold">Data PKL</h1>
             </div>
-            <div class="mb-4 flex justify-between items-center">
-                <div class="relative w-1/3">
-                        <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" name="search" placeholder="Cari Tahun " type="text" value="{{ request('search') }}">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>              
-                 </div>
-                <a href="{{ Auth::user()->sekolah->status === 'diterima' ? route('pkl.create') : '#' }}" 
-                    class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out" 
+             <!-- Menampilkan pesan jika ada -->
+             @if(session('message'))
+             <div class="bg-red-500 text-white p-4 mb-4 text-center rounded">
+                 {{ session('message') }}
+             </div>
+         @endif
+            <div class="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                <form method="GET" action="{{ route('pkl.index') }}" class="relative w-full sm:w-1/3">
+                    <input 
+                        class="border rounded p-2 pl-10 w-full" 
+                        id="search" 
+                        name="search" 
+                        placeholder="Cari Tahun" 
+                        type="text" 
+                        value="{{ request('search') }}"
+                    >
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </form>                
+                <a href="{{ Auth::user()->sekolah->status === 'diterima' ? route('pkl.create') : route('pkl.index').'?status=not_accepted' }}" 
+                    class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out mt-4 sm:mt-0"
                     {{ Auth::user()->sekolah->status !== 'diterima' ? 'disabled' : '' }}>
                     <i class="fas fa-plus mr-2"></i>Tambah Data
                 </a>
-            </div>
+            </div>            
             <div class="overflow-x-auto">
                 <table class="w-full table-auto border-collapse">
                     <thead>

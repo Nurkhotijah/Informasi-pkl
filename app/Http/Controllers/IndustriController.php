@@ -6,6 +6,7 @@ use App\Models\Jurnal;
 use App\Models\Pengajuan;
 use App\Models\Kehadiran;
 use App\Models\Penilaian;
+use App\Models\Pkl;
 use App\Models\Profile;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -29,27 +30,49 @@ class IndustriController extends Controller
 /* -------------------------------------------------------------------------- */
 /*                                  START KEHADIRAN                           */
 /* -------------------------------------------------------------------------- */
+public function Kehadiran(Request $request)
+{
+    $search = $request->input('search'); // Ambil input pencarian
 
-    public function Kehadiran()
-    {
-        // Ambil data kehadiran unik berdasarkan user_id
-        $kehadiran = Kehadiran::select('user_id')
-            ->distinct()
-            ->with(['user', 'profile.sekolah'])
-            ->paginate(2);
+    // Query untuk mengambil data kehadiran berdasarkan pencarian
+    $kehadiranQuery = Kehadiran::select('user_id')
+        ->distinct()
+        ->with(['user', 'profile.sekolah']);
 
-        return view('pages-industri.kelola-kehadiran', compact('kehadiran'));
-    }
-    public function detail($userId)
-    {
-        // Cari data kehadiran berdasarkan user_id
-        $kehadiran = Kehadiran::where('user_id', $userId)
-            ->orderBy('tanggal', 'desc')
-            ->get();
-
-        return view('pages-industri.detail-kehadiran', compact('kehadiran'));
+    if ($search) {
+        $kehadiranQuery->whereHas('user', function ($query) use ($search) {
+            $query->where('name', 'like', "%$search%"); // Pencarian berdasarkan nama user
+        })
+        ->orWhereHas('profile.sekolah', function ($query) use ($search) {
+            $query->where('nama', 'like', "%$search%"); // Pencarian berdasarkan nama sekolah
+        });
     }
 
+    $kehadiran = $kehadiranQuery->get(); // Ambil data kehadiran yang sudah difilter
+
+    return view('pages-industri.kelola-kehadiran', compact('kehadiran'));
+}
+
+    public function detail($userId, Request $request)
+    {
+        // Ambil tanggal dari parameter request, jika ada
+        $tanggal = $request->get('tanggal');
+        
+        // Query untuk mendapatkan data kehadiran berdasarkan user_id
+        $kehadiranQuery = Kehadiran::where('user_id', $userId);
+    
+        // Jika ada tanggal yang dipilih, filter berdasarkan tanggal
+        if ($tanggal) {
+            $kehadiranQuery->whereDate('tanggal', $tanggal);
+        }
+    
+        // Ambil data kehadiran, urutkan berdasarkan tanggal terbaru
+        $kehadiran = $kehadiranQuery->orderBy('tanggal', 'desc')->get();
+    
+        // Kirimkan data kehadiran dan tanggal ke view
+        return view('pages-industri.detail-kehadiran', compact('kehadiran', 'tanggal', 'userId'));
+    }
+    
     public function cetakkehadiranuser($userId)
     {
     // Ambil semua data kehadiran untuk user berdasarkan user_id
@@ -127,17 +150,32 @@ class IndustriController extends Controller
 /* -------------------------------------------------------------------------- */
 /*                                  START PENGAJUAN                           */
 /* -------------------------------------------------------------------------- */
-    public function dataSekolah()
+     public function dataSekolah()
     {
         $listSekolah = User::where('role', 'sekolah')->get();
-        return view('pages-industri.data-sekolah', compact('listSekolah'));
+
+        return view('pages-industri.sekolah.index', compact('listSekolah'));
     }
 
-       public function lihatSiswa($id)
-    {
-        $listSiswa = Pengajuan::where('id_sekolah', $id)->get();
-        return view('pages-industri.lihat-siswa', compact('listSiswa'));
-    }
+    public function showpkl(Request $request, string $id)
+{
+    // Ambil input pencarian
+    $search = $request->input('search');
+
+    // Filter data berdasarkan id_sekolah dan input pencarian
+    $listSekolah = Pkl::where('id_sekolah', $id)
+        ->where(function ($query) use ($search) {
+            if ($search) {
+                $query->where('tahun', 'like', "%$search%")
+                      ->orWhere('judul_pkl', 'like', "%$search%")
+                      ->orWhere('pembimbing', 'like', "%$search%");
+            }
+        })
+        ->get();
+
+    return view('pages-industri.sekolah.show', compact('listSekolah'));
+}
+
 
     public function updateStatusSiswa(Request $request)
     {

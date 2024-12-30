@@ -74,7 +74,7 @@
         <div class="info">
             <p><strong>Nama Siswa:</strong> {{ $penilaian->user->name }}</p>
             <p><strong>Sekolah:</strong> {{ $penilaian->user->profile->sekolah->nama }}</p>
-            <p><strong>Periode PKL:</strong> {{ $tanggalMulai }} - {{ $tanggalSelesai }}</p>
+            <p><strong>Periode PKL:</strong> {{ \Carbon\Carbon::parse($tanggalMulai)->format('d F Y') }} - {{ \Carbon\Carbon::parse($tanggalSelesai)->format('d F Y') }}</p>
         </div>        
         <table>
             <thead>

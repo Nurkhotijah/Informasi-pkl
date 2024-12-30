@@ -101,7 +101,7 @@
  <script>
 
          let currentPage = 1;
-                const rowsPerPage = 2;
+                const rowsPerPage = 5;
                 const rows = document.querySelectorAll('.school-row');
                 const totalPages = Math.ceil(rows.length / rowsPerPage);
                 

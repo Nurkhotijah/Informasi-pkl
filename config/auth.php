@@ -40,6 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'sekolah' => [
+            'driver' => 'session',
+            'provider' => 'sekolahs',
+        ],
+
+        'industri' => [
+            'driver' => 'session',
+            'provider' => 'industris',
+        ],
     ],
 
     /*
@@ -65,10 +75,16 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        // ditambahin sama mas Roy, buat middleware nya
+        'sekolahs' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+
+        'industris' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
     ],
 
     /*

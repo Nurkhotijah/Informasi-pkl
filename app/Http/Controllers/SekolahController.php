@@ -71,7 +71,7 @@ class SekolahController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function showpkl(string $id)
     {
         $listSekolah = Pkl::where('id_sekolah', $id)->get();
         return view('pages-industri.sekolah.show', compact('listSekolah'));

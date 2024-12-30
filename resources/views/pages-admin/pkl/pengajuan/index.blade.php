@@ -16,9 +16,9 @@
                     </div>
                     <!-- Add Student Button -->
                     <div class="mt-4 sm:mt-0">
-                        <a href="{{ route('pengajuan.create', $id_pkl) }}" class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out">
+                        <a href="{{ route('pengajuan.create', $id_pkl) }}" class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out mt-4 sm:mt-0">
                             <i class="fas fa-user-plus mr-2"></i>Tambah Siswa
-                        </a>
+                        </a>                        
                     </div>
                 </div>
             </div>

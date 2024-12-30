@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -27,87 +28,83 @@ class LoginController extends Controller
             'password' => 'required|min:5',
         ]);
 
-        // Coba autentikasi pengguna
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            // Cek role pengguna dan redirect ke halaman sesuai
-            if (Auth::user()->role === 'industri') {
-                return redirect()->route('industri.dashboard');
-            } elseif (Auth::user()->role === 'siswa') {
-                return redirect()->route('user.dashboard'); 
-            } elseif (Auth::user()->role === 'sekolah') {
-            return redirect()->route('admin.dashboard'); 
-        }
-         
+        $user = User::where("email", $request->email)->first();
 
+        if (!$user) {
+            return back()->withErrors(['email' => 'Invalid email or password.']);
         }
 
-        // Jika autentikasi gagal
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->withInput();
+        Auth::guard('industri')->logout();
+        Auth::guard('sekolah')->logout();
+        Auth::logout();
+
+        // Cek role user dan arahkan ke halaman dashboard sesuai role
+        if ($user->role === 'industri') {
+            if (Auth::guard('industri')->attempt($request->only('email', 'password'))){
+                $request->session()->regenerate();
+                
+                return redirect()->route('industri.dashboard')->with('success', 'Login successful!');
+            } 
+            
+        } elseif ($user->role === 'sekolah') {
+            if (Auth::guard('sekolah')->attempt($request->only('email', 'password'))){
+                $request->session()->regenerate();
+                
+                return redirect()->route('admin.dashboard')->with('success', 'Login successful!');
+            }
+        } elseif ($user->role === 'siswa') {
+            if (Auth::attempt($request->only('email', 'password'))){
+                $request->session()->regenerate();
+
+                return redirect()->route('user.dashboard')->with('success', 'Login successful!');
+            }
+        }
+
+        return back()->withErrors(['email' => 'Invalid email or password.']);
+    }   
+       
+    
+
+        public function logout(Request $request)
+        {
+            Auth::logout();
+            $request->session()->invalidate();
+     
+            $request->session()->regenerateToken();
+    
+            return redirect('/login')->with('success', 'Anda berhasil logout.');       
+        }
+    
+        // Proses logout
+        public function logoutsekolah(Request $request)
+        {
+            Auth::guard('sekolah')->logout();
+            $request->session()->invalidate();
+            
+     
+            $request->session()->regenerateToken();
+    
+            return redirect('/login')->with('success', 'Anda berhasil logout.');       
+        }
+        public function logoutindustri(Request $request)
+        {
+            Auth::guard('industri')->logout();
+            $request->session()->invalidate();
+            
+     
+            $request->session()->regenerateToken();
+    
+            return redirect('/login')->with('success', 'Anda berhasil logout.');       
+        }
     }
 
-
-    /**
-     * Tangani login tanpa menggunakan database.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    // public function login(Request $request)
-    // {
-    //     // Data pengguna statis (tanpa database)
-    //     $users = [
-    //         [
-    //             'email' => 'user1@example.com',
-    //             'password' => 'password123',
-    //         ],
-    //         [
-    //             'email' => 'user2@example.com',
-    //             'password' => 'password456',
-    //         ],
-    //     ];
-
-    //     // Validasi input
-    //     $request->validate([
-    //         'email' => 'required|email',
-    //         'password' => 'required',
-    //     ]);
-
-    //     // Cek apakah pengguna ada dalam daftar
-    //     $authenticated = false;
-    //     foreach ($users as $user) {
-    //         if ($user['email'] == $request->email && $user['password'] == $request->password) {
-    //             $authenticated = true;
-    //             break;
-    //         }
-    //     }
-
-    //     // Jika pengguna berhasil login
-    //     if ($authenticated) {
-    //         // Simpan pengguna di session
-    //         Session::put('user', $request->email);
-
-    //         // Redirect ke dashboard user
-    //         return redirect('/dashboard-user');
-    //     }
-
-    //     // Jika login gagal
-    //     return redirect()->back()
-    //         ->withInput($request->only('email'))
-    //         ->withErrors(['email' => 'Email atau kata sandi tidak valid.']);
-    // }
-
-    // /**
-    //  * Logout dari aplikasi.
-    //  *
-    //  * @return \Illuminate\Http\RedirectResponse
-    //  */
-    // public function logout()
-    // {
-    //     // Hapus session pengguna
-    //     Session::forget('user');
-
-    //     return redirect('/login');
-    // }
-}
+     // // Coba autentikasi pengguna
+        // if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        //     // Cek role pengguna dan redirect ke halaman sesuai
+        //     if (Auth::user()->role === 'industri') {
+        //         return redirect()->route('industri.dashboard');
+        //     } elseif (Auth::user()->role === 'siswa') {
+        //         return redirect()->route('user.dashboard'); 
+        //     } elseif (Auth::user()->role === 'sekolah') {
+        //     return redirect()->route('admin.dashboard'); 
+        // 

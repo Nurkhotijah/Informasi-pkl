@@ -12,15 +12,18 @@
                 <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Detail Kehadiran</h1>
                 <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
                     <div class="flex items-center w-full sm:w-auto sm:ml-auto">
-                        <label class="mr-2" for="date">Pilih Tanggal:</label>
-                        <input 
-                            type="date" 
-                            class="border rounded p-2 w-full sm:w-auto" 
-                            id="date" 
-                            onchange="filterByDate()"
-                        />
-                    </div>    
-                                     
+                        <form method="GET" action="{{ route('kehadiran.detail', $userId) }}" id="dateForm">
+                            <label class="mr-2" for="date">Tanggal:</label>
+                            <input 
+                                type="date" 
+                                class="border rounded p-2 w-full sm:w-auto" 
+                                id="date" 
+                                name="tanggal" 
+                                value="{{ request('tanggal') }}"  {{-- Menampilkan tanggal yang dipilih saat ini --}}
+                                onchange="this.form.submit()"  {{-- Menyubmit form saat tanggal dipilih --}}
+                            />
+                        </form>                                                                               
+                    </div>               
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -103,27 +106,10 @@
 
 <script>
 
-const ITEMS_PER_PAGE = 1; // Set to 5 for better pagination
+const ITEMS_PER_PAGE = 2; // Set to 5 for better pagination
 let currentPage = 1;
 let filteredData = [];
 
-function filterByDate() {
-    const selectedDate = document.getElementById('date').value;
-    const tableBody = document.querySelector('#attendanceTable tbody');
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
-    
-    if (!selectedDate) {
-        filteredData = rows;
-    } else {
-        filteredData = rows.filter(row => {
-            const dateCell = row.querySelector('td:nth-child(2)'); // Corrected to match the date column
-            return dateCell.textContent.includes(selectedDate);
-        });
-    }
-    
-    currentPage = 1;
-    updateTableDisplay();
-}
 
 function initializeTable() {
     const tableBody = document.querySelector('#attendanceTable tbody');

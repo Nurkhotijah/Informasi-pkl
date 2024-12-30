@@ -10,13 +10,25 @@ use App\Models\JurnalKegiatan;
 
 class JurnalSiswaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $users = Auth::user();
-
-        $jurnal = Jurnal::where('user_id', $users->id)->get();
+        
+        // Ambil data jurnal berdasarkan user_id
+        $jurnal = Jurnal::where('user_id', $users->id);
+    
+        // Filter berdasarkan tanggal jika ada
+        if ($request->has('tanggal') && $request->tanggal) {
+            $jurnal = $jurnal->whereDate('tanggal', $request->tanggal);
+        }
+    
+        // Ambil data jurnal dan kirim ke view
+        $jurnal = $jurnal->get();
+    
+        // Kembalikan tampilan dengan data jurnal
         return view('pages-user.jurnal.index', compact('jurnal'));
     }
+    
     public function edit($id)
     {
         $jurnal = Jurnal::findOrFail($id);

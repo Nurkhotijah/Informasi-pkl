@@ -11,9 +11,18 @@
                 <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Data PKL</h1>
                 <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
                     <div class="relative w-full sm:w-auto">
-                        <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" placeholder="Cari Tahun Ajaran" type="text" oninput="searchTable()">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                    </div>                
+                        <form method="GET" action="{{ url()->current() }}">
+                            <input 
+                                type="text" 
+                                name="search" 
+                                id="search" 
+                                class="border rounded p-2 pl-10 w-full sm:w-64" 
+                                placeholder="Cari Tahun Ajaran, Judul, atau Pembimbing" 
+                                value="{{ request('search') }}"
+                            >
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </form>
+                    </div>                              
                 </div>
             </div>
 

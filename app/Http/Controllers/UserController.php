@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Jurnal;
+use App\Models\Profile;
 use App\Models\Kehadiran;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -45,16 +46,24 @@ class UserController extends Controller
     public function cetakSertifikat($id)
     {
         $siswa = User::with('profile.sekolah.user')->findOrFail($id);
-        // dd($siswa->profile->sekolah->user->foto_profile);
-
+    
+        // Mengecek apakah siswa sudah selesai PKL
+        $selesaiPKL = $siswa->profile && $siswa->profile->tanggal_selesai ? true : false;
+    
+        // Jika belum selesai PKL, arahkan atau beri pesan
+        if (!$selesaiPKL) {
+            return back()->with('error', 'Anda belum selesai PKL, sertifikat tidak bisa dicetak.');
+        }
+    
         // Load view dan generate PDF
         $pdf = Pdf::loadView('pages-user.pdf.sertifikatuser', compact('siswa'));
         $pdf->setPaper('A4', 'landscape');
-
+    
         // Return PDF untuk di-download
         return $pdf->download($siswa->name . '-sertifikat.pdf');
     }
-
+    
+    
     public function showprofilsiswa()
     {
         $profilesiswa = User::with(['sekolah', 'profile', 'pengajuan.sekolah', 'pengajuan.pkl'])->findOrFail(Auth::user()->id);

@@ -8,11 +8,12 @@
     <div class="bg-gray-100 flex items-center justify-center w-full md:w-1/3 p-6">
       <div class="text-center">
         <img alt="Profile picture of the student" class="rounded-full mx-auto mb-2" height="100" src="{{ asset(Auth::user()->foto_profile ?? 'assets/default-profile.png') }}" width="100"/>
+        <h2 class="text-2xl font-semibold text-gray-800">{{ Auth::user()->name }}</h2>
         <p class="text-gray-700">{{ $profilesiswa->role }}</p>
       </div>
     </div>
     <div class="bg-white w-full md:w-2/3 p-6">
-      <h2 class="text-xl font-bold mb-4">Profile Siswa</h2>
+      <h2 class="text-xl font-bold mb-4">Informasi Siswa</h2>
       <p class="mb-2">
         <span class="font-semibold">Nama Sekolah</span><br/>
         {{ $profilesiswa->profile->sekolah->nama }}

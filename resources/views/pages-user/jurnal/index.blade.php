@@ -9,25 +9,29 @@
         <!-- Header Section -->
         <div class="mb-4 flex flex-col sm:flex-row justify-between items-center">
             <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Jurnal</h1>
-            <div class="flex items-center w-full sm:w-auto">
-                <label for="dateFilter" class="mr-2">Tanggal:</label>
-                <input type="date" id="dateFilter" class="border rounded p-2 w-full sm:w-auto" onchange="filterByDate()">
-            </div>
         </div>
-        
-        <!-- Action Buttons Section -->
-        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
-            <!-- Tombol Tambah Jurnal -->
-            <a href="{{ route('jurnal-siswa.create') }}" class="bg-blue-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out w-full sm:w-auto text-center">
-                <i class="fas fa-user-plus mr-2"></i> Tambah Jurnal
-            </a>
-        
-            <!-- Tombol Lihat Jurnal -->
-            <a href="{{ route('penilaian.show.user') }}" class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out w-full sm:w-auto text-center">
-                <i class="fas fa-eye mr-2"></i> Lihat Penilaian
-            </a>
-        </div>
-        
+<!-- Filter Tanggal (ditempatkan di pojok kanan) -->
+<form method="GET" action="{{ route('jurnal-siswa.index') }}" class="flex items-center space-x-2 w-full justify-between">
+    <div class="flex items-center space-x-2">
+        <!-- Tombol Tambah Jurnal -->
+        <a href="{{ route('jurnal-siswa.create') }}" class="bg-blue-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out w-full sm:w-auto text-center">
+            <i class="fas fa-user-plus mr-2"></i> Tambah Jurnal
+        </a>
+
+        <!-- Tombol Lihat Penilaian -->
+        <a href="{{ route('penilaian.show.user') }}" class="bg-green-500 text-white text-xs px-4 py-2 rounded shadow hover:bg-green-600 transition duration-300 ease-in-out w-full sm:w-auto text-center">
+            <i class="fas fa-eye mr-2"></i> Lihat Penilaian
+        </a>
+    </div>
+
+    <!-- Filter Tanggal (ditempatkan di pojok kanan) -->
+    <div class="ml-auto">
+        <label for="dateFilter" class="mr-2 text-sm">Tanggal:</label>
+        <input type="date" name="tanggal" id="dateFilter" class="border rounded p-2 w-full sm:w-auto" 
+            value="{{ request('tanggal') }}" onchange="this.form.submit()">
+    </div>
+</form>
+
 
         <!-- Table Section -->
         <div class="overflow-x-auto">
@@ -55,20 +59,27 @@
                                 <img src="{{ asset('storage/'.$siswa->foto_kegiatan) }}" alt="Foto Kegiatan" class="w-14 h-14 object-cover rounded-full cursor-pointer" onclick="showActivityImage('{{ asset('storage/'.$siswa->foto_kegiatan) }}')">
                             </td>
                             <td class="py-2 px-4 border-b text-center">
-                                <a href="{{ route('jurnal-siswa.edit', ['id' => $siswa->id]) }}" class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
-                                    <i class="fas fa-edit mr-1"></i> Edit
-                                </a>
-                                <form action="{{ route('jurnal-siswa.destroy', ['id' => $siswa->id]) }}" method="POST" class="inline-block ml-2" onsubmit="return confirm('Apakah Anda yakin ingin menghapus siswa ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-red-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-600 transition duration-300 ease-in-out">
-                                        <i class="fas fa-trash-alt mr-1"></i> Hapus
-                                    </button>
-                                </form>
-                            </td>                            
-                        </tr>
+                                <div class="flex justify-center space-x-2">
+                                    <!-- Tombol Edit -->
+                                    <a href="{{ route('jurnal-siswa.edit', ['id' => $siswa->id]) }}" class="inline-block w-auto">
+                                        <button class="bg-blue-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out">
+                                            <i class="fas fa-edit"></i> 
+                                        </button>
+                                    </a>
+                            
+                                    <!-- Form untuk Hapus -->
+                                    <form action="{{ route('jurnal-siswa.destroy', ['id' => $siswa->id]) }}" method="POST" class="inline-block w-auto" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-500 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-600 transition duration-300 ease-in-out">
+                                            <i class="fas fa-trash"></i> 
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                                                                          
                     @endforeach
-                </tbody>
+                </tbody>                
             </table>
         </div>
 
@@ -96,7 +107,7 @@
 
 <script>
     let currentPage = 1;
-    const ITEMS_PER_PAGE = 2;
+    const ITEMS_PER_PAGE = 5;
     let filteredData = [];
 
     function showActivityImage(imageSrc) {

@@ -227,7 +227,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . auth()->id(),
-            'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:5000',
+            'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg|max:1000',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 

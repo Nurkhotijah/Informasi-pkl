@@ -88,43 +88,7 @@
         });
     });
 
-    function pushCertificate() {
-        // Ambil data siswa yang dipilih
-        const selectedRows = document.querySelectorAll('.student-checkbox:checked');
-        if (selectedRows.length === 0) {
-            alert('Pilih setidaknya satu siswa untuk memproses sertifikat.');
-            return;
-        }
-
-        // Kumpulkan ID siswa dan ID sekolah
-        const data = Array.from(selectedRows).map((checkbox) => ({
-            studentId: checkbox.value, // ID Siswa
-            schoolId: checkbox.dataset.schoolId, // ID Sekolah
-        }));
-
-        // Kirim data ke backend
-        fetch('/push-certificate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: JSON.stringify({ students: data }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    alert('Sertifikat berhasil diproses!');
-                    // Lakukan pembaruan UI jika diperlukan
-                } else {
-                    alert('Terjadi kesalahan: ' + data.message);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan saat memproses sertifikat.');
-            });
-    }
+    
 
      // Fungsi untuk memilih semua siswa
     function toggleSelectAll(source) {

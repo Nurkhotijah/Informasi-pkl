@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Aplikasi Absensi PKL</title>
+    <title>Login | SI-PKL</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
@@ -13,7 +13,7 @@
     </style>
 </head>
 <body class="bg-blue-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full mx-4 max-w-sm">
         <h2 class="text-2xl font-bold mb-6 text-center">Masuk</h2>
 
         @if ($errors->any())
@@ -42,7 +42,6 @@
                     <input type="checkbox" id="remember_me" name="remember" class="mr-2">
                     <label for="remember" class="text-gray-700">Ingat Saya</label>
                 </div>
-                <a href="/forgot-password" class="text-blue-500">Lupa Kata Sandi?</a>
             </div>
             <button class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Masuk</button>
         </form>

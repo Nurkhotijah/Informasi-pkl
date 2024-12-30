@@ -18,11 +18,13 @@
                 {{ $buttonText === 'Selesai' ? 'disabled' : '' }}>
             {{ $buttonText }}
             </button>                
-            <a class="bg-gray-800 text-white px-4 py-2 rounded flex items-center justify-center"
-                href="{{ route('cetak-sertifikat', Auth::user()->id) }}">
-                <i class="fas fa-download mr-2"></i>
-                Sertifikat           
-            </a>
+            <a class="bg-gray-800 text-white px-4 py-2 rounded flex items-center justify-center 
+            {{ Auth::user()->profile && Auth::user()->profile->tanggal_selesai ? '' : 'opacity-50 cursor-not-allowed' }}"
+            href="{{ route('cetak-sertifikat', Auth::user()->id) }}" 
+            {{ !Auth::user()->profile || !Auth::user()->profile->tanggal_selesai ? 'disabled' : '' }}>
+            <i class="fas fa-download mr-2"></i>
+            Sertifikat           
+        </a>         
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

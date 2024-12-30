@@ -21,17 +21,24 @@ class KehadiranController extends Controller
         // Ambil data kehadiran berdasarkan user yang login
         $kehadiran = Kehadiran::where('user_id', Auth::id())
             ->orderBy('tanggal', 'desc');
-
+    
         // Filter berdasarkan tanggal
         if ($request->has('tanggal')) {
             $kehadiran = $kehadiran->whereDate('tanggal', $request->tanggal);
         }
-
+    
         // Mengambil data kehadiran dengan paginasi
         $kehadiran = $kehadiran->paginate(2); // 2 entries per page
-
-        return view('pages-user.riwayat-absensi', compact('kehadiran'));
+    
+        // Ambil data profile untuk mengecek tanggal selesai PKL
+        $profile = Profile::where('user_id', Auth::id())->first();
+    
+        // Cek apakah PKL sudah selesai
+        $isPklSelesai = $profile ? Carbon::parse($profile->tanggal_selesai)->isPast() : false;
+    
+        return view('pages-user.riwayat-absensi', compact('kehadiran', 'isPklSelesai'));
     }
+    
 
     public function store(Request $request)
 {
@@ -84,37 +91,49 @@ class KehadiranController extends Controller
 
     public function rekapkehadiran()
     {
-        $user = auth()->user(); // Mendapatkan pengguna yang sedang login
-        $kehadiran = Kehadiran::where('user_id', $user->id)->get(); // Ambil data kehadiran berdasarkan user_id
-
-        // Ambil data tanggal mulai dan tanggal selesai PKL dari tabel profile sesuai user_id
-        $profile = Profile::where('user_id', $user->id)->first(); // Ambil data profile sesuai user_id
-        $tanggalMulai = $profile ? $profile->tanggal_mulai : null; // Mengambil tanggal mulai jika ada
-        $tanggalSelesai = $profile ? $profile->tanggal_selesai : null; // Mengambil tanggal selesai jika ada
-
-        // Hitung jumlah kehadiran, izin, dan tidak hadir
-        $hadirCount = $kehadiran->where('status', 'Hadir')->count();
-        $izinCount = $kehadiran->where('status', 'Izin')->count();
-        $tidakHadirCount = $kehadiran->where('status', 'Tidak Hadir')->count();
+        $user = Auth::user();
+    
+        // Ambil data profile untuk mendapatkan nama, sekolah, tanggal mulai dan selesai PKL
+        $profile = Profile::where('user_id', $user->id)->first();
+        if (!$profile) {
+            return redirect()->back()->withErrors('Data profil tidak ditemukan.');
+        }
+    
+        // Ambil tanggal mulai dan selesai PKL dari profil
+        $tanggalMulai = Carbon::parse($profile->tanggal_mulai)->startOfDay();
+        $tanggalSelesai = Carbon::parse($profile->tanggal_selesai)->endOfDay();
+    
+        // Ambil data kehadiran untuk user pada rentang tanggal PKL
+        $kehadiran = Kehadiran::where('user_id', $user->id)
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
+            ->get();
+    
+        // Hitung jumlah kehadiran berdasarkan status
+        $hadirCount = $kehadiran->where('status', 'hadir')->count();
+        $izinCount = $kehadiran->where('status', 'izin')->count();
+        $tidakHadirCount = $kehadiran->where('status', 'tidak hadir')->count();
+    
+        // Total kehadiran berdasarkan status
         $total = $hadirCount + $izinCount + $tidakHadirCount;
-
-        // Menyusun data untuk dikirim ke view
+    
+        // Menyusun data untuk PDF
         $data = [
             'user' => $user,
-            'kehadiran' => $kehadiran,
+            'profile' => $profile,
             'hadirCount' => $hadirCount,
             'izinCount' => $izinCount,
             'tidakHadirCount' => $tidakHadirCount,
             'total' => $total,
-            'tanggalMulai' => $tanggalMulai,
-            'tanggalSelesai' => $tanggalSelesai,
+            'tanggalMulai' => $tanggalMulai->format('Y-m-d'),
+            'tanggalSelesai' => $tanggalSelesai->format('Y-m-d'),
         ];
-
+    
         // Membuat PDF menggunakan template
         $pdf = PDF::loadView('template-kehadiran', $data);
-
+    
         // Mengunduh PDF
         return $pdf->download('rekap-kehadiran-' . $user->name . '.pdf');
     }
-   
+    
+
 }    

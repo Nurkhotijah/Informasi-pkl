@@ -11,10 +11,19 @@
             <div class="mb-4">
                 <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Kelola Kehadiran</h1>
                 <div class="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 sm:space-x-4">
-                    <div class="relative w-full sm:w-auto">
-                        <input class="border rounded p-2 pl-10 w-full sm:w-64" id="search" placeholder="Cari Nama atau sekolah" type="text" oninput="searchTable()">
+                    <form method="GET" action="{{ route('kelola-kehadiran') }}" class="relative">
+                        <input 
+                            class="border rounded p-2 pl-10 w-full sm:w-64" 
+                            id="search" 
+                            placeholder="Cari Nama atau sekolah" 
+                            type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            oninput="this.form.submit()"  
+                        >
+                        <!-- Menampilkan nilai pencarian yang sudah ada -->
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                    </div>
+                    </form>                    
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -27,10 +36,10 @@
                             <th class="py-2 px-4 border-b text-center">Aksi</th> 
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="attendanceTableBody">
                         @foreach ($kehadiran as $index => $item)
                             <tr class="school-row">
-                                <td class="py-2 px-4 border-b text-center">{{ $index + 1 + ($kehadiran->currentPage() - 1) * $kehadiran->perPage() }}</td>
+                                <td class="py-2 px-4 border-b text-center">{{ $index + 1 }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->user->name }}</td>
                                 <td class="py-2 px-4 border-b text-left">{{ $item->user->profile->sekolah->nama }}</td>
                                 <td class="py-2 px-4 border-b text-center">
@@ -51,11 +60,11 @@
 
          <!-- Pagination Section -->
  <div class="flex justify-end items-center mt-4">
-    <span class="mr-4" id="pageNumber">Halaman {{ $kehadiran->currentPage() }}</span>
-    <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()" id="prevButton" {{ $kehadiran->currentPage() == 1 ? 'disabled' : '' }}>
+    <span class="mr-4" id="pageNumber">Halaman 1</span>
+    <button class="bg-gray-300 text-gray-700 p-2 rounded mr-2" onclick="prevPage()" id="prevButton" disabled>
         <i class="fas fa-chevron-left"></i>
     </button>
-    <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()" id="nextButton" {{ $kehadiran->currentPage() == $kehadiran->lastPage() ? 'disabled' : '' }}>
+    <button class="bg-gray-300 text-gray-700 p-2 rounded" onclick="nextPage()" id="nextButton">
         <i class="fas fa-chevron-right"></i>
     </button>
 </div>
@@ -79,10 +88,10 @@
     </div>
 
 </div>
-<script>
 
+<script>
 let currentPage = 1;
-const rowsPerPage = 2;
+const rowsPerPage = 5; // Menampilkan 2 entri per halaman
 const rows = document.querySelectorAll('.school-row');
 const totalPages = Math.ceil(rows.length / rowsPerPage);
 
@@ -121,22 +130,6 @@ function prevPage() {
 
 // Initialize first page
 showPage(currentPage);
-
-function openModal(imageUrl) {
-    const modal = document.getElementById("modal");
-    const modalImage = document.getElementById("modalImage").querySelector("img");
-    modalImage.src = imageUrl;
-    modal.classList.remove("hidden");
-}
-
-function closeModal() {
-    const modal = document.getElementById("modal");
-    modal.classList.add("hidden");
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    showPage(currentPage);
-});
 </script>
 
 @endsection

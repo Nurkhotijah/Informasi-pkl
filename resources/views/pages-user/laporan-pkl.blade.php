@@ -49,7 +49,7 @@
         <div id="previewContainer" class="hidden mt-4 w-full sm:w-auto">
             <h2 class="text-lg font-semibold mb-2">Pratinjau Laporan PKL</h2>
             <div class="border rounded-lg overflow-hidden">
-                <iframe id="filePreview" src="" class="w-full h-96"></iframe>
+                <iframe id="filePreview" src="" class="w-full h-96 sm:h-[450px]"></iframe>
             </div>
         </div>
     </div>

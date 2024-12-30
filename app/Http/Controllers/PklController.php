@@ -28,10 +28,15 @@ class PklController extends Controller
                         }
                     })
                     ->get();
-    
+
+    // Jika parameter status ada dan sekolah belum diterima
+    if ($request->has('status') && $request->status === 'not_accepted') {
+        // Kirimkan pesan flash ke session
+        session()->flash('message', 'Sekolah Anda belum disetujui');
+    }
+
     return view('pages-admin.pkl.index', compact('pengajuan'));
 }
-
 
     /**
      * Show the form for creating a new resource.

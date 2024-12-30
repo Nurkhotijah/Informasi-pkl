@@ -107,7 +107,7 @@
 
     // Pagination variables and functions
     let currentPage = 1;
-    const rowsPerPage = 1; // Show 10 rows per page
+    const rowsPerPage = 5; // Show 10 rows per page
     const table = document.getElementById('pengajuanTable');
     const rows = table.getElementsByTagName('tr');
     const totalRows = rows.length - 1; // Subtract 1 to exclude header

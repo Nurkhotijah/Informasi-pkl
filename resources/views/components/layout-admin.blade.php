@@ -7,6 +7,7 @@
     <title>@yield('title', 'default title')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('assets/logo absensipkl.png') }}" type="image/x-icon" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.1/css/boxicons.min.css" rel="stylesheet" />
@@ -89,30 +90,22 @@
                                         <span>Profile</span>
                                     </a>
                                 </li>
-                                <li id="logout" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer transition">
-                                    <a class="flex items-center space-x-2">
-                                      <img alt="logout-rounded-left" height="30" src="https://img.icons8.com/ios-filled/50/000000/logout-rounded-left.png" width="30"/>
-                                     <span>
-                                      Logout
-                                     </span>
-                                    </a>
-                                   </li>
+                                <li class="block px-4 py-2 hover:bg-gray-100 cursor-pointer transition">
+                                    <form method="POST" action="{{ route('logout-sekolah') }}">
+                                        @csrf
+                                        <button type="submit" class="flex items-center space-x-2 w-full text-left">
+                                            <img alt="logout-rounded-left" height="30" 
+                                                 src="https://img.icons8.com/ios-filled/50/000000/logout-rounded-left.png" width="30" />
+                                            <span>Logout</span>
+                                        </button>
+                                    </form>
+                                </li>   
                             </ul>
                         </div>
                     </div>
                 </div>
             </nav>
 
-    <!-- Popup Logout Confirmation -->
-    <div id="confirmationLogout" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-800 bg-opacity-50 text-sm md:text-lg">
-        <div class="bg-white py-6 px-12 rounded-lg shadow-lg">
-            <p class="text-center text-gray-700">Yakin mau logout?</p>
-            <div class="mt-4 flex justify-center gap-6">
-                <button id="cancelLogout" class="bg-white text-green-500 border border-green-500 py-2 px-4 rounded-xl hover:bg-green-500 hover:text-white">Tidak</button>
-                <button id="confirmLogout" class="bg-white border border-red-500 text-red-500 py-2 px-4 rounded-xl hover:bg-red-500 hover:text-white">Ya</button>
-            </div>
-        </div>
-    </div>
 
     <div class="flex-1 p-6 overflow-auto bg-gray-100">
         @yield('content')
@@ -120,24 +113,7 @@
    </div>
 
 <script>
-    // Menampilkan popup saat tombol logout diklik
-  document.getElementById('logout').addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('confirmationLogout').classList.remove('hidden');
-    });
-
-    // Mengonfirmasi logout dan redirect ke halaman lain
-    document.getElementById('confirmLogout').addEventListener('click', function() {
-        document.getElementById('confirmationLogout').classList.add('hidden');
-        window.location.href = '/'; // Ganti '/' dengan URL halaman tujuan setelah logout
-    });
-
-    // Membatalkan logout dan menutup popup
-    document.getElementById('cancelLogout').addEventListener('click', function() {
-        document.getElementById('confirmationLogout').classList.add('hidden');
-    });
-
-
+    
         // Menampilkan dan menyembunyikan dropdown
         const profileButton = document.getElementById('profileButton');
         const profileDropdown = document.getElementById('profileDropdown');
